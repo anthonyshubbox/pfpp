@@ -1,0 +1,1517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#0A0E1A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="PFPP">
+<title>Pre-Flight Pilot Pal</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230A0E1A'/%3E%3Ctext x='50' y='68' text-anchor='middle' font-family='monospace' font-size='55' font-weight='900' fill='%2300D4FF'%3EP%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230A0E1A'/%3E%3Ctext x='50' y='68' text-anchor='middle' font-family='monospace' font-size='55' font-weight='900' fill='%2300D4FF'%3EP%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=Orbitron:wght@500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   PRE-FLIGHT PILOT PAL — AVIATION TECH DESIGN SYSTEM
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Color: cockpit instrument panel */
+  --bg-deep:     #060913;
+  --bg-panel:    #0A0E1A;
+  --bg-elevated: #121828;
+  --bg-hover:    #1a2238;
+  --border:      #1F2940;
+  --border-hot:  #2A3857;
+  --text-1:      #E8EEFF;
+  --text-2:      #8FA0C7;
+  --text-3:      #5A6B8E;
+  --text-dim:    #3D4A68;
+
+  /* Instrument panel accents */
+  --cyan:        #00D4FF;   /* primary HUD */
+  --cyan-glow:   #00D4FF33;
+  --amber:       #FFB200;   /* warnings, golden hour */
+  --amber-glow:  #FFB20033;
+  --green:       #00FF94;   /* go */
+  --green-glow:  #00FF9433;
+  --red:         #FF3B5C;   /* stop */
+  --red-glow:    #FF3B5C33;
+  --magenta:     #FF00AA;   /* accent / links */
+
+  /* Typography */
+  --font-display: 'Orbitron', 'Courier New', monospace;
+  --font-technical: 'JetBrains Mono', 'Courier New', monospace;
+  --font-ui: 'Rajdhani', 'Helvetica Neue', sans-serif;
+
+  /* Spacing scale */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  background: var(--bg-deep);
+  color: var(--text-1);
+  font-family: var(--font-ui);
+  font-size: 16px;
+  line-height: 1.4;
+  overscroll-behavior: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse at top, #0a1b30 0%, transparent 50%),
+    radial-gradient(ellipse at bottom, #120822 0%, transparent 60%),
+    var(--bg-deep);
+  background-attachment: fixed;
+  padding-bottom: 90px;
+  padding-top: env(safe-area-inset-top);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* Grain overlay for texture */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.95' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.4;
+  z-index: 1000;
+  mix-blend-mode: overlay;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   HEADER / CALL SIGN BAR
+   ═══════════════════════════════════════════════════════════════ */
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: linear-gradient(180deg, rgba(10,14,26,0.98) 0%, rgba(10,14,26,0.92) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: var(--sp-4) var(--sp-5);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--cyan) 50%, transparent 100%);
+  opacity: 0.5;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.brand-mark {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  background: var(--bg-elevated);
+  border: 1px solid var(--cyan);
+  border-radius: 4px;
+  position: relative;
+  box-shadow: 0 0 12px var(--cyan-glow), inset 0 0 8px var(--cyan-glow);
+}
+
+.brand-mark::before {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border: 1px solid var(--cyan-glow);
+  border-radius: 2px;
+}
+
+.brand-mark svg {
+  width: 20px;
+  height: 20px;
+  fill: var(--cyan);
+  filter: drop-shadow(0 0 4px var(--cyan));
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+.brand-text .name {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  color: var(--text-1);
+}
+
+.brand-text .sub {
+  font-family: var(--font-technical);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--cyan);
+  margin-top: 2px;
+}
+
+.status-pill {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: 6px 10px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-family: var(--font-technical);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--text-2);
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 6px var(--green);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(0.85); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   LAYOUT
+   ═══════════════════════════════════════════════════════════════ */
+
+.main {
+  padding: var(--sp-5);
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.view {
+  display: none;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.view.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.section-title {
+  font-family: var(--font-technical);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  color: var(--text-3);
+  margin: var(--sp-6) 0 var(--sp-3);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--border) 0%, transparent 100%);
+}
+
+.section-title:first-child {
+  margin-top: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CARD
+   ═══════════════════════════════════════════════════════════════ */
+
+.card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: var(--sp-5);
+  margin-bottom: var(--sp-4);
+  position: relative;
+  overflow: hidden;
+}
+
+.card.glow {
+  border-color: var(--border-hot);
+  box-shadow: 0 0 0 1px var(--cyan-glow), 0 4px 30px rgba(0,212,255,0.08);
+}
+
+.card-corner {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  pointer-events: none;
+}
+.card-corner::before, .card-corner::after {
+  content: '';
+  position: absolute;
+  background: var(--cyan);
+}
+.card-corner.tl { top: 6px; left: 6px; }
+.card-corner.tl::before { top: 0; left: 0; width: 12px; height: 1px; }
+.card-corner.tl::after  { top: 0; left: 0; width: 1px; height: 12px; }
+.card-corner.tr { top: 6px; right: 6px; }
+.card-corner.tr::before { top: 0; right: 0; width: 12px; height: 1px; }
+.card-corner.tr::after  { top: 0; right: 0; width: 1px; height: 12px; }
+.card-corner.bl { bottom: 6px; left: 6px; }
+.card-corner.bl::before { bottom: 0; left: 0; width: 12px; height: 1px; }
+.card-corner.bl::after  { bottom: 0; left: 0; width: 1px; height: 12px; }
+.card-corner.br { bottom: 6px; right: 6px; }
+.card-corner.br::before { bottom: 0; right: 0; width: 12px; height: 1px; }
+.card-corner.br::after  { bottom: 0; right: 0; width: 1px; height: 12px; }
+
+/* ═══════════════════════════════════════════════════════════════
+   HOME / DASHBOARD
+   ═══════════════════════════════════════════════════════════════ */
+
+.hero {
+  text-align: center;
+  padding: var(--sp-6) 0 var(--sp-4);
+}
+
+.hero-label {
+  font-family: var(--font-technical);
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: var(--cyan);
+  margin-bottom: var(--sp-2);
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  line-height: 1.1;
+  margin-bottom: var(--sp-3);
+}
+
+.hero-title .accent {
+  color: var(--cyan);
+  text-shadow: 0 0 20px var(--cyan-glow);
+}
+
+.hero-sub {
+  font-size: 14px;
+  color: var(--text-2);
+  max-width: 340px;
+  margin: 0 auto;
+}
+
+.tool-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-3);
+  margin-top: var(--sp-5);
+}
+
+.tool-tile {
+  position: relative;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: var(--sp-5) var(--sp-4);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+  font-family: inherit;
+  color: var(--text-1);
+  overflow: hidden;
+}
+
+.tool-tile:hover, .tool-tile:active {
+  border-color: var(--cyan);
+  background: var(--bg-elevated);
+  transform: translateY(-1px);
+  box-shadow: 0 0 20px var(--cyan-glow);
+}
+
+.tool-tile .icon {
+  width: 28px;
+  height: 28px;
+  color: var(--cyan);
+  margin-bottom: var(--sp-3);
+  filter: drop-shadow(0 0 4px var(--cyan-glow));
+}
+
+.tool-tile .label {
+  font-family: var(--font-technical);
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  color: var(--text-3);
+  margin-bottom: 4px;
+}
+
+.tool-tile .title {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--text-1);
+  line-height: 1.2;
+}
+
+.tool-tile.premium .premium-badge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: var(--amber);
+  color: var(--bg-deep);
+  font-family: var(--font-technical);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 2px 6px;
+  border-radius: 2px;
+}
+
+.tool-tile.premium .icon {
+  color: var(--amber);
+  filter: drop-shadow(0 0 4px var(--amber-glow));
+}
+
+.tool-tile.premium:hover {
+  border-color: var(--amber);
+  box-shadow: 0 0 20px var(--amber-glow);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   VIEW HEADER (inside tool pages)
+   ═══════════════════════════════════════════════════════════════ */
+
+.view-header {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-5);
+}
+
+.back-btn {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-1);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.back-btn:active {
+  background: var(--bg-elevated);
+  border-color: var(--cyan);
+}
+
+.view-title {
+  flex: 1;
+}
+
+.view-title .kicker {
+  font-family: var(--font-technical);
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  color: var(--cyan);
+}
+
+.view-title .main-title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FORM CONTROLS
+   ═══════════════════════════════════════════════════════════════ */
+
+.field {
+  margin-bottom: var(--sp-4);
+}
+
+.field-label {
+  font-family: var(--font-technical);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--text-2);
+  margin-bottom: var(--sp-2);
+  display: block;
+}
+
+.field-hint {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: var(--text-3);
+  margin-top: var(--sp-2);
+  line-height: 1.5;
+}
+
+input[type=text], input[type=number], input[type=email], input[type=date],
+select, textarea {
+  width: 100%;
+  background: var(--bg-deep);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 12px 14px;
+  color: var(--text-1);
+  font-family: var(--font-technical);
+  font-size: 14px;
+  font-weight: 500;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 3px var(--cyan-glow);
+}
+
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2300D4FF' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 40px;
+}
+
+.seg {
+  display: grid;
+  grid-template-columns: repeat(var(--cols,3), 1fr);
+  gap: 0;
+  background: var(--bg-deep);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.seg input { display: none; }
+
+.seg label {
+  text-align: center;
+  padding: 10px 8px;
+  cursor: pointer;
+  font-family: var(--font-technical);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--text-2);
+  border-right: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.seg label:last-of-type {
+  border-right: none;
+}
+
+.seg input:checked + label {
+  background: var(--cyan);
+  color: var(--bg-deep);
+  font-weight: 700;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  padding: 12px 20px;
+  background: var(--bg-elevated);
+  color: var(--text-1);
+  border: 1px solid var(--border-hot);
+  border-radius: 4px;
+  font-family: var(--font-technical);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-transform: uppercase;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn-primary {
+  background: var(--cyan);
+  color: var(--bg-deep);
+  border-color: var(--cyan);
+  box-shadow: 0 0 20px var(--cyan-glow);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 0 30px var(--cyan-glow);
+}
+
+.btn-full {
+  width: 100%;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   READOUT / RESULT DISPLAY
+   ═══════════════════════════════════════════════════════════════ */
+
+.readout {
+  background: linear-gradient(180deg, var(--bg-deep) 0%, #020510 100%);
+  border: 1px solid var(--cyan);
+  border-radius: 6px;
+  padding: var(--sp-5);
+  margin-top: var(--sp-4);
+  position: relative;
+  box-shadow: inset 0 0 40px rgba(0,212,255,0.06);
+}
+
+.readout::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%; transform: translateX(-50%);
+  width: 40px; height: 2px;
+  background: var(--cyan);
+  box-shadow: 0 0 8px var(--cyan);
+}
+
+.readout-label {
+  font-family: var(--font-technical);
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: var(--cyan);
+  text-align: center;
+  margin-bottom: var(--sp-3);
+}
+
+.readout-value {
+  font-family: var(--font-display);
+  font-size: 42px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-align: center;
+  color: var(--text-1);
+  line-height: 1;
+  text-shadow: 0 0 20px var(--cyan-glow);
+  margin-bottom: var(--sp-2);
+}
+
+.readout-value .unit {
+  font-size: 18px;
+  color: var(--cyan);
+  margin-left: var(--sp-2);
+}
+
+.readout-sub {
+  font-family: var(--font-technical);
+  font-size: 11px;
+  color: var(--text-2);
+  text-align: center;
+  line-height: 1.5;
+}
+
+.readout-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-3);
+  margin-top: var(--sp-4);
+  padding-top: var(--sp-4);
+  border-top: 1px dashed var(--border);
+}
+
+.meta-item {
+  text-align: center;
+}
+
+.meta-item .label {
+  font-family: var(--font-technical);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--text-3);
+  margin-bottom: 4px;
+}
+
+.meta-item .val {
+  font-family: var(--font-technical);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-1);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   BOTTOM NAVIGATION
+   ═══════════════════════════════════════════════════════════════ */
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(6,9,19,0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border);
+  padding: var(--sp-2) var(--sp-2) calc(var(--sp-2) + env(safe-area-inset-bottom));
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  z-index: 100;
+}
+
+.bottom-nav::before {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+  opacity: 0.3;
+}
+
+.nav-btn {
+  background: none;
+  border: none;
+  padding: 8px 4px;
+  color: var(--text-3);
+  font-family: var(--font-technical);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  border-radius: 4px;
+  transition: all 0.15s;
+}
+
+.nav-btn svg {
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+}
+
+.nav-btn.active {
+  color: var(--cyan);
+}
+
+.nav-btn.active svg {
+  filter: drop-shadow(0 0 6px var(--cyan));
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   UTILS
+   ═══════════════════════════════════════════════════════════════ */
+
+.mono { font-family: var(--font-technical); }
+.cyan { color: var(--cyan); }
+.amber { color: var(--amber); }
+.green { color: var(--green); }
+.red { color: var(--red); }
+.dim { color: var(--text-3); }
+
+.row { display: flex; gap: var(--sp-3); align-items: center; }
+.row-between { display: flex; justify-content: space-between; align-items: center; }
+.stack { display: flex; flex-direction: column; gap: var(--sp-2); }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-3); }
+
+.chip {
+  display: inline-block;
+  padding: 3px 8px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  font-family: var(--font-technical);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--text-2);
+}
+
+.chip.hot { color: var(--amber); border-color: var(--amber); }
+.chip.go  { color: var(--green); border-color: var(--green); }
+
+/* Welcome / onboarding */
+.welcome-hero {
+  text-align: center;
+  padding: var(--sp-6) var(--sp-5) var(--sp-5);
+}
+
+.welcome-hero .badge {
+  display: inline-block;
+  padding: 4px 12px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--cyan);
+  border-radius: 20px;
+  font-family: var(--font-technical);
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  color: var(--cyan);
+  margin-bottom: var(--sp-4);
+}
+
+.welcome-hero h1 {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: 0.04em;
+  margin-bottom: var(--sp-3);
+}
+
+.welcome-hero p {
+  color: var(--text-2);
+  font-size: 14px;
+  line-height: 1.5;
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+.feature-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  padding: var(--sp-3) 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.feature-row:last-child { border-bottom: none; }
+
+.feature-row .icon {
+  width: 24px;
+  height: 24px;
+  color: var(--cyan);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.feature-row .text h4 {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin-bottom: 2px;
+}
+
+.feature-row .text p {
+  font-size: 12px;
+  color: var(--text-2);
+  line-height: 1.4;
+}
+
+/* ND filter result specific */
+.nd-result .filter-name {
+  font-family: var(--font-display);
+  font-size: 56px;
+  font-weight: 900;
+  color: var(--cyan);
+  letter-spacing: 0.04em;
+  text-shadow: 0 0 30px var(--cyan-glow);
+}
+
+.nd-scale {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-top: var(--sp-4);
+}
+
+.nd-scale-item {
+  text-align: center;
+  padding: 8px 2px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  font-family: var(--font-technical);
+  font-size: 10px;
+  color: var(--text-3);
+}
+
+.nd-scale-item.active {
+  background: var(--cyan);
+  color: var(--bg-deep);
+  border-color: var(--cyan);
+  font-weight: 700;
+  box-shadow: 0 0 15px var(--cyan-glow);
+}
+
+/* Shutter calculator shutters */
+.shutter-rail {
+  margin-top: var(--sp-4);
+  padding: var(--sp-4);
+  background: var(--bg-elevated);
+  border-radius: 4px;
+  font-family: var(--font-technical);
+}
+
+.shutter-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px dashed var(--border);
+  font-size: 12px;
+}
+.shutter-row:last-child { border-bottom: none; }
+.shutter-row .k { color: var(--text-3); }
+.shutter-row .v { color: var(--text-1); font-weight: 600; }
+.shutter-row.highlight .v { color: var(--cyan); }
+.shutter-row.highlight .k { color: var(--cyan); }
+
+/* Install prompt */
+.install-banner {
+  background: linear-gradient(135deg, var(--bg-elevated) 0%, var(--bg-hover) 100%);
+  border: 1px solid var(--amber);
+  border-radius: 6px;
+  padding: var(--sp-4);
+  margin-bottom: var(--sp-4);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.install-banner .install-icon {
+  width: 32px;
+  height: 32px;
+  color: var(--amber);
+  flex-shrink: 0;
+}
+
+.install-banner .text {
+  flex: 1;
+  font-size: 12px;
+  color: var(--text-2);
+  line-height: 1.4;
+}
+
+.install-banner .text strong {
+  color: var(--amber);
+  font-family: var(--font-display);
+  display: block;
+  font-size: 13px;
+  letter-spacing: 0.05em;
+}
+
+/* Coming soon overlay on tiles */
+.tool-tile.soon {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.tool-tile.soon .soon-tag {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: var(--bg-deep);
+  color: var(--text-3);
+  font-family: var(--font-technical);
+  font-size: 8px;
+  letter-spacing: 0.15em;
+  padding: 2px 6px;
+  border-radius: 2px;
+  border: 1px solid var(--border);
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- HEADER                                                            -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+
+<header class="header">
+  <div class="brand">
+    <div class="brand-mark">
+      <svg viewBox="0 0 24 24"><path d="M12 2L2 22h20L12 2zm0 6l6 12H6l6-12z"/></svg>
+    </div>
+    <div class="brand-text">
+      <div class="name">PRE-FLIGHT</div>
+      <div class="sub">PILOT PAL v0.1</div>
+    </div>
+  </div>
+  <div class="status-pill">
+    <span class="status-dot"></span>
+    <span>READY</span>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- MAIN                                                              -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+
+<main class="main">
+
+  <!-- ─── HOME VIEW ─── -->
+  <section class="view active" id="view-home">
+
+    <div class="hero">
+      <div class="hero-label">CANADIAN DRONE PILOT COMPANION</div>
+      <h1 class="hero-title">BEFORE YOU <span class="accent">FLY</span></h1>
+      <p class="hero-sub">Everything the pre-flight checklist forgets. Built by pilots, for pilots.</p>
+    </div>
+
+    <div class="install-banner" id="install-banner" style="display:none;">
+      <svg class="install-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/>
+      </svg>
+      <div class="text">
+        <strong>INSTALL TO HOME SCREEN</strong>
+        Tap the share icon in your browser, then "Add to Home Screen" for full-app experience.
+      </div>
+    </div>
+
+    <div class="section-title">FIELD TOOLS</div>
+
+    <div class="tool-grid">
+      <button class="tool-tile" data-nav="nd">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="12" r="9"/>
+          <circle cx="12" cy="12" r="4"/>
+          <path d="M12 3v2M12 19v2M3 12h2M19 12h2"/>
+        </svg>
+        <div class="label">F·01</div>
+        <div class="title">ND FILTER<br>RECOMMENDER</div>
+      </button>
+
+      <button class="tool-tile" data-nav="shutter">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="12" r="9"/>
+          <path d="M12 3l3 6M21 12l-6 3M12 21l-3-6M3 12l6-3"/>
+          <path d="M12 12l6-3M12 12l-6 3M12 12l3 6M12 12l-3-6"/>
+        </svg>
+        <div class="label">F·02</div>
+        <div class="title">180° SHUTTER<br>CALCULATOR</div>
+      </button>
+
+      <button class="tool-tile soon">
+        <span class="soon-tag">SOON</span>
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="12" r="5"/>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+        </svg>
+        <div class="label">F·03</div>
+        <div class="title">SUN / MOON<br>POSITION</div>
+      </button>
+
+      <button class="tool-tile soon">
+        <span class="soon-tag">SOON</span>
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M9 11l3 3L22 4"/>
+          <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+        </svg>
+        <div class="label">F·04</div>
+        <div class="title">PRE-FLIGHT<br>CHECKLIST</div>
+      </button>
+
+      <button class="tool-tile soon">
+        <span class="soon-tag">SOON</span>
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M2 12h3M19 12h3M12 2v3M12 19v3"/>
+          <circle cx="12" cy="12" r="7"/>
+          <path d="M12 7v5l3 3"/>
+        </svg>
+        <div class="label">F·05</div>
+        <div class="title">WHITE BALANCE<br>REFERENCE</div>
+      </button>
+
+      <button class="tool-tile premium soon">
+        <span class="premium-badge">PRO</span>
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M3 14l4-4 4 4 4-7 6 12"/>
+          <path d="M3 3v18h18"/>
+        </svg>
+        <div class="label">F·06</div>
+        <div class="title">FLIGHT<br>SUITABILITY</div>
+      </button>
+    </div>
+
+    <div class="section-title">CONFIGURATION</div>
+
+    <button class="tool-tile soon" style="width:100%;text-align:left;">
+      <span class="soon-tag">SOON</span>
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+        <circle cx="12" cy="7" r="4"/>
+      </svg>
+      <div class="label">PILOT PROFILE</div>
+      <div class="title">CREDENTIALS &amp; DRONE REGISTRY</div>
+    </button>
+
+  </section>
+
+  <!-- ─── ND RECOMMENDER VIEW ─── -->
+  <section class="view" id="view-nd">
+    <div class="view-header">
+      <button class="back-btn" data-back>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+      </button>
+      <div class="view-title">
+        <div class="kicker">F·01 · FIELD TOOL</div>
+        <div class="main-title">ND FILTER RECOMMENDER</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-corner tl"></div>
+      <div class="card-corner tr"></div>
+      <div class="card-corner bl"></div>
+      <div class="card-corner br"></div>
+
+      <div class="field">
+        <label class="field-label">LIGHT CONDITION</label>
+        <div class="seg" style="--cols:3;">
+          <input type="radio" name="light" id="l1" value="dim"><label for="l1">DIM</label>
+          <input type="radio" name="light" id="l2" value="overcast"><label for="l2">OVERCAST</label>
+          <input type="radio" name="light" id="l3" value="cloudy_bright"><label for="l3">BRIGHT·CLOUDY</label>
+        </div>
+        <div class="seg" style="--cols:3; margin-top: 4px;">
+          <input type="radio" name="light" id="l4" value="sunny" checked><label for="l4">SUNNY</label>
+          <input type="radio" name="light" id="l5" value="very_sunny"><label for="l5">VERY SUNNY</label>
+          <input type="radio" name="light" id="l6" value="extreme"><label for="l6">SNOW·BEACH</label>
+        </div>
+        <div class="field-hint">Look up at the sky, not the ground. "Overcast" means you can't see the sun disc. "Bright cloudy" means hazy sun visible through thin clouds.</div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">FRAME RATE</label>
+        <div class="seg" style="--cols:4;">
+          <input type="radio" name="fps" id="f24" value="24"><label for="f24">24</label>
+          <input type="radio" name="fps" id="f30" value="30" checked><label for="f30">30</label>
+          <input type="radio" name="fps" id="f60" value="60"><label for="f60">60</label>
+          <input type="radio" name="fps" id="f120" value="120"><label for="f120">120</label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">YOUR ND KIT</label>
+        <select id="nd-kit">
+          <option value="standard">Standard (ND16 / 32 / 64 / 128)</option>
+          <option value="extended" selected>Extended (ND16 / 32 / 64 / 128 / 256) + CPL</option>
+          <option value="full">Full (ND8 / 16 / 32 / 64 / 128 / 256 / 512)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="readout nd-result" id="nd-readout">
+      <div class="readout-label">▼ RECOMMENDATION ▼</div>
+      <div class="readout-value"><span id="nd-filter" class="filter-name">ND64</span></div>
+      <div class="readout-sub" id="nd-sub">Mounts on the lens · rotates the exposure math back into the 180° rule zone.</div>
+
+      <div class="nd-scale" id="nd-scale"></div>
+
+      <div class="readout-meta">
+        <div class="meta-item">
+          <div class="label">STOPS REDUCED</div>
+          <div class="val" id="nd-stops">6</div>
+        </div>
+        <div class="meta-item">
+          <div class="label">TARGET SHUTTER</div>
+          <div class="val" id="nd-target-shutter">1/60s</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top: var(--sp-4);">
+      <div class="field-label" style="margin-bottom: var(--sp-3);">ABOUT THIS RECOMMENDATION</div>
+      <div style="color: var(--text-2); font-size: 13px; line-height: 1.6;">
+        The 180° shutter rule says your shutter speed should be roughly 2× your frame rate for natural motion.
+        At your chosen frame rate, the ideal shutter is too slow for bright daylight without an ND filter —
+        the image would blow out. This filter brings the exposure back in line.
+        <br><br>
+        <span class="dim">If you notice your footage has a slight color cast with this filter, use a +/-5 temperature
+        correction in your editor. Budget filters sometimes skew magenta or yellow.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── SHUTTER CALCULATOR VIEW ─── -->
+  <section class="view" id="view-shutter">
+    <div class="view-header">
+      <button class="back-btn" data-back>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+      </button>
+      <div class="view-title">
+        <div class="kicker">F·02 · FIELD TOOL</div>
+        <div class="main-title">180° SHUTTER RULE</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-corner tl"></div>
+      <div class="card-corner tr"></div>
+      <div class="card-corner bl"></div>
+      <div class="card-corner br"></div>
+
+      <div class="field">
+        <label class="field-label">YOUR FRAME RATE (FPS)</label>
+        <div class="seg" style="--cols:4;">
+          <input type="radio" name="sfps" id="s24"  value="24"><label for="s24">24</label>
+          <input type="radio" name="sfps" id="s25"  value="25"><label for="s25">25</label>
+          <input type="radio" name="sfps" id="s30"  value="30" checked><label for="s30">30</label>
+          <input type="radio" name="sfps" id="s50"  value="50"><label for="s50">50</label>
+        </div>
+        <div class="seg" style="--cols:4; margin-top: 4px;">
+          <input type="radio" name="sfps" id="s60"  value="60"><label for="s60">60</label>
+          <input type="radio" name="sfps" id="s100" value="100"><label for="s100">100</label>
+          <input type="radio" name="sfps" id="s120" value="120"><label for="s120">120</label>
+          <input type="radio" name="sfps" id="s240" value="240"><label for="s240">240</label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">SHUTTER ANGLE</label>
+        <div class="seg" style="--cols:4;">
+          <input type="radio" name="sangle" id="a90"  value="90"><label for="a90">90°</label>
+          <input type="radio" name="sangle" id="a172" value="172.8"><label for="a172">172°</label>
+          <input type="radio" name="sangle" id="a180" value="180" checked><label for="a180">180°</label>
+          <input type="radio" name="sangle" id="a360" value="360"><label for="a360">360°</label>
+        </div>
+        <div class="field-hint">180° is the cinematic standard. 90° gives staccato / choppy motion (used in "Saving Private Ryan" battle scenes). 360° gives maximum motion blur.</div>
+      </div>
+    </div>
+
+    <div class="readout">
+      <div class="readout-label">▼ IDEAL SHUTTER SPEED ▼</div>
+      <div class="readout-value" id="shutter-value">1/60<span class="unit">s</span></div>
+      <div class="readout-sub" id="shutter-sub">Set your camera to this shutter for natural motion blur.</div>
+
+      <div class="readout-meta">
+        <div class="meta-item">
+          <div class="label">CLOSEST PRESET</div>
+          <div class="val" id="shutter-preset">1/60</div>
+        </div>
+        <div class="meta-item">
+          <div class="label">EXACT VALUE</div>
+          <div class="val" id="shutter-exact">1/60.0s</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top: var(--sp-4);">
+      <div class="field-label" style="margin-bottom: var(--sp-3);">COMMON FRAME RATES</div>
+      <div class="shutter-rail" id="shutter-rail"></div>
+    </div>
+
+    <div class="card" style="margin-top: var(--sp-4);">
+      <div class="field-label" style="margin-bottom: var(--sp-3);">WHY THIS MATTERS</div>
+      <div style="color: var(--text-2); font-size: 13px; line-height: 1.6;">
+        When shutter speed is too fast relative to frame rate, motion freezes frame-by-frame and footage
+        looks stuttery or "video-y." When it's too slow, everything smears. The 180° rule (shutter ≈ 2× frame rate)
+        matches the natural motion blur your eye expects.
+        <br><br>
+        <span class="dim">On a bright day, hitting the ideal shutter without an ND filter is usually impossible —
+        the camera would blow out the image. That's why NDs exist. Pair this calculator with the ND Filter Recommender.</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- BOTTOM NAVIGATION                                                 -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+
+<nav class="bottom-nav">
+  <button class="nav-btn active" data-nav="home">
+    <svg viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 10v10h4v-6h6v6h4V10"/></svg>
+    <span>HOME</span>
+  </button>
+  <button class="nav-btn" data-nav="nd">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg>
+    <span>ND</span>
+  </button>
+  <button class="nav-btn" data-nav="shutter">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3l3 6M21 12l-6 3M12 21l-3-6M3 12l6-3"/></svg>
+    <span>SHUTTER</span>
+  </button>
+  <button class="nav-btn soon-nav" data-nav="soon">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v6M12 17v6M4.22 4.22l4.24 4.24M15.54 15.54l4.24 4.24M1 12h6M17 12h6M4.22 19.78l4.24-4.24M15.54 8.46l4.24-4.24"/></svg>
+    <span>MORE</span>
+  </button>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- LOGIC                                                             -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+
+<script>
+/* ────────────────────────────────────────────────
+   NAVIGATION
+   ──────────────────────────────────────────────── */
+
+const views = {
+  home:    document.getElementById('view-home'),
+  nd:      document.getElementById('view-nd'),
+  shutter: document.getElementById('view-shutter'),
+};
+
+function navigate(viewId) {
+  Object.values(views).forEach(v => v.classList.remove('active'));
+  if (views[viewId]) views[viewId].classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.nav === viewId);
+  });
+  window.scrollTo({ top: 0, behavior: 'instant' });
+}
+
+document.querySelectorAll('[data-nav]').forEach(el => {
+  el.addEventListener('click', (e) => {
+    const target = el.dataset.nav;
+    if (target === 'soon') {
+      alert('More tools coming soon:\n\n• Sun / Moon position\n• Pre-flight checklist\n• White balance reference\n• Flight suitability (Pro)\n\nThis is v0.1 — we\'re just getting started.');
+      return;
+    }
+    if (el.classList.contains('soon')) {
+      alert('Coming in v0.2 — this tile is a placeholder for now.');
+      return;
+    }
+    if (views[target]) {
+      navigate(target);
+    }
+  });
+});
+
+document.querySelectorAll('[data-back]').forEach(b => {
+  b.addEventListener('click', () => navigate('home'));
+});
+
+/* ────────────────────────────────────────────────
+   ND FILTER RECOMMENDER
+   ────────────────────────────────────────────────
+   Logic: given light condition + frame rate + kit,
+   compute stops-of-reduction needed, pick closest
+   available ND filter from the user's kit.
+   ──────────────────────────────────────────────── */
+
+// Approximate EV of each lighting condition (bright sky, fixed f/1.7 aperture like Mini 5 Pro)
+const LIGHT_EV = {
+  dim:            9,    // indoor-bright / dusk
+  overcast:       12,   // heavy cloud cover
+  cloudy_bright:  13,   // hazy sun through thin cloud
+  sunny:          14,   // normal sunny day
+  very_sunny:     15,   // high summer, open sky
+  extreme:        16,   // snow, white sand, noon overhead
+};
+
+// Stops-of-reduction each ND filter gives
+const ND_STOPS = {
+  'ND8':   3,
+  'ND16':  4,
+  'ND32':  5,
+  'ND64':  6,
+  'ND128': 7,
+  'ND256': 8,
+  'ND512': 9,
+};
+
+const ND_KITS = {
+  standard: ['ND16','ND32','ND64','ND128'],
+  extended: ['ND16','ND32','ND64','ND128','ND256'],
+  full:     ['ND8','ND16','ND32','ND64','ND128','ND256','ND512'],
+};
+
+// Base reference: at f/1.7 and ISO 100, target shutter = 1/(2×fps)
+// EV needed at target shutter = log2(f^2 / shutter) + log2(ISO/100)
+// At f/1.7: f^2 ≈ 2.89, so base EV for target shutter = log2(2.89 * 2 * fps)
+// Stops to remove = scene_EV - target_EV
+function computeND(lightKey, fps, kit) {
+  const sceneEV = LIGHT_EV[lightKey] ?? 14;
+  const targetShutter = 1 / (2 * fps);   // e.g. 1/60 at 30fps
+  // EV = log2(N² / t)   where N=f-number, t=shutter time in seconds
+  // Mini 5 Pro f/1.7 → N²=2.89
+  const targetEV = Math.log2(2.89 / targetShutter);   // ISO 100 assumed
+  const stopsToRemove = Math.max(0, sceneEV - targetEV);
+
+  // Pick closest ND from kit (preferring undershoot — let user open up shutter slightly rather than underexpose)
+  const available = ND_KITS[kit];
+  let chosen = available[0];
+  let bestDiff = Infinity;
+  for (const nd of available) {
+    const diff = Math.abs(ND_STOPS[nd] - stopsToRemove);
+    if (diff < bestDiff) { bestDiff = diff; chosen = nd; }
+  }
+
+  return {
+    chosen,
+    stopsToRemove: Math.round(stopsToRemove),
+    targetShutter: `1/${Math.round(2*fps)}s`,
+    availableKit: available,
+  };
+}
+
+function renderND() {
+  const light = document.querySelector('input[name=light]:checked')?.value || 'sunny';
+  const fps = parseFloat(document.querySelector('input[name=fps]:checked')?.value || 30);
+  const kit = document.getElementById('nd-kit').value;
+
+  const result = computeND(light, fps, kit);
+
+  document.getElementById('nd-filter').textContent = result.chosen;
+  document.getElementById('nd-stops').textContent = ND_STOPS[result.chosen];
+  document.getElementById('nd-target-shutter').textContent = result.targetShutter;
+
+  // Build scale
+  const scale = document.getElementById('nd-scale');
+  scale.innerHTML = '';
+  const allND = ['ND8','ND16','ND32','ND64','ND128','ND256','ND512'];
+  allND.forEach(nd => {
+    const d = document.createElement('div');
+    d.className = 'nd-scale-item';
+    if (nd === result.chosen) d.classList.add('active');
+    if (!result.availableKit.includes(nd)) d.style.opacity = '0.35';
+    d.textContent = nd.replace('ND','');
+    scale.appendChild(d);
+  });
+
+  // Tailored subline
+  const hints = {
+    dim: 'Low light — usually no ND needed, but if you\'re at a wide shutter you might stack a light ND to reduce glare.',
+    overcast: 'Diffused light, great for even exposure. Light ND stops you from over-exposing bright patches.',
+    cloudy_bright: 'Hazy sun — tricky light. This ND handles the brighter patches without crushing the shadows.',
+    sunny: 'Your most common flying condition. This filter keeps the 180° rule intact.',
+    very_sunny: 'High contrast. Watch your highlights — use zebras on the controller.',
+    extreme: 'Beach / snow / noon overhead. Aggressive ND + consider a CPL to tame reflections.',
+  };
+  document.getElementById('nd-sub').textContent = hints[light];
+}
+
+document.querySelectorAll('#view-nd input, #view-nd select').forEach(el => {
+  el.addEventListener('change', renderND);
+});
+
+/* ────────────────────────────────────────────────
+   SHUTTER CALCULATOR
+   ──────────────────────────────────────────────── */
+
+const STANDARD_SHUTTERS = [
+  8000,4000,2000,1000,500,250,200,160,125,100,80,60,50,40,30,25,20,15,10,8,4,2,1
+];
+
+function closestStandardShutter(exactDenominator) {
+  let best = STANDARD_SHUTTERS[0];
+  let bestDiff = Math.abs(best - exactDenominator);
+  for (const s of STANDARD_SHUTTERS) {
+    const d = Math.abs(s - exactDenominator);
+    if (d < bestDiff) { bestDiff = d; best = s; }
+  }
+  return best;
+}
+
+function renderShutter() {
+  const fps = parseFloat(document.querySelector('input[name=sfps]:checked')?.value || 30);
+  const angle = parseFloat(document.querySelector('input[name=sangle]:checked')?.value || 180);
+
+  // shutter (seconds) = shutter_angle / (360 * fps)
+  const shutterTime = angle / (360 * fps);
+  const denominator = 1 / shutterTime;
+  const preset = closestStandardShutter(denominator);
+
+  document.getElementById('shutter-value').innerHTML =
+    `1/${Math.round(denominator)}<span class="unit">s</span>`;
+  document.getElementById('shutter-preset').textContent = `1/${preset}`;
+  document.getElementById('shutter-exact').textContent = `1/${denominator.toFixed(1)}s`;
+
+  // Sub text tailored to angle
+  const subs = {
+    '90':    'Staccato / choppy motion. Used for intense action scenes.',
+    '172.8': 'Slight under-180° used to avoid flicker under 60Hz lights.',
+    '180':   'The cinematic standard. Matches natural motion blur.',
+    '360':   'Maximum motion blur. Dreamy, flowing, ethereal look.',
+  };
+  const angleStr = String(angle);
+  document.getElementById('shutter-sub').textContent = subs[angleStr] || subs['180'];
+
+  // Build the rail showing common fps at this shutter angle
+  const rail = document.getElementById('shutter-rail');
+  rail.innerHTML = '';
+  [24, 25, 30, 50, 60, 120, 240].forEach(rateKey => {
+    const t = angle / (360 * rateKey);
+    const den = Math.round(1/t);
+    const pres = closestStandardShutter(1/t);
+    const highlight = (rateKey === fps) ? ' highlight' : '';
+    rail.innerHTML += `
+      <div class="shutter-row${highlight}">
+        <span class="k">${rateKey} fps</span>
+        <span class="v">1/${den}s <span class="dim">(closest preset: 1/${pres})</span></span>
+      </div>
+    `;
+  });
+}
+
+document.querySelectorAll('#view-shutter input').forEach(el => {
+  el.addEventListener('change', renderShutter);
+});
+
+/* ────────────────────────────────────────────────
+   PWA INSTALL PROMPT
+   ──────────────────────────────────────────────── */
+
+// Only show banner on iOS (Android shows its own install prompt)
+if (/iPhone|iPad|iPod/.test(navigator.userAgent) && !window.matchMedia('(display-mode: standalone)').matches) {
+  document.getElementById('install-banner').style.display = 'flex';
+}
+
+/* ────────────────────────────────────────────────
+   INIT
+   ──────────────────────────────────────────────── */
+
+renderND();
+renderShutter();
+
+// Register service worker for offline use
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  });
+}
+</script>
+
+</body>
+</html>
