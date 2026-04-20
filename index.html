@@ -6,11 +6,11 @@
 <meta name="theme-color" content="#0A0E1A">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="PFPP">
-<title>Pre-Flight Pilot Pal</title>
+<meta name="apple-mobile-web-app-title" content="Vista Frame">
+<title>Vista Frame</title>
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230A0E1A'/%3E%3Ctext x='50' y='68' text-anchor='middle' font-family='monospace' font-size='55' font-weight='900' fill='%2300D4FF'%3EP%3C/text%3E%3C/svg%3E">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230A0E1A'/%3E%3Ctext x='50' y='68' text-anchor='middle' font-family='monospace' font-size='55' font-weight='900' fill='%2300D4FF'%3EP%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230A0E1A'/%3E%3Ctext x='50' y='68' text-anchor='middle' font-family='monospace' font-size='55' font-weight='900' fill='%2300D4FF'%3EV%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230A0E1A'/%3E%3Ctext x='50' y='68' text-anchor='middle' font-family='monospace' font-size='55' font-weight='900' fill='%2300D4FF'%3EV%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=Orbitron:wght@500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -28,10 +28,10 @@
   --bg-hover:    #1a2238;
   --border:      #1F2940;
   --border-hot:  #2A3857;
-  --text-1:      #E8EEFF;
-  --text-2:      #8FA0C7;
-  --text-3:      #5A6B8E;
-  --text-dim:    #3D4A68;
+  --text-1:      #F2F5FF;
+  --text-2:      #B8C5E0;
+  --text-3:      #8294B8;
+  --text-dim:    #5E7092;
 
   /* Instrument panel accents */
   --cyan:        #00D4FF;   /* primary HUD */
@@ -1654,6 +1654,223 @@ select {
 }
 
 /* ═══════════════════════════════════════════════════════════════
+   DRONE REGISTRY
+   ═══════════════════════════════════════════════════════════════ */
+
+.drone-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: var(--sp-4);
+  margin-bottom: var(--sp-3);
+  position: relative;
+  transition: all 0.15s;
+  cursor: pointer;
+}
+
+.drone-card:active {
+  background: var(--bg-elevated);
+}
+
+.drone-card.primary {
+  border-color: var(--cyan);
+  box-shadow: 0 0 12px var(--cyan-glow);
+}
+
+.drone-card.primary::before {
+  content: 'PRIMARY';
+  position: absolute;
+  top: -8px;
+  left: var(--sp-4);
+  background: var(--cyan);
+  color: var(--bg-deep);
+  font-family: var(--font-technical);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  padding: 2px 8px;
+  border-radius: 3px;
+}
+
+.drone-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-3);
+}
+
+.drone-title {
+  min-width: 0;
+  flex: 1;
+}
+
+.drone-title .make {
+  font-family: var(--font-technical);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--text-3);
+  margin-bottom: 2px;
+}
+
+.drone-title .model {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--text-1);
+  line-height: 1.2;
+}
+
+.drone-title .nickname {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: var(--cyan);
+  margin-top: 2px;
+  font-style: italic;
+}
+
+.drone-actions {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.drone-specs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--sp-2);
+  padding-top: var(--sp-3);
+  border-top: 1px dashed var(--border);
+}
+
+.drone-spec {
+  min-width: 0;
+}
+
+.drone-spec .label {
+  font-family: var(--font-technical);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  color: var(--text-3);
+  margin-bottom: 2px;
+}
+
+.drone-spec .value {
+  font-family: var(--font-technical);
+  font-size: 12px;
+  color: var(--text-1);
+  font-weight: 500;
+  overflow-wrap: break-word;
+}
+
+.drone-weight-badge {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: var(--font-technical);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  margin-top: 4px;
+}
+
+.drone-weight-badge.sub250 {
+  background: rgba(0,255,148,0.15);
+  color: var(--green);
+  border: 1px solid var(--green);
+}
+
+.drone-weight-badge.over250 {
+  background: rgba(255,178,0,0.15);
+  color: var(--amber);
+  border: 1px solid var(--amber);
+}
+
+.drone-empty {
+  text-align: center;
+  padding: var(--sp-6) var(--sp-4);
+  color: var(--text-3);
+}
+
+.drone-empty .icon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto var(--sp-3);
+  color: var(--text-dim);
+}
+
+.drone-empty h3 {
+  font-family: var(--font-display);
+  font-size: 14px;
+  color: var(--text-2);
+  margin-bottom: var(--sp-2);
+  letter-spacing: 0.05em;
+}
+
+.drone-empty p {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-3);
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+.drone-picker-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  background: var(--bg-deep);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: var(--sp-4);
+}
+
+.drone-picker-toggle input { display: none; }
+
+.drone-picker-toggle label {
+  text-align: center;
+  padding: 10px;
+  cursor: pointer;
+  font-family: var(--font-technical);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--text-2);
+  transition: all 0.15s;
+}
+
+.drone-picker-toggle label:first-of-type {
+  border-right: 1px solid var(--border);
+}
+
+.drone-picker-toggle input:checked + label {
+  background: var(--cyan);
+  color: var(--bg-deep);
+  font-weight: 700;
+}
+
+.action-btn-big {
+  width: 100%;
+  padding: 14px;
+  background: var(--cyan);
+  color: var(--bg-deep);
+  border: 1px solid var(--cyan);
+  border-radius: 4px;
+  font-family: var(--font-technical);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  cursor: pointer;
+  box-shadow: 0 0 15px var(--cyan-glow);
+  transition: all 0.15s;
+  margin-top: var(--sp-3);
+}
+
+.action-btn-big:active { transform: scale(0.98); }
+
+/* ═══════════════════════════════════════════════════════════════
    UTILS
    ═══════════════════════════════════════════════════════════════ */
 
@@ -1878,8 +2095,8 @@ select {
       <svg viewBox="0 0 24 24"><path d="M12 2L2 22h20L12 2zm0 6l6 12H6l6-12z"/></svg>
     </div>
     <div class="brand-text">
-      <div class="name">PRE-FLIGHT</div>
-      <div class="sub">PILOT PAL v0.4</div>
+      <div class="name">VISTA FRAME</div>
+      <div class="sub">v0.5 · CINEMATOGRAPHY</div>
     </div>
   </div>
   <div class="status-pill">
@@ -1898,9 +2115,9 @@ select {
   <section class="view active" id="view-home">
 
     <div class="hero">
-      <div class="hero-label">CANADIAN DRONE PILOT COMPANION</div>
-      <h1 class="hero-title">BEFORE YOU <span class="accent">FLY</span></h1>
-      <p class="hero-sub">Everything the pre-flight checklist forgets. Built by pilots, for pilots.</p>
+      <div class="hero-label">AERIAL CINEMATOGRAPHY COMPANION</div>
+      <h1 class="hero-title">FRAME YOUR <span class="accent">SHOT</span></h1>
+      <p class="hero-sub">The drone photographer's pocket reference. Perfect light, perfect filter, perfect frame.</p>
     </div>
 
     <div class="install-banner" id="install-banner" style="display:none;">
@@ -1964,28 +2181,65 @@ select {
         <div class="title">WHITE BALANCE<br>REFERENCE</div>
       </button>
 
+      <button class="tool-tile" data-nav="drones">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="4" y="4" width="6" height="6"/>
+          <rect x="14" y="4" width="6" height="6"/>
+          <rect x="4" y="14" width="6" height="6"/>
+          <rect x="14" y="14" width="6" height="6"/>
+          <circle cx="12" cy="12" r="2"/>
+        </svg>
+        <div class="label">F·06</div>
+        <div class="title">DRONE<br>REGISTRY</div>
+      </button>
+    </div>
+
+    <div class="section-title">COMING SOON · PREMIUM</div>
+
+    <div class="tool-grid">
       <button class="tool-tile premium soon">
         <span class="premium-badge">PRO</span>
         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
           <path d="M3 14l4-4 4 4 4-7 6 12"/>
           <path d="M3 3v18h18"/>
         </svg>
-        <div class="label">F·06</div>
+        <div class="label">F·07</div>
         <div class="title">FLIGHT<br>SUITABILITY</div>
       </button>
+
+      <button class="tool-tile premium soon">
+        <span class="premium-badge">PRO</span>
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="3" y="3" width="18" height="18" rx="1"/>
+          <line x1="9" y1="3" x2="9" y2="21"/>
+          <line x1="15" y1="3" x2="15" y2="21"/>
+          <line x1="3" y1="9" x2="21" y2="9"/>
+          <line x1="3" y1="15" x2="21" y2="15"/>
+        </svg>
+        <div class="label">F·08</div>
+        <div class="title">COMPOSITION<br>GUIDES</div>
+      </button>
+
+      <button class="tool-tile premium soon">
+        <span class="premium-badge">PRO</span>
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M17.6 6.4A9 9 0 1021 12"/>
+          <polyline points="21 3 21 9 15 9"/>
+        </svg>
+        <div class="label">F·09</div>
+        <div class="title">SCENE → SETTINGS</div>
+      </button>
+
+      <button class="tool-tile premium soon">
+        <span class="premium-badge">PRO</span>
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+        </svg>
+        <div class="label">F·10</div>
+        <div class="title">FLIGHT REPORT<br>PDF</div>
+      </button>
     </div>
-
-    <div class="section-title">CONFIGURATION</div>
-
-    <button class="tool-tile soon" style="width:100%;text-align:left;">
-      <span class="soon-tag">SOON</span>
-      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
-        <circle cx="12" cy="7" r="4"/>
-      </svg>
-      <div class="label">PILOT PROFILE</div>
-      <div class="title">CREDENTIALS &amp; DRONE REGISTRY</div>
-    </button>
 
   </section>
 
@@ -2293,8 +2547,8 @@ select {
         </svg>
       </button>
       <div class="view-title">
-        <div class="kicker">F·04 · SAFETY ROUTINE</div>
-        <div class="main-title">PRE-FLIGHT CHECKLIST</div>
+        <div class="kicker">F·04 · SHOOT PREP</div>
+        <div class="main-title">PRE-SHOOT CHECKLIST</div>
       </div>
     </div>
 
@@ -2335,8 +2589,8 @@ select {
     <div class="card">
       <div class="field-label" style="margin-bottom: var(--sp-3);">ABOUT THIS CHECKLIST</div>
       <div style="color: var(--text-2); font-size: 13px; line-height: 1.6;">
-        This starts with a Canadian drone pilot's pre-flight ritual:
-        <strong class="cyan">PLAN → SITE → CAMERA → AIRCRAFT</strong>.
+        This starts with a 4-phase pre-shoot ritual focused on the shot, not the aircraft:
+        <strong class="cyan">VISION → LIGHT &amp; LENS → CAMERA SETTINGS → READY TO ROLL</strong>.
         Customize it to your exact workflow.
         <br><br>
         <span class="dim">Auto-resets when you open the app on a new day. Tap "NEW FLIGHT" to reset manually mid-day (multi-flight shoots). Data stays on your device — never sent anywhere.</span>
@@ -2407,6 +2661,44 @@ select {
     </div>
   </section>
 
+  <!-- ─── DRONE REGISTRY VIEW ─── -->
+  <section class="view" id="view-drones">
+    <div class="view-header">
+      <button class="back-btn" data-back>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+      </button>
+      <div class="view-title">
+        <div class="kicker">F·06 · EQUIPMENT</div>
+        <div class="main-title">DRONE REGISTRY</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="field-label" style="margin-bottom: var(--sp-2);">YOUR DRONES</div>
+      <div style="color: var(--text-2); font-size: 13px; line-height: 1.5; margin-bottom: var(--sp-3);">
+        Add your drones to get camera-specific ND recommendations, aperture-matched exposure math,
+        and faster reference at the field. The drone marked <strong class="cyan">PRIMARY</strong>
+        feeds into the ND Filter Recommender.
+      </div>
+      <div id="drone-list"></div>
+      <button class="action-btn-big" id="btn-add-drone">+ ADD A DRONE</button>
+    </div>
+
+    <div class="card">
+      <div class="field-label" style="margin-bottom: var(--sp-3);">ABOUT THE DATABASE</div>
+      <div style="color: var(--text-2); font-size: 13px; line-height: 1.6;">
+        Vista Frame includes a curated list of camera drones in the <strong class="cyan">sub-250g to 1kg</strong> range —
+        DJI, Autel, Skydio, Parrot, Yuneec, and others. Each entry carries the specs
+        the app needs to recommend settings: max aperture, sensor size, max bitrate, color profiles.
+        <br><br>
+        <span class="dim">Don't see your drone? Use "Add Custom" to enter your own make, model, and aperture —
+        the ND recommender will still work.</span>
+      </div>
+    </div>
+  </section>
+
 </main>
 
 <!-- ═══════════════════════════════════════════════════════════════ -->
@@ -2454,6 +2746,61 @@ select {
   </div>
 </div>
 
+<!-- Drone add/edit modal -->
+<div class="modal-overlay" id="drone-modal">
+  <div class="modal" style="max-width:440px;">
+    <div class="modal-title" id="drone-modal-title">ADD DRONE</div>
+
+    <div class="drone-picker-toggle">
+      <input type="radio" name="drone-mode" id="drone-mode-db" value="db" checked>
+      <label for="drone-mode-db">FROM DATABASE</label>
+      <input type="radio" name="drone-mode" id="drone-mode-custom" value="custom">
+      <label for="drone-mode-custom">ADD CUSTOM</label>
+    </div>
+
+    <div id="drone-mode-db-panel">
+      <div class="field">
+        <label class="field-label">MANUFACTURER</label>
+        <select id="drone-make">
+          <option value="">Select make...</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="field-label">MODEL</label>
+        <select id="drone-model">
+          <option value="">Select make first...</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="drone-mode-custom-panel" style="display:none;">
+      <div class="field">
+        <label class="field-label">MAKE</label>
+        <input type="text" id="drone-custom-make" placeholder="e.g. Generic">
+      </div>
+      <div class="field">
+        <label class="field-label">MODEL</label>
+        <input type="text" id="drone-custom-model" placeholder="e.g. Custom FPV Build">
+      </div>
+      <div class="field">
+        <label class="field-label">APERTURE (F-STOP)</label>
+        <input type="text" id="drone-custom-aperture" placeholder="e.g. 2.8" inputmode="decimal">
+        <div class="field-hint">Lower = more light. Most consumer drones: f/1.7 to f/2.8.</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label">NICKNAME (OPTIONAL)</label>
+      <input type="text" id="drone-nickname" placeholder="e.g. Main, Backup, The Workhorse">
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn" id="drone-modal-cancel">CANCEL</button>
+      <button class="btn btn-primary" id="drone-modal-save">SAVE</button>
+    </div>
+  </div>
+</div>
+
 <!-- ═══════════════════════════════════════════════════════════════ -->
 <!-- LOGIC                                                             -->
 <!-- ═══════════════════════════════════════════════════════════════ -->
@@ -2470,6 +2817,7 @@ const views = {
   sun:       document.getElementById('view-sun'),
   checklist: document.getElementById('view-checklist'),
   wb:        document.getElementById('view-wb'),
+  drones:    document.getElementById('view-drones'),
 };
 
 function navigate(viewId) {
@@ -2487,6 +2835,10 @@ function navigate(viewId) {
   // When checklist view opens, refresh display (handles auto-reset on new day)
   if (viewId === 'checklist') {
     checklistOpened();
+  }
+  // When drone registry opens, refresh the list
+  if (viewId === 'drones') {
+    renderDroneList();
   }
 }
 
@@ -3236,45 +3588,42 @@ setInterval(() => {
 const DEFAULT_CHECKLIST = [
   {
     id: 's1',
-    name: 'PLAN',
+    name: 'VISION',
     items: [
-      { id: 'p1', text: 'Check weather forecast (wind, precip, visibility)', note: 'Wind under 30 km/h for smooth footage' },
-      { id: 'p2', text: 'Verify airspace via NAV CANADA or AirMap app', note: 'Check for CTRL zones, TFRs, and NOTAMs' },
-      { id: 'p3', text: 'Confirm insurance and Part 107 / RPAS documents', note: 'Digital or physical copy on hand' },
-      { id: 'p4', text: 'Review client brief / shot list', note: 'Know what you need before you launch' },
+      { id: 'v1', text: 'Review shot list / client brief',                 note: 'Know what you came here to capture' },
+      { id: 'v2', text: 'Identify hero shots and safety shots',            note: 'Get the must-haves early, play later' },
+      { id: 'v3', text: 'Check sun/moon position for golden light window', note: 'See Sun & Moon Tracker' },
     ]
   },
   {
     id: 's2',
-    name: 'SITE',
+    name: 'LIGHT & LENS',
     items: [
-      { id: 'si1', text: 'Scout takeoff and landing area (flat, clear)', note: '3m+ clearance in all directions' },
-      { id: 'si2', text: 'Identify obstacles (wires, trees, buildings)', note: 'Note heading, distance, altitude' },
-      { id: 'si3', text: 'Check for people / vehicles / wildlife', note: '30m horizontal separation minimum' },
-      { id: 'si4', text: 'Confirm GPS signal strength', note: '10+ satellites locked before arming' },
+      { id: 'l1', text: 'Read the current light (hard sun, cloudy, shade)', note: 'Determines ND and WB choices' },
+      { id: 'l2', text: 'Mount appropriate ND filter',                      note: 'See ND Filter Recommender' },
+      { id: 'l3', text: 'Set white balance (manual, not auto)',             note: 'Auto WB causes edit inconsistency' },
+      { id: 'l4', text: 'Clean lens with microfiber cloth',                 note: 'Any dust ends up in every frame' },
     ]
   },
   {
     id: 's3',
-    name: 'CAMERA',
+    name: 'CAMERA SETTINGS',
     items: [
-      { id: 'c1', text: 'Set ISO, shutter, aperture for current light', note: '180° shutter rule = shutter 2× fps' },
-      { id: 'c2', text: 'Mount appropriate ND filter', note: 'See ND Filter Recommender tool' },
-      { id: 'c3', text: 'Verify color profile (D-Log M / Normal)', note: 'Match to your edit workflow' },
-      { id: 'c4', text: 'Confirm resolution + framerate on recorder', note: '4K60 D-Log M for pro work' },
-      { id: 'c5', text: 'Clean lens with microfiber cloth', note: 'Dust on lens = smudge in every frame' },
+      { id: 'c1', text: 'Set frame rate (24 / 30 / 60 fps)',               note: '24 for cinematic, 60 for slow-mo' },
+      { id: 'c2', text: 'Set shutter speed (180° rule: 2× fps)',            note: 'See 180° Shutter Calculator' },
+      { id: 'c3', text: 'Lock ISO at base (100 ideally)',                   note: 'Use ND to expose, not ISO' },
+      { id: 'c4', text: 'Select color profile (D-Log M / Normal / HLG)',    note: 'D-Log M gives most grading headroom' },
+      { id: 'c5', text: 'Enable peaking + zebras for focus/exposure',       note: 'Zebras at 95% to catch blown highlights' },
     ]
   },
   {
     id: 's4',
-    name: 'AIRCRAFT',
+    name: 'READY TO ROLL',
     items: [
-      { id: 'a1', text: 'Inspect propellers for cracks or chips', note: 'Replace suspect props - they are $8' },
-      { id: 'a2', text: 'Check battery level (>50% for primary flight)', note: 'Land at 25%, not 15%' },
-      { id: 'a3', text: 'Confirm SD card has space + is seated', note: '1GB per 30 sec at 4K60 D-Log M' },
-      { id: 'a4', text: 'Calibrate compass if in new location', note: 'Only when aircraft asks for it' },
-      { id: 'a5', text: 'Set RTH altitude above all obstacles', note: 'Default 100m; higher for hills/trees' },
-      { id: 'a6', text: 'Verify remote ID broadcast is active', note: 'Canadian Remote ID required 2026+' },
+      { id: 'r1', text: 'Confirm SD card has space + is seated',            note: '~1 GB per 30s at 4K60 D-Log M' },
+      { id: 'r2', text: 'Battery at 80%+ for primary flight',               note: 'Wind and cold eat battery fast' },
+      { id: 'r3', text: 'Do a test shot — review the result',               note: '10s test footage saves 30 min in edit' },
+      { id: 'r4', text: 'Mental rehearsal of first shot path',              note: 'Start → middle → end → land' },
     ]
   },
 ];
@@ -3282,7 +3631,7 @@ const DEFAULT_CHECKLIST = [
 const CHECKLIST_KEY    = 'pfpp.checklist';
 const CHECKLIST_STATE  = 'pfpp.checklist.state';
 const CHECKLIST_DAY    = 'pfpp.checklist.day';
-const CHECKLIST_DEFAULTS_VERSION = 2;   // bump when DEFAULT_CHECKLIST changes
+const CHECKLIST_DEFAULTS_VERSION = 3;   // bump when DEFAULT_CHECKLIST changes
 const CHECKLIST_VERSION_KEY = 'pfpp.checklist.defaultsVersion';
 
 let checklistData = loadChecklist();
@@ -3320,16 +3669,22 @@ function loadChecklist() {
   return JSON.parse(JSON.stringify(DEFAULT_CHECKLIST));
 }
 
-// Detect the old v1 defaults (had 5 sections including FLIGHT).
-// If user hasn't modified anything, the section IDs s1-s5 and item IDs will match.
+// Detect the old default checklists (v1 had 5 sections with FLIGHT; v2 had 4 sections PLAN/SITE/CAMERA/AIRCRAFT).
+// If user hasn't modified anything, the section IDs/names will still match.
 function looksLikeOldDefaults(data) {
-  if (!Array.isArray(data) || data.length !== 5) return false;
-  const expectedIds = ['s1','s2','s3','s4','s5'];
-  const expectedNames = ['PLAN','SITE','CAMERA','AIRCRAFT','FLIGHT'];
-  for (let i = 0; i < 5; i++) {
-    if (data[i].id !== expectedIds[i] || data[i].name !== expectedNames[i]) return false;
+  if (!Array.isArray(data)) return false;
+
+  // v1: PLAN, SITE, CAMERA, AIRCRAFT, FLIGHT
+  if (data.length === 5) {
+    const names = ['PLAN','SITE','CAMERA','AIRCRAFT','FLIGHT'];
+    if (data.every((s, i) => s.id === 's'+(i+1) && s.name === names[i])) return true;
   }
-  return true;
+  // v2: PLAN, SITE, CAMERA, AIRCRAFT
+  if (data.length === 4) {
+    const names = ['PLAN','SITE','CAMERA','AIRCRAFT'];
+    if (data.every((s, i) => s.id === 's'+(i+1) && s.name === names[i])) return true;
+  }
+  return false;
 }
 
 function saveChecklist() {
@@ -3847,6 +4202,361 @@ function selectWBScenario(row, item) {
 }
 
 /* ────────────────────────────────────────────────
+   DRONE REGISTRY
+   ────────────────────────────────────────────────
+   Curated database of camera drones. Sub-250g to ~1kg class.
+   Users can add drones from the DB or enter custom ones.
+   The "primary" drone feeds into the ND Recommender for
+   aperture-matched exposure math.
+
+   To update with new drone releases:
+   1. Add entry to DRONE_DATABASE below
+   2. Bump DRONE_DB_VERSION
+   3. No migration needed — users see new drones in the picker
+   ──────────────────────────────────────────────── */
+
+const DRONE_DB_VERSION = 1;
+
+const DRONE_DATABASE = {
+  'DJI': [
+    { model: 'Mini 5 Pro',            weight: 250, aperture: 1.7, sensor: '1" CMOS',       bitrate: '150 Mbps',  profiles: 'D-Log M / HLG / Normal',  year: 2025 },
+    { model: 'Mini 4 Pro',            weight: 249, aperture: 1.7, sensor: '1/1.3" CMOS',   bitrate: '150 Mbps',  profiles: 'D-Log M / HLG / Normal',  year: 2023 },
+    { model: 'Mini 3 Pro',            weight: 249, aperture: 1.7, sensor: '1/1.3" CMOS',   bitrate: '150 Mbps',  profiles: 'D-Cinelike / Normal',     year: 2022 },
+    { model: 'Mini 3',                weight: 249, aperture: 1.7, sensor: '1/1.3" CMOS',   bitrate: '100 Mbps',  profiles: 'Normal',                  year: 2022 },
+    { model: 'Mini 4K',               weight: 249, aperture: 2.8, sensor: '1/2.3" CMOS',   bitrate: '100 Mbps',  profiles: 'Normal',                  year: 2024 },
+    { model: 'Air 3S',                weight: 724, aperture: 1.8, sensor: '1" CMOS',       bitrate: '150 Mbps',  profiles: 'D-Log M / HLG / Normal',  year: 2024 },
+    { model: 'Air 3',                 weight: 720, aperture: 1.7, sensor: '1/1.3" CMOS',   bitrate: '150 Mbps',  profiles: 'D-Log M / HLG / Normal',  year: 2023 },
+    { model: 'Air 2S',                weight: 595, aperture: 2.8, sensor: '1" CMOS',       bitrate: '150 Mbps',  profiles: 'D-Log / HLG / Normal',    year: 2021 },
+    { model: 'Mavic 4 Pro',           weight: 1063,aperture: 2.0, sensor: '4/3 CMOS',      bitrate: '500 Mbps',  profiles: 'D-Log / D-Log M / HLG',   year: 2025 },
+    { model: 'Mavic 3 Pro',           weight: 958, aperture: 2.8, sensor: '4/3 CMOS',      bitrate: '200 Mbps',  profiles: 'D-Log / D-Log M / HLG',   year: 2023 },
+    { model: 'Mavic 3 Classic',       weight: 895, aperture: 2.8, sensor: '4/3 CMOS',      bitrate: '200 Mbps',  profiles: 'D-Log / HLG / Normal',    year: 2022 },
+    { model: 'Avata 2',               weight: 377, aperture: 2.8, sensor: '1/1.3" CMOS',   bitrate: '150 Mbps',  profiles: 'D-Log M / Normal',        year: 2024 },
+    { model: 'Neo',                   weight: 135, aperture: 2.8, sensor: '1/2" CMOS',     bitrate: '75 Mbps',   profiles: 'Normal',                  year: 2024 },
+    { model: 'FPV',                   weight: 795, aperture: 2.8, sensor: '1/2.3" CMOS',   bitrate: '120 Mbps',  profiles: 'D-Cinelike / Normal',     year: 2021 },
+    { model: 'Flip',                  weight: 249, aperture: 1.7, sensor: '1/1.3" CMOS',   bitrate: '150 Mbps',  profiles: 'D-Log M / HLG / Normal',  year: 2025 },
+  ],
+  'Autel': [
+    { model: 'EVO Nano+',             weight: 249, aperture: 1.9, sensor: '1/1.28" CMOS',  bitrate: '100 Mbps',  profiles: 'A-Log / Normal',          year: 2022 },
+    { model: 'EVO Lite+',             weight: 835, aperture: 2.8, sensor: '1" CMOS',       bitrate: '120 Mbps',  profiles: 'A-Log / HLG / Normal',    year: 2022 },
+    { model: 'EVO II Pro V3',         weight: 1191,aperture: 2.8, sensor: '1" CMOS',       bitrate: '120 Mbps',  profiles: 'A-Log / HLG / Normal',    year: 2023 },
+  ],
+  'Skydio': [
+    { model: 'X10',                   weight: 2000,aperture: 2.2, sensor: '1" CMOS',       bitrate: '180 Mbps',  profiles: 'D-Log / Normal',          year: 2023 },
+    { model: '2+',                    weight: 800, aperture: 2.8, sensor: '1/2.3" CMOS',   bitrate: '100 Mbps',  profiles: 'Normal',                  year: 2021 },
+  ],
+  'Parrot': [
+    { model: 'Anafi Ai',              weight: 898, aperture: 2.0, sensor: '1/2" CMOS',     bitrate: '100 Mbps',  profiles: 'P-Log / Normal',          year: 2021 },
+    { model: 'Anafi USA',             weight: 500, aperture: 2.4, sensor: '1/2.4" CMOS',   bitrate: '100 Mbps',  profiles: 'Normal',                  year: 2020 },
+  ],
+  'Yuneec': [
+    { model: 'Mantis Q',              weight: 480, aperture: 2.8, sensor: '1/3.2" CMOS',   bitrate: '40 Mbps',   profiles: 'Normal',                  year: 2018 },
+    { model: 'Typhoon H Plus',        weight: 1995,aperture: 2.8, sensor: '1" CMOS',       bitrate: '100 Mbps',  profiles: 'Normal',                  year: 2018 },
+  ],
+  'Hubsan': [
+    { model: 'Zino Mini SE',          weight: 249, aperture: 1.85,sensor: '1/1.3" CMOS',   bitrate: '100 Mbps',  profiles: 'Normal',                  year: 2022 },
+    { model: 'Zino Pro+',             weight: 700, aperture: 2.2, sensor: '1/2.3" CMOS',   bitrate: '60 Mbps',   profiles: 'Normal',                  year: 2020 },
+  ],
+  'Potensic': [
+    { model: 'ATOM 2',                weight: 249, aperture: 2.2, sensor: '1/2" CMOS',     bitrate: '50 Mbps',   profiles: 'Normal',                  year: 2024 },
+    { model: 'ATOM SE',               weight: 245, aperture: 2.2, sensor: '1/3" CMOS',     bitrate: '30 Mbps',   profiles: 'Normal',                  year: 2023 },
+  ],
+  'Ryze (Tello)': [
+    { model: 'Tello',                 weight: 80,  aperture: 2.8, sensor: '1/5" CMOS',     bitrate: '4 Mbps',    profiles: 'Normal',                  year: 2018 },
+  ],
+};
+
+const DRONES_KEY = 'vf.drones';
+
+let dronesData = loadDrones();
+let editingDroneId = null;  // null when adding new, string when editing
+
+function loadDrones() {
+  try {
+    const raw = localStorage.getItem(DRONES_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) return parsed;
+    }
+  } catch (e) {}
+  return [];
+}
+
+function saveDrones() {
+  try {
+    localStorage.setItem(DRONES_KEY, JSON.stringify(dronesData));
+  } catch (e) {}
+}
+
+function renderDroneList() {
+  const list = document.getElementById('drone-list');
+  if (!list) return;
+  list.innerHTML = '';
+
+  if (dronesData.length === 0) {
+    list.innerHTML = `
+      <div class="drone-empty">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="4" y="4" width="6" height="6"/>
+          <rect x="14" y="4" width="6" height="6"/>
+          <rect x="4" y="14" width="6" height="6"/>
+          <rect x="14" y="14" width="6" height="6"/>
+          <circle cx="12" cy="12" r="2"/>
+        </svg>
+        <h3>NO DRONES REGISTERED</h3>
+        <p>Add your first drone to unlock aperture-matched ND recommendations and faster workflow at the field.</p>
+      </div>
+    `;
+    return;
+  }
+
+  dronesData.forEach(d => {
+    const card = document.createElement('div');
+    card.className = 'drone-card' + (d.primary ? ' primary' : '');
+    card.dataset.droneId = d.id;
+    const weightBadge = d.weight < 250
+      ? '<span class="drone-weight-badge sub250">SUB-250g</span>'
+      : d.weight
+        ? `<span class="drone-weight-badge over250">${d.weight}g</span>`
+        : '';
+    card.innerHTML = `
+      <div class="drone-head">
+        <div class="drone-title">
+          <div class="make">${escapeHtml(d.make)}</div>
+          <div class="model">${escapeHtml(d.model)}</div>
+          ${d.nickname ? `<div class="nickname">"${escapeHtml(d.nickname)}"</div>` : ''}
+          ${weightBadge}
+        </div>
+        <div class="drone-actions">
+          ${!d.primary ? `<button class="mini-btn" data-set-primary="${d.id}">PRIMARY</button>` : ''}
+          <button class="check-edit-btn" data-edit-drone="${d.id}" aria-label="Edit">
+            <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </button>
+          <button class="check-delete-btn" data-delete-drone="${d.id}" aria-label="Delete">
+            <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="drone-specs">
+        <div class="drone-spec">
+          <div class="label">APERTURE</div>
+          <div class="value">f/${d.aperture || '?'}</div>
+        </div>
+        <div class="drone-spec">
+          <div class="label">SENSOR</div>
+          <div class="value">${escapeHtml(d.sensor || '—')}</div>
+        </div>
+        <div class="drone-spec">
+          <div class="label">MAX BITRATE</div>
+          <div class="value">${escapeHtml(d.bitrate || '—')}</div>
+        </div>
+        <div class="drone-spec">
+          <div class="label">COLOR PROFILES</div>
+          <div class="value">${escapeHtml(d.profiles || '—')}</div>
+        </div>
+      </div>
+    `;
+    list.appendChild(card);
+  });
+
+  bindDroneListEvents();
+}
+
+function bindDroneListEvents() {
+  document.querySelectorAll('[data-set-primary]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const id = btn.dataset.setPrimary;
+      dronesData.forEach(d => { d.primary = (d.id === id); });
+      saveDrones();
+      renderDroneList();
+    });
+  });
+  document.querySelectorAll('[data-edit-drone]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openDroneModal(btn.dataset.editDrone);
+    });
+  });
+  document.querySelectorAll('[data-delete-drone]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const id = btn.dataset.deleteDrone;
+      const drone = dronesData.find(d => d.id === id);
+      if (!drone) return;
+      if (!confirm(`Remove "${drone.make} ${drone.model}" from your registry?`)) return;
+      const wasPrimary = drone.primary;
+      dronesData = dronesData.filter(d => d.id !== id);
+      // If we deleted the primary and others exist, promote the first one
+      if (wasPrimary && dronesData.length > 0) {
+        dronesData[0].primary = true;
+      }
+      saveDrones();
+      renderDroneList();
+    });
+  });
+}
+
+// Populate the "make" dropdown in the modal
+function populateMakeDropdown() {
+  const makeSel = document.getElementById('drone-make');
+  makeSel.innerHTML = '<option value="">Select make...</option>';
+  Object.keys(DRONE_DATABASE).sort().forEach(make => {
+    const opt = document.createElement('option');
+    opt.value = make;
+    opt.textContent = make;
+    makeSel.appendChild(opt);
+  });
+}
+
+function populateModelDropdown(make) {
+  const modelSel = document.getElementById('drone-model');
+  modelSel.innerHTML = '';
+  if (!make || !DRONE_DATABASE[make]) {
+    modelSel.innerHTML = '<option value="">Select make first...</option>';
+    return;
+  }
+  modelSel.innerHTML = '<option value="">Select model...</option>';
+  DRONE_DATABASE[make].slice().sort((a,b) => b.year - a.year).forEach(d => {
+    const opt = document.createElement('option');
+    opt.value = d.model;
+    opt.textContent = `${d.model} (${d.year})`;
+    modelSel.appendChild(opt);
+  });
+}
+
+function openDroneModal(droneId) {
+  editingDroneId = droneId || null;
+  const modal = document.getElementById('drone-modal');
+  const title = document.getElementById('drone-modal-title');
+
+  // Reset fields
+  populateMakeDropdown();
+  document.getElementById('drone-make').value = '';
+  populateModelDropdown('');
+  document.getElementById('drone-custom-make').value = '';
+  document.getElementById('drone-custom-model').value = '';
+  document.getElementById('drone-custom-aperture').value = '';
+  document.getElementById('drone-nickname').value = '';
+  document.getElementById('drone-mode-db').checked = true;
+  toggleDronePickerMode('db');
+
+  if (droneId) {
+    // Editing existing
+    const drone = dronesData.find(d => d.id === droneId);
+    if (!drone) return;
+    title.textContent = 'EDIT DRONE';
+    document.getElementById('drone-nickname').value = drone.nickname || '';
+
+    // Check if it matches a DB entry
+    const dbMatch = DRONE_DATABASE[drone.make]?.find(m => m.model === drone.model);
+    if (dbMatch) {
+      document.getElementById('drone-mode-db').checked = true;
+      toggleDronePickerMode('db');
+      document.getElementById('drone-make').value = drone.make;
+      populateModelDropdown(drone.make);
+      document.getElementById('drone-model').value = drone.model;
+    } else {
+      document.getElementById('drone-mode-custom').checked = true;
+      toggleDronePickerMode('custom');
+      document.getElementById('drone-custom-make').value = drone.make;
+      document.getElementById('drone-custom-model').value = drone.model;
+      document.getElementById('drone-custom-aperture').value = drone.aperture || '';
+    }
+  } else {
+    title.textContent = 'ADD DRONE';
+  }
+
+  modal.classList.add('show');
+}
+
+function toggleDronePickerMode(mode) {
+  document.getElementById('drone-mode-db-panel').style.display = mode === 'db' ? 'block' : 'none';
+  document.getElementById('drone-mode-custom-panel').style.display = mode === 'custom' ? 'block' : 'none';
+}
+
+function saveDroneFromModal() {
+  const nickname = document.getElementById('drone-nickname').value.trim();
+  const mode = document.querySelector('input[name="drone-mode"]:checked').value;
+
+  let droneObj;
+  if (mode === 'db') {
+    const make = document.getElementById('drone-make').value;
+    const model = document.getElementById('drone-model').value;
+    if (!make || !model) {
+      alert('Pick a manufacturer and model.');
+      return;
+    }
+    const spec = DRONE_DATABASE[make].find(m => m.model === model);
+    if (!spec) { alert('Model not found in database.'); return; }
+    droneObj = {
+      make, model,
+      aperture: spec.aperture,
+      sensor:   spec.sensor,
+      bitrate:  spec.bitrate,
+      profiles: spec.profiles,
+      weight:   spec.weight,
+      year:     spec.year,
+      nickname,
+    };
+  } else {
+    const make = document.getElementById('drone-custom-make').value.trim();
+    const model = document.getElementById('drone-custom-model').value.trim();
+    const apRaw = document.getElementById('drone-custom-aperture').value.trim();
+    if (!make || !model) {
+      alert('Make and model are required.');
+      return;
+    }
+    const aperture = parseFloat(apRaw);
+    droneObj = {
+      make, model,
+      aperture: isNaN(aperture) ? null : aperture,
+      sensor:   'Custom',
+      bitrate:  '—',
+      profiles: '—',
+      weight:   null,
+      year:     null,
+      nickname,
+    };
+  }
+
+  if (editingDroneId) {
+    const existing = dronesData.find(d => d.id === editingDroneId);
+    if (existing) {
+      // Preserve id + primary flag
+      Object.assign(existing, droneObj);
+    }
+  } else {
+    droneObj.id = 'd' + Date.now().toString(36);
+    droneObj.primary = dronesData.length === 0;  // first drone is primary
+    dronesData.push(droneObj);
+  }
+  saveDrones();
+  document.getElementById('drone-modal').classList.remove('show');
+  editingDroneId = null;
+  renderDroneList();
+}
+
+// Drone modal wiring
+document.getElementById('btn-add-drone').addEventListener('click', () => openDroneModal(null));
+document.getElementById('drone-modal-cancel').addEventListener('click', () => {
+  document.getElementById('drone-modal').classList.remove('show');
+  editingDroneId = null;
+});
+document.getElementById('drone-modal-save').addEventListener('click', saveDroneFromModal);
+document.getElementById('drone-modal').addEventListener('click', (e) => {
+  if (e.target.id === 'drone-modal') {
+    document.getElementById('drone-modal').classList.remove('show');
+    editingDroneId = null;
+  }
+});
+document.querySelectorAll('input[name="drone-mode"]').forEach(el => {
+  el.addEventListener('change', () => toggleDronePickerMode(el.value));
+});
+document.getElementById('drone-make').addEventListener('change', (e) => {
+  populateModelDropdown(e.target.value);
+});
+
+/* ────────────────────────────────────────────────
    INIT
    ──────────────────────────────────────────────── */
 
@@ -3856,6 +4566,7 @@ renderSun();
 autoResetIfNewDay();
 renderChecklist();
 renderWB();
+renderDroneList();
 
 // Register service worker for offline use
 if ('serviceWorker' in navigator) {
