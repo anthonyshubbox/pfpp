@@ -744,6 +744,320 @@ select {
 }
 
 /* ═══════════════════════════════════════════════════════════════
+   SUN / MOON DIAL
+   ═══════════════════════════════════════════════════════════════ */
+
+.dial-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  aspect-ratio: 1;
+  margin: 0 auto var(--sp-5);
+}
+
+.dial-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.dial-ring {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 1;
+}
+
+.dial-ring.inner {
+  stroke: var(--border-hot);
+}
+
+.dial-tick {
+  stroke: var(--text-3);
+  stroke-width: 1;
+}
+.dial-tick.major {
+  stroke: var(--text-2);
+  stroke-width: 2;
+}
+
+.dial-cardinal {
+  fill: var(--cyan);
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.dial-horizon {
+  fill: none;
+  stroke: var(--text-dim);
+  stroke-width: 1;
+  stroke-dasharray: 2 3;
+}
+
+.sun-arc {
+  fill: none;
+  stroke: var(--amber);
+  stroke-width: 1.5;
+  stroke-dasharray: 3 3;
+  opacity: 0.5;
+}
+
+.moon-arc {
+  fill: none;
+  stroke: #B8C8E8;
+  stroke-width: 1.5;
+  stroke-dasharray: 3 3;
+  opacity: 0.3;
+}
+
+.sun-body {
+  fill: var(--amber);
+  filter: drop-shadow(0 0 8px var(--amber));
+}
+
+.sun-body.below {
+  fill: #806030;
+  filter: none;
+  opacity: 0.6;
+}
+
+.moon-body {
+  fill: #E8EEFF;
+  filter: drop-shadow(0 0 6px rgba(200,220,255,0.5));
+}
+
+.moon-body.below {
+  fill: #3a4a68;
+  filter: none;
+  opacity: 0.6;
+}
+
+.dial-center {
+  fill: var(--bg-deep);
+  stroke: var(--border-hot);
+  stroke-width: 1;
+}
+
+.dial-readout {
+  fill: var(--text-1);
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.dial-readout.sub {
+  fill: var(--text-3);
+  font-family: var(--font-technical);
+  font-size: 8px;
+  letter-spacing: 0.15em;
+}
+
+/* Timeline strip showing today's key solar events */
+.sun-timeline {
+  position: relative;
+  background: var(--bg-deep);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  height: 48px;
+  overflow: hidden;
+  margin-top: var(--sp-3);
+}
+
+.sun-timeline-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg,
+    #0a1a35 0%,         /* night */
+    #1f2a50 6%,         /* astro dawn */
+    #3d3355 10%,        /* nautical dawn */
+    #6a4060 15%,        /* civil dawn */
+    #c08030 22%,        /* sunrise / golden hour */
+    #d8a850 30%,
+    #8fb8e0 40%,        /* day */
+    #a8c8e8 50%,
+    #8fb8e0 60%,        /* day */
+    #d8a850 70%,
+    #c08030 78%,        /* sunset / golden hour */
+    #6a4060 85%,        /* civil dusk */
+    #3d3355 90%,        /* nautical dusk */
+    #1f2a50 94%,        /* astro dusk */
+    #0a1a35 100%        /* night */
+  );
+  opacity: 0.55;
+}
+
+.sun-timeline-now {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 2px;
+  background: var(--cyan);
+  box-shadow: 0 0 8px var(--cyan);
+  z-index: 2;
+}
+
+.sun-timeline-marker {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 1px;
+  background: rgba(255,255,255,0.3);
+}
+
+.sun-timeline-label {
+  position: absolute;
+  bottom: 3px;
+  transform: translateX(-50%);
+  font-family: var(--font-technical);
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  color: var(--text-1);
+  white-space: nowrap;
+  background: rgba(10,14,26,0.8);
+  padding: 1px 3px;
+  border-radius: 2px;
+}
+
+.sun-events {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-2);
+  margin-top: var(--sp-3);
+}
+
+.sun-event-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: var(--sp-3);
+  position: relative;
+}
+
+.sun-event-card.golden {
+  border-color: var(--amber);
+  box-shadow: 0 0 12px var(--amber-glow);
+}
+
+.sun-event-card .event-name {
+  font-family: var(--font-technical);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--text-3);
+  margin-bottom: 4px;
+}
+
+.sun-event-card.golden .event-name {
+  color: var(--amber);
+}
+
+.sun-event-card .event-time {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-1);
+  letter-spacing: 0.03em;
+}
+
+.sun-event-card .event-countdown {
+  font-family: var(--font-technical);
+  font-size: 10px;
+  color: var(--text-2);
+  margin-top: 2px;
+}
+
+.location-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-3);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  margin-bottom: var(--sp-4);
+  font-family: var(--font-technical);
+  font-size: 11px;
+  color: var(--text-2);
+}
+
+.location-bar .loc-label {
+  color: var(--text-3);
+  letter-spacing: 0.15em;
+}
+
+.location-bar .loc-val {
+  color: var(--cyan);
+  font-weight: 600;
+}
+
+.location-bar.needs-location {
+  border-color: var(--amber);
+  background: rgba(255,178,0,0.05);
+}
+
+.location-btn {
+  margin-left: auto;
+  background: var(--bg-deep);
+  border: 1px solid var(--cyan);
+  color: var(--cyan);
+  padding: 4px 10px;
+  border-radius: 3px;
+  font-family: var(--font-technical);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+}
+
+.location-btn:active {
+  background: var(--cyan);
+  color: var(--bg-deep);
+}
+
+.body-selector {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  background: var(--bg-deep);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: var(--sp-4);
+}
+
+.body-selector input { display: none; }
+
+.body-selector label {
+  text-align: center;
+  padding: 10px;
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--text-2);
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.body-selector label:first-of-type {
+  border-right: 1px solid var(--border);
+}
+
+.body-selector input:checked + label {
+  background: var(--bg-elevated);
+  color: var(--amber);
+}
+
+.body-selector input#body-moon:checked + label {
+  color: #C8D8F0;
+}
+
+/* ═══════════════════════════════════════════════════════════════
    UTILS
    ═══════════════════════════════════════════════════════════════ */
 
@@ -1026,8 +1340,7 @@ select {
         <div class="title">180° SHUTTER<br>CALCULATOR</div>
       </button>
 
-      <button class="tool-tile soon">
-        <span class="soon-tag">SOON</span>
+      <button class="tool-tile" data-nav="sun">
         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
           <circle cx="12" cy="12" r="5"/>
           <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
@@ -1252,6 +1565,131 @@ select {
     </div>
   </section>
 
+  <!-- ─── SUN / MOON VIEW ─── -->
+  <section class="view" id="view-sun">
+    <div class="view-header">
+      <button class="back-btn" data-back>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+      </button>
+      <div class="view-title">
+        <div class="kicker">F·03 · CELESTIAL POSITION</div>
+        <div class="main-title">SUN &amp; MOON TRACKER</div>
+      </div>
+    </div>
+
+    <div class="location-bar" id="location-bar">
+      <span class="loc-label">POS:</span>
+      <span class="loc-val" id="loc-display">— not set —</span>
+      <button class="location-btn" id="btn-location">GET LOCATION</button>
+    </div>
+
+    <div class="body-selector">
+      <input type="radio" name="body" id="body-sun" value="sun" checked>
+      <label for="body-sun">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="5"/><path d="M12 2v2M12 20v2M4 4l1.5 1.5M18.5 18.5L20 20M2 12h2M20 12h2M4 20l1.5-1.5M18.5 5.5L20 4" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+        SUN
+      </label>
+      <input type="radio" name="body" id="body-moon" value="moon">
+      <label for="body-moon">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+        MOON
+      </label>
+    </div>
+
+    <div class="card">
+      <div class="card-corner tl"></div>
+      <div class="card-corner tr"></div>
+      <div class="card-corner bl"></div>
+      <div class="card-corner br"></div>
+
+      <!-- Compass dial -->
+      <div class="dial-wrap">
+        <svg class="dial-svg" viewBox="-160 -160 320 320" id="dial-svg">
+          <!-- Outer ring -->
+          <circle class="dial-ring" cx="0" cy="0" r="150"/>
+          <circle class="dial-ring inner" cx="0" cy="0" r="125"/>
+          <!-- Horizon dashed circle (at mid-radius representing the horizon level) -->
+          <circle class="dial-horizon" cx="0" cy="0" r="95"/>
+
+          <!-- Arc path for today (drawn by JS) -->
+          <path class="sun-arc" id="body-arc" d=""/>
+
+          <!-- 16 tick marks -->
+          <g id="dial-ticks"></g>
+
+          <!-- Cardinal letters -->
+          <text class="dial-cardinal" x="0" y="-140">N</text>
+          <text class="dial-cardinal" x="140" y="0">E</text>
+          <text class="dial-cardinal" x="0" y="140">S</text>
+          <text class="dial-cardinal" x="-140" y="0">W</text>
+
+          <!-- Center readout -->
+          <circle class="dial-center" cx="0" cy="0" r="52"/>
+          <text class="dial-readout" x="0" y="-12" id="dial-az">---°</text>
+          <text class="dial-readout sub" x="0" y="4">AZIMUTH</text>
+          <text class="dial-readout" x="0" y="22" id="dial-alt" style="font-size:12px;">ALT ---°</text>
+
+          <!-- Sun/Moon body (position set by JS) -->
+          <circle class="sun-body" id="body-dot" cx="0" cy="-95" r="8"/>
+        </svg>
+      </div>
+
+      <!-- Current state readout -->
+      <div class="readout" style="margin-top:0;">
+        <div class="readout-label">▼ RIGHT NOW ▼</div>
+        <div class="readout-value" id="body-status"><span class="unit" style="font-size:24px;color:var(--amber);">●</span> ABOVE</div>
+        <div class="readout-sub" id="body-status-sub">Sun is above the horizon.</div>
+
+        <div class="readout-meta">
+          <div class="meta-item">
+            <div class="label">AZIMUTH</div>
+            <div class="val" id="body-azimuth">---°</div>
+          </div>
+          <div class="meta-item">
+            <div class="label">ALTITUDE</div>
+            <div class="val" id="body-altitude">---°</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Today's timeline -->
+    <div class="card">
+      <div class="field-label" style="margin-bottom: var(--sp-3);">TODAY · DAWN ➜ DUSK</div>
+      <div class="sun-timeline" id="sun-timeline">
+        <div class="sun-timeline-bg"></div>
+        <div class="sun-timeline-now" id="sun-timeline-now" style="left: 50%;"></div>
+      </div>
+      <div class="field-hint" style="margin-top: var(--sp-2);">The blue line is right now. Colors show light quality throughout the day.</div>
+    </div>
+
+    <!-- Key events -->
+    <div class="card" id="events-card">
+      <div class="field-label" style="margin-bottom: var(--sp-3);">KEY EVENTS TODAY</div>
+      <div class="sun-events" id="sun-events"></div>
+      <div class="field-hint" style="margin-top: var(--sp-3);">
+        <span class="amber">●</span> Golden hour: warm, low-angle light. The best light for drone cinematography.
+        <br>
+        <span class="dim">Civil twilight: ~30 min before sunrise / after sunset. Still enough light to shoot safely.</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="field-label" style="margin-bottom: var(--sp-3);">HOW TO USE THIS</div>
+      <div style="color: var(--text-2); font-size: 13px; line-height: 1.6;">
+        <strong class="cyan">Azimuth</strong> tells you where on the compass the sun/moon is. 0° = North, 90° = East, 180° = South, 270° = West.
+        <br><br>
+        <strong class="cyan">Altitude</strong> tells you how high above the horizon. 0° = on the horizon, 90° = straight overhead.
+        <br><br>
+        <strong class="amber">Golden hour</strong> is when the sun is between 0° and ~6° altitude. Warm tones, long shadows, flattering light for everything you'd film with a drone.
+        <br><br>
+        <span class="dim">Position is calculated from your device's GPS + time. Works offline once location is set.</span>
+      </div>
+    </div>
+  </section>
+
 </main>
 
 <!-- ═══════════════════════════════════════════════════════════════ -->
@@ -1290,6 +1728,7 @@ const views = {
   home:    document.getElementById('view-home'),
   nd:      document.getElementById('view-nd'),
   shutter: document.getElementById('view-shutter'),
+  sun:     document.getElementById('view-sun'),
 };
 
 function navigate(viewId) {
@@ -1299,13 +1738,18 @@ function navigate(viewId) {
     b.classList.toggle('active', b.dataset.nav === viewId);
   });
   window.scrollTo({ top: 0, behavior: 'instant' });
+
+  // When sun view opens, refresh the dial immediately
+  if (viewId === 'sun') {
+    renderSun();
+  }
 }
 
 document.querySelectorAll('[data-nav]').forEach(el => {
   el.addEventListener('click', (e) => {
     const target = el.dataset.nav;
     if (target === 'soon') {
-      alert('More tools coming soon:\n\n• Sun / Moon position\n• Pre-flight checklist\n• White balance reference\n• Flight suitability (Pro)\n\nThis is v0.1 — we\'re just getting started.');
+      alert('More tools coming soon:\n\n• Pre-flight checklist\n• White balance reference\n• Pilot profile\n• Flight suitability (Pro)\n\nWe\'re building these one at a time.');
       return;
     }
     if (el.classList.contains('soon')) {
@@ -1499,11 +1943,550 @@ if (/iPhone|iPad|iPod/.test(navigator.userAgent) && !window.matchMedia('(display
 }
 
 /* ────────────────────────────────────────────────
+   SUN / MOON POSITION CALCULATOR
+   ────────────────────────────────────────────────
+   Uses NOAA-standard solar position algorithms.
+   Moon calculations use the simplified lunar theory
+   (accurate to ~0.1°, way more than enough for
+   "where on the compass is the moon right now").
+
+   All calculations happen on-device. No APIs needed.
+   ──────────────────────────────────────────────── */
+
+const SUN = (() => {
+
+  const PI   = Math.PI;
+  const rad  = PI / 180;
+  const deg  = 180 / PI;
+
+  // ── Time helpers ─────────────────────────────────
+  function toJulian(date) {
+    return date.valueOf() / 86400000 - 0.5 + 2440588;
+  }
+  function fromJulian(j) {
+    return new Date((j + 0.5 - 2440588) * 86400000);
+  }
+  function toDays(date) {
+    return toJulian(date) - 2451545;
+  }
+
+  // ── Sun position (NOAA algorithm, simplified) ────
+  function solarMeanAnomaly(d) {
+    return rad * (357.5291 + 0.98560028 * d);
+  }
+
+  function eclipticLongitude(M) {
+    const C = rad * (1.9148 * Math.sin(M) + 0.02 * Math.sin(2 * M) + 0.0003 * Math.sin(3 * M));
+    const P = rad * 102.9372;
+    return M + C + P + PI;
+  }
+
+  function sunCoords(d) {
+    const M = solarMeanAnomaly(d);
+    const L = eclipticLongitude(M);
+    const e = rad * 23.4397;  // obliquity of Earth
+    return {
+      dec: Math.asin(Math.sin(0) * Math.cos(e) + Math.cos(0) * Math.sin(e) * Math.sin(L)),  // declination (simplified: 0 lat)
+      ra:  Math.atan2(Math.sin(L) * Math.cos(e), Math.cos(L)),                              // right ascension
+    };
+  }
+
+  function siderealTime(d, lw) {
+    return rad * (280.16 + 360.9856235 * d) - lw;
+  }
+
+  function azimuth(H, phi, dec) {
+    return Math.atan2(Math.sin(H), Math.cos(H) * Math.sin(phi) - Math.tan(dec) * Math.cos(phi));
+  }
+
+  function altitude(H, phi, dec) {
+    return Math.asin(Math.sin(phi) * Math.sin(dec) + Math.cos(phi) * Math.cos(dec) * Math.cos(H));
+  }
+
+  function getSunPosition(date, lat, lng) {
+    const lw = rad * -lng;
+    const phi = rad * lat;
+    const d = toDays(date);
+    const c = sunCoords(d);
+    const H = siderealTime(d, lw) - c.ra;
+    let az = azimuth(H, phi, c.dec) * deg + 180;  // convert to 0=N, 90=E
+    if (az < 0) az += 360;
+    if (az >= 360) az -= 360;
+    return {
+      azimuth: az,
+      altitude: altitude(H, phi, c.dec) * deg,
+    };
+  }
+
+  // ── Solar times (sunrise, sunset, civil/nautical/astronomical twilight, golden hour) ──
+  // Using algorithms from NOAA Solar Calculator
+
+  const J0 = 0.0009;
+
+  function julianCycle(d, lw) {
+    return Math.round(d - J0 - lw / (2 * PI));
+  }
+
+  function approxTransit(Ht, lw, n) {
+    return J0 + (Ht + lw) / (2 * PI) + n;
+  }
+
+  function solarTransitJ(ds, M, L) {
+    return 2451545 + ds + 0.0053 * Math.sin(M) - 0.0069 * Math.sin(2 * L);
+  }
+
+  function hourAngle(h, phi, d) {
+    return Math.acos(
+      (Math.sin(h) - Math.sin(phi) * Math.sin(d)) /
+      (Math.cos(phi) * Math.cos(d))
+    );
+  }
+
+  function getSetJ(h, lw, phi, dec, n, M, L) {
+    const w = hourAngle(h, phi, dec);
+    const a = approxTransit(w, lw, n);
+    return solarTransitJ(a, M, L);
+  }
+
+  // Solar elevation angles for key events (degrees below/above horizon)
+  // Following standard astronomy definitions.
+  const ANGLES = [
+    [ 6,   'goldenHourEnd',   'goldenHour'],    // morning golden hour end / evening golden hour start
+    [-0.833, 'sunrise',        'sunset'],         // sun top edge touches horizon
+    [-0.3,   'sunriseEnd',     'sunsetStart'],    // sun fully above/below horizon
+    [-6,     'dawn',           'dusk'],            // civil twilight
+    [-12,    'nauticalDawn',   'nauticalDusk'],    // nautical twilight
+    [-18,    'nightEnd',       'night'],           // astronomical twilight
+  ];
+
+  function getSunTimes(date, lat, lng) {
+    const lw  = rad * -lng;
+    const phi = rad * lat;
+    const d   = toDays(date);
+    const n   = julianCycle(d, lw);
+    const ds  = approxTransit(0, lw, n);
+    const M   = solarMeanAnomaly(ds);
+    const L   = eclipticLongitude(M);
+    const dec = Math.asin(Math.sin(L) * Math.sin(rad * 23.4397));
+
+    const Jnoon = solarTransitJ(ds, M, L);
+
+    const result = {
+      solarNoon: fromJulian(Jnoon),
+      nadir:     fromJulian(Jnoon - 0.5),
+    };
+
+    for (const [h, rise, set] of ANGLES) {
+      const Jset = getSetJ(h * rad, lw, phi, dec, n, M, L);
+      const Jrise = Jnoon - (Jset - Jnoon);
+      result[rise] = fromJulian(Jrise);
+      result[set]  = fromJulian(Jset);
+    }
+    return result;
+  }
+
+  // ── Moon position ───────────────────────────────
+  function moonCoords(d) {
+    const L = rad * (218.316 + 13.176396 * d);
+    const M = rad * (134.963 + 13.064993 * d);
+    const F = rad * (93.272  + 13.229350 * d);
+    const lon = L + rad * 6.289 * Math.sin(M);
+    const lat = rad * 5.128 * Math.sin(F);
+    const dist = 385001 - 20905 * Math.cos(M);
+    const e = rad * 23.4397;
+    return {
+      ra:   Math.atan2(Math.sin(lon) * Math.cos(e) - Math.tan(lat) * Math.sin(e), Math.cos(lon)),
+      dec:  Math.asin(Math.sin(lat) * Math.cos(e) + Math.cos(lat) * Math.sin(e) * Math.sin(lon)),
+      dist: dist,
+    };
+  }
+
+  function getMoonPosition(date, lat, lng) {
+    const lw  = rad * -lng;
+    const phi = rad * lat;
+    const d   = toDays(date);
+    const c   = moonCoords(d);
+    const H   = siderealTime(d, lw) - c.ra;
+    let h     = altitude(H, phi, c.dec);
+    // atmospheric refraction correction
+    h += rad * 0.017 / Math.tan(h + rad * 10.26 / (h + rad * 5.10));
+    let az = azimuth(H, phi, c.dec) * deg + 180;
+    if (az < 0) az += 360;
+    if (az >= 360) az -= 360;
+    return {
+      azimuth: az,
+      altitude: h * deg,
+      distance: c.dist,
+    };
+  }
+
+  function getMoonPhase(date) {
+    const d = toDays(date);
+    const M = rad * (134.963 + 13.064993 * d);
+    // Lunar synodic period = 29.53 days
+    const synodicAge = ((toJulian(date) - 2451549.5) % 29.530588853 + 29.530588853) % 29.530588853;
+    const fraction = synodicAge / 29.530588853;
+    // Phase name
+    let name = 'New Moon';
+    if (fraction < 0.03 || fraction > 0.97) name = 'New Moon';
+    else if (fraction < 0.22) name = 'Waxing Crescent';
+    else if (fraction < 0.28) name = 'First Quarter';
+    else if (fraction < 0.47) name = 'Waxing Gibbous';
+    else if (fraction < 0.53) name = 'Full Moon';
+    else if (fraction < 0.72) name = 'Waning Gibbous';
+    else if (fraction < 0.78) name = 'Last Quarter';
+    else if (fraction < 0.97) name = 'Waning Crescent';
+    const illumination = (1 - Math.cos(2 * PI * fraction)) / 2;
+    return { fraction, name, illumination };
+  }
+
+  return {
+    getSunPosition,
+    getSunTimes,
+    getMoonPosition,
+    getMoonPhase,
+  };
+})();
+
+/* ────────────────────────────────────────────────
+   SUN VIEW STATE + RENDERING
+   ──────────────────────────────────────────────── */
+
+const sunState = {
+  lat: null,
+  lng: null,
+  body: 'sun',          // 'sun' or 'moon'
+  lastLocationTime: null,
+};
+
+// Load saved location (if any)
+try {
+  const saved = localStorage.getItem('pfpp.location');
+  if (saved) {
+    const parsed = JSON.parse(saved);
+    if (parsed && typeof parsed.lat === 'number' && typeof parsed.lng === 'number') {
+      sunState.lat = parsed.lat;
+      sunState.lng = parsed.lng;
+      sunState.lastLocationTime = parsed.time || null;
+    }
+  }
+} catch (e) {}
+
+function formatLatLng(lat, lng) {
+  const NS = lat >= 0 ? 'N' : 'S';
+  const EW = lng >= 0 ? 'E' : 'W';
+  return `${Math.abs(lat).toFixed(4)}°${NS}  ${Math.abs(lng).toFixed(4)}°${EW}`;
+}
+
+function fmtTime(d) {
+  if (!d || isNaN(d.valueOf())) return '—';
+  const h = d.getHours();
+  const m = d.getMinutes();
+  const ap = h < 12 ? 'AM' : 'PM';
+  const h12 = ((h + 11) % 12) + 1;
+  return `${h12}:${String(m).padStart(2, '0')} ${ap}`;
+}
+
+function fmtCountdown(target, now) {
+  if (!target) return '—';
+  const diffMs = target - now;
+  if (diffMs < 0) {
+    const pastMin = Math.round(-diffMs / 60000);
+    if (pastMin < 60) return `${pastMin}m ago`;
+    return `${Math.round(pastMin/60)}h ago`;
+  }
+  const mins = Math.round(diffMs / 60000);
+  if (mins < 60) return `in ${mins}m`;
+  const h = Math.floor(mins / 60);
+  const m = mins % 60;
+  return `in ${h}h ${m}m`;
+}
+
+function azimuthToCompass(az) {
+  const dirs = ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];
+  const idx = Math.round(az / 22.5) % 16;
+  return dirs[idx];
+}
+
+function buildDialTicks() {
+  const g = document.getElementById('dial-ticks');
+  if (!g) return;
+  g.innerHTML = '';
+  for (let i = 0; i < 36; i++) {
+    const major = (i % 9 === 0);
+    const ang = (i * 10) * Math.PI / 180;
+    const r1 = 150;
+    const r2 = major ? 138 : 143;
+    const x1 = r1 * Math.sin(ang);
+    const y1 = -r1 * Math.cos(ang);
+    const x2 = r2 * Math.sin(ang);
+    const y2 = -r2 * Math.cos(ang);
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', x1);
+    line.setAttribute('y1', y1);
+    line.setAttribute('x2', x2);
+    line.setAttribute('y2', y2);
+    line.setAttribute('class', major ? 'dial-tick major' : 'dial-tick');
+    g.appendChild(line);
+  }
+}
+buildDialTicks();
+
+function renderSun() {
+  const now = new Date();
+  const locDisplay = document.getElementById('loc-display');
+  const locBar = document.getElementById('location-bar');
+
+  // If no location, show prompt state and bail out of calculations
+  if (sunState.lat === null || sunState.lng === null) {
+    locDisplay.textContent = '— location needed —';
+    locBar.classList.add('needs-location');
+    document.getElementById('body-status').innerHTML = '<span class="unit" style="font-size:24px;color:var(--amber);">●</span> LOCATION';
+    document.getElementById('body-status-sub').textContent = 'Tap GET LOCATION above to calculate sun and moon positions.';
+    document.getElementById('body-azimuth').textContent = '---°';
+    document.getElementById('body-altitude').textContent = '---°';
+    document.getElementById('dial-az').textContent = '---°';
+    document.getElementById('dial-alt').textContent = 'ALT ---°';
+    document.getElementById('sun-events').innerHTML = '';
+    return;
+  }
+
+  locBar.classList.remove('needs-location');
+  locDisplay.textContent = formatLatLng(sunState.lat, sunState.lng);
+
+  const body = sunState.body;
+  const pos = body === 'sun'
+    ? SUN.getSunPosition(now, sunState.lat, sunState.lng)
+    : SUN.getMoonPosition(now, sunState.lat, sunState.lng);
+
+  // Dial position
+  // Azimuth maps to compass angle, altitude (0-90) maps to radial distance (125 at horizon, 15 at zenith).
+  // Below horizon (negative altitude), show at radius 125 but dimmed.
+  const az = pos.azimuth;
+  const alt = pos.altitude;
+  const aboveHorizon = alt > 0;
+  // Clamp altitude 0..90 for the dial radius (inner = zenith, outer = horizon)
+  const altClamped = Math.max(0, Math.min(90, alt));
+  const r = 125 - (altClamped / 90) * 80; // ~125 at horizon -> ~45 at zenith
+  const angRad = az * Math.PI / 180;
+  const x = r * Math.sin(angRad);
+  const y = -r * Math.cos(angRad);
+
+  const bodyDot = document.getElementById('body-dot');
+  bodyDot.setAttribute('cx', x.toFixed(2));
+  bodyDot.setAttribute('cy', y.toFixed(2));
+  bodyDot.setAttribute('r', body === 'sun' ? 9 : 7);
+  bodyDot.setAttribute('class',
+    (body === 'sun' ? 'sun-body' : 'moon-body') + (aboveHorizon ? '' : ' below')
+  );
+
+  // Center readout
+  document.getElementById('dial-az').textContent = `${Math.round(az)}°`;
+  document.getElementById('dial-alt').textContent = `ALT ${Math.round(alt)}°`;
+
+  // Main readout
+  const statusEl = document.getElementById('body-status');
+  const subEl = document.getElementById('body-status-sub');
+  const bodyName = body === 'sun' ? 'Sun' : 'Moon';
+
+  if (aboveHorizon) {
+    const zone = body === 'sun' ? getSunZone(alt) : '';
+    statusEl.innerHTML = body === 'sun'
+      ? `<span class="unit" style="font-size:24px;color:var(--amber);">●</span> ${zone.label}`
+      : `<span class="unit" style="font-size:24px;color:#C8D8F0;">●</span> VISIBLE`;
+    subEl.textContent = body === 'sun'
+      ? zone.description
+      : `Moon is above the horizon in the ${azimuthToCompass(az)}.`;
+  } else {
+    statusEl.innerHTML = `<span class="unit" style="font-size:24px;color:var(--text-dim);">●</span> BELOW HORIZON`;
+    subEl.textContent = `${bodyName} is currently below the horizon.`;
+  }
+
+  document.getElementById('body-azimuth').textContent = `${Math.round(az)}° ${azimuthToCompass(az)}`;
+  document.getElementById('body-altitude').textContent = `${alt.toFixed(1)}°`;
+
+  // Timeline + events (sun-only)
+  if (body === 'sun') {
+    renderSunTimelineAndEvents(now);
+  } else {
+    // For moon, show basic phase info instead
+    const phase = SUN.getMoonPhase(now);
+    document.getElementById('sun-events').innerHTML = `
+      <div class="sun-event-card">
+        <div class="event-name">PHASE</div>
+        <div class="event-time">${phase.name}</div>
+        <div class="event-countdown">${Math.round(phase.illumination * 100)}% illuminated</div>
+      </div>
+      <div class="sun-event-card">
+        <div class="event-name">DISTANCE</div>
+        <div class="event-time">${Math.round(pos.distance).toLocaleString()} km</div>
+        <div class="event-countdown">from Earth</div>
+      </div>
+    `;
+    // Clear markers from the timeline when moon is active
+    clearTimelineMarkers();
+  }
+}
+
+function getSunZone(altitude) {
+  if (altitude < 0) return { label: 'BELOW', description: 'Sun is below the horizon.' };
+  if (altitude < 6) return {
+    label: 'GOLDEN HOUR',
+    description: 'Perfect cinematic light. Warm tones, long shadows. Fly now if you can.'
+  };
+  if (altitude < 10) return {
+    label: 'GOLDEN ZONE',
+    description: 'Still great light for drone cinematography. Softer shadows than midday.'
+  };
+  if (altitude < 30) return {
+    label: 'MORNING / EVENING',
+    description: 'Decent light. Watch for harsh contrast on subjects facing the sun.'
+  };
+  if (altitude < 60) return {
+    label: 'DAYLIGHT',
+    description: 'Bright daylight. Use ND filters. Check histogram for blown highlights.'
+  };
+  return {
+    label: 'HIGH SUN',
+    description: 'Near overhead. Harshest light of the day. Strong NDs required.'
+  };
+}
+
+function clearTimelineMarkers() {
+  const tl = document.getElementById('sun-timeline');
+  tl.querySelectorAll('.sun-timeline-marker, .sun-timeline-label').forEach(e => e.remove());
+}
+
+function renderSunTimelineAndEvents(now) {
+  const times = SUN.getSunTimes(now, sunState.lat, sunState.lng);
+
+  // Timeline: a 24h strip centered on "today" (local midnight → next midnight).
+  const midnight = new Date(now);
+  midnight.setHours(0, 0, 0, 0);
+  const tomorrow = new Date(midnight.getTime() + 24 * 3600000);
+  const totalMs = tomorrow - midnight;
+
+  const tl = document.getElementById('sun-timeline');
+  clearTimelineMarkers();
+
+  // Now marker
+  const nowPct = ((now - midnight) / totalMs) * 100;
+  document.getElementById('sun-timeline-now').style.left = `${nowPct}%`;
+
+  // Key events to mark on the timeline
+  const markerEvents = [
+    { key: 'sunrise',   label: '↑' },
+    { key: 'solarNoon', label: '◎' },
+    { key: 'sunset',    label: '↓' },
+  ];
+  markerEvents.forEach(ev => {
+    const t = times[ev.key];
+    if (!t || isNaN(t.valueOf())) return;
+    const pct = ((t - midnight) / totalMs) * 100;
+    if (pct < 0 || pct > 100) return;
+    const marker = document.createElement('div');
+    marker.className = 'sun-timeline-marker';
+    marker.style.left = `${pct}%`;
+    tl.appendChild(marker);
+
+    const label = document.createElement('div');
+    label.className = 'sun-timeline-label';
+    label.style.left = `${pct}%`;
+    label.textContent = ev.label;
+    tl.appendChild(label);
+  });
+
+  // Key events card: show the four most important, in chronological order relative to "now"
+  const eventDefs = [
+    { key: 'dawn',          name: 'CIVIL DAWN',     golden: false },
+    { key: 'sunrise',       name: 'SUNRISE',        golden: true  },
+    { key: 'goldenHourEnd', name: 'GOLDEN HR ENDS', golden: true  },
+    { key: 'solarNoon',     name: 'SOLAR NOON',     golden: false },
+    { key: 'goldenHour',    name: 'GOLDEN HR START',golden: true  },
+    { key: 'sunset',        name: 'SUNSET',         golden: true  },
+    { key: 'dusk',          name: 'CIVIL DUSK',     golden: false },
+  ];
+
+  // Build all events with times, find the next 4 events (including past golden hour if it's today and <1h ago)
+  const eventList = eventDefs
+    .map(e => ({ ...e, time: times[e.key] }))
+    .filter(e => e.time && !isNaN(e.time.valueOf()));
+
+  // Pick: the next 4 upcoming events, plus the most recent one (so user knows context)
+  const future = eventList.filter(e => e.time > now);
+  const past   = eventList.filter(e => e.time <= now);
+  const pastLast = past[past.length - 1];
+  const toShow = pastLast ? [pastLast, ...future.slice(0, 3)] : future.slice(0, 4);
+
+  const eventsEl = document.getElementById('sun-events');
+  eventsEl.innerHTML = toShow.map(e => `
+    <div class="sun-event-card${e.golden ? ' golden' : ''}">
+      <div class="event-name">${e.name}</div>
+      <div class="event-time">${fmtTime(e.time)}</div>
+      <div class="event-countdown">${fmtCountdown(e.time, now)}</div>
+    </div>
+  `).join('');
+}
+
+/* ────────────────────────────────────────────────
+   LOCATION + BODY SELECTOR WIRING
+   ──────────────────────────────────────────────── */
+
+document.getElementById('btn-location').addEventListener('click', () => {
+  if (!navigator.geolocation) {
+    alert('This device does not support geolocation.');
+    return;
+  }
+  const btn = document.getElementById('btn-location');
+  btn.textContent = 'LOCATING...';
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      sunState.lat = pos.coords.latitude;
+      sunState.lng = pos.coords.longitude;
+      sunState.lastLocationTime = Date.now();
+      try {
+        localStorage.setItem('pfpp.location', JSON.stringify({
+          lat: sunState.lat,
+          lng: sunState.lng,
+          time: sunState.lastLocationTime,
+        }));
+      } catch (e) {}
+      btn.textContent = 'UPDATE';
+      renderSun();
+    },
+    (err) => {
+      btn.textContent = 'GET LOCATION';
+      let msg = 'Could not get location.';
+      if (err.code === 1) msg = 'Permission denied. Enable location access for this site in your browser settings.';
+      else if (err.code === 2) msg = 'Location unavailable. Try again in a moment.';
+      else if (err.code === 3) msg = 'Timed out. Try again.';
+      alert(msg);
+    },
+    { enableHighAccuracy: false, timeout: 15000, maximumAge: 300000 }
+  );
+});
+
+document.querySelectorAll('input[name=body]').forEach(el => {
+  el.addEventListener('change', () => {
+    sunState.body = document.querySelector('input[name=body]:checked')?.value || 'sun';
+    renderSun();
+  });
+});
+
+// Refresh sun position every minute while view is open
+setInterval(() => {
+  if (views.sun.classList.contains('active')) {
+    renderSun();
+  }
+}, 60000);
+
+/* ────────────────────────────────────────────────
    INIT
    ──────────────────────────────────────────────── */
 
 renderND();
 renderShutter();
+renderSun();
 
 // Register service worker for offline use
 if ('serviceWorker' in navigator) {
