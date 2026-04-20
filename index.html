@@ -1058,6 +1058,408 @@ select {
 }
 
 /* ═══════════════════════════════════════════════════════════════
+   PRE-FLIGHT CHECKLIST
+   ═══════════════════════════════════════════════════════════════ */
+
+.progress-bar-wrap {
+  background: var(--bg-deep);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  height: 8px;
+  overflow: hidden;
+  margin: var(--sp-3) 0;
+  position: relative;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--cyan) 0%, var(--green) 100%);
+  width: 0%;
+  transition: width 0.3s ease-out;
+  box-shadow: 0 0 10px var(--cyan-glow);
+}
+
+.progress-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-technical);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--text-2);
+}
+
+.progress-stats .count {
+  color: var(--cyan);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.progress-stats .complete {
+  color: var(--green);
+  font-weight: 700;
+}
+
+.flight-header {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-hot);
+  border-radius: 6px;
+  padding: var(--sp-4);
+  margin-bottom: var(--sp-4);
+  position: relative;
+}
+
+.flight-header .flight-label {
+  font-family: var(--font-technical);
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  color: var(--text-3);
+  margin-bottom: 2px;
+}
+
+.flight-header .flight-date {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-1);
+  letter-spacing: 0.04em;
+}
+
+.flight-header .reset-btn {
+  position: absolute;
+  top: var(--sp-3);
+  right: var(--sp-3);
+  background: var(--bg-deep);
+  border: 1px solid var(--amber);
+  color: var(--amber);
+  padding: 6px 12px;
+  border-radius: 3px;
+  font-family: var(--font-technical);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.flight-header .reset-btn:active {
+  background: var(--amber);
+  color: var(--bg-deep);
+}
+
+.checklist-section {
+  margin-bottom: var(--sp-5);
+}
+
+.checklist-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp-3) 0 var(--sp-2);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: var(--sp-3);
+}
+
+.checklist-section-header .title {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--cyan);
+}
+
+.checklist-section-header .section-count {
+  font-family: var(--font-technical);
+  font-size: 10px;
+  color: var(--text-3);
+  letter-spacing: 0.15em;
+}
+
+.checklist-section-header .section-count.done {
+  color: var(--green);
+}
+
+.check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  padding: var(--sp-3);
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.check-item:active {
+  background: var(--bg-elevated);
+}
+
+.check-item.checked {
+  background: rgba(0,255,148,0.04);
+  border-color: rgba(0,255,148,0.3);
+}
+
+.check-item.checked .check-text {
+  color: var(--text-3);
+  text-decoration: line-through;
+  text-decoration-color: rgba(0,255,148,0.5);
+  text-decoration-thickness: 1px;
+}
+
+.check-box {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border: 2px solid var(--border-hot);
+  border-radius: 3px;
+  display: grid;
+  place-items: center;
+  transition: all 0.15s;
+  margin-top: 1px;
+  background: var(--bg-deep);
+}
+
+.check-item.checked .check-box {
+  background: var(--green);
+  border-color: var(--green);
+  box-shadow: 0 0 10px var(--green-glow);
+}
+
+.check-box svg {
+  width: 14px;
+  height: 14px;
+  stroke: var(--bg-deep);
+  stroke-width: 3;
+  fill: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.check-item.checked .check-box svg {
+  opacity: 1;
+}
+
+.check-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.check-text {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-1);
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+
+.check-note {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: var(--text-3);
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+.check-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.check-edit-btn, .check-delete-btn {
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  color: var(--text-3);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: all 0.15s;
+}
+
+.check-edit-btn:active { color: var(--cyan); border-color: var(--cyan); }
+.check-delete-btn:active { color: var(--red); border-color: var(--red); }
+
+.check-edit-btn svg, .check-delete-btn svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+}
+
+.add-item-row {
+  display: flex;
+  gap: var(--sp-2);
+  margin-top: var(--sp-3);
+}
+
+.add-item-row input {
+  flex: 1;
+  margin: 0;
+}
+
+.add-btn {
+  padding: 0 14px;
+  background: var(--cyan);
+  color: var(--bg-deep);
+  border: 1px solid var(--cyan);
+  border-radius: 4px;
+  font-family: var(--font-technical);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+
+.add-btn:active { transform: scale(0.97); box-shadow: 0 0 15px var(--cyan-glow); }
+
+.add-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.section-actions {
+  display: flex;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+  margin-top: var(--sp-3);
+}
+
+.mini-btn {
+  padding: 6px 10px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-2);
+  border-radius: 3px;
+  font-family: var(--font-technical);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.mini-btn:active {
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
+
+.mini-btn.danger:active {
+  border-color: var(--red);
+  color: var(--red);
+}
+
+.checklist-empty {
+  text-align: center;
+  padding: var(--sp-5);
+  color: var(--text-3);
+  font-size: 13px;
+}
+
+.celebration-banner {
+  background: linear-gradient(135deg, rgba(0,255,148,0.15) 0%, rgba(0,212,255,0.1) 100%);
+  border: 1px solid var(--green);
+  border-radius: 6px;
+  padding: var(--sp-4);
+  margin-bottom: var(--sp-4);
+  text-align: center;
+  display: none;
+}
+
+.celebration-banner.show {
+  display: block;
+  animation: celebrate 0.5s ease-out;
+}
+
+@keyframes celebrate {
+  0% { transform: scale(0.95); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.celebration-banner .title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  color: var(--green);
+  text-shadow: 0 0 20px var(--green-glow);
+  margin-bottom: var(--sp-2);
+}
+
+.celebration-banner .sub {
+  font-size: 13px;
+  color: var(--text-2);
+  line-height: 1.5;
+}
+
+.celebration-banner .ready-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: var(--green);
+  border-radius: 50%;
+  margin: 0 var(--sp-2);
+  animation: pulse 1s ease-in-out infinite;
+  box-shadow: 0 0 8px var(--green);
+}
+
+/* Edit modal overlay */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 200;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-5);
+  animation: fadeIn 0.2s ease-out;
+}
+
+.modal-overlay.show { display: flex; }
+
+.modal {
+  background: var(--bg-panel);
+  border: 1px solid var(--cyan);
+  border-radius: 6px;
+  padding: var(--sp-5);
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 0 40px var(--cyan-glow), 0 20px 60px rgba(0,0,0,0.5);
+}
+
+.modal-title {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--cyan);
+  margin-bottom: var(--sp-4);
+}
+
+.modal-actions {
+  display: flex;
+  gap: var(--sp-2);
+  margin-top: var(--sp-4);
+}
+
+.modal-actions .btn {
+  flex: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════════
    UTILS
    ═══════════════════════════════════════════════════════════════ */
 
@@ -1349,8 +1751,7 @@ select {
         <div class="title">SUN / MOON<br>POSITION</div>
       </button>
 
-      <button class="tool-tile soon">
-        <span class="soon-tag">SOON</span>
+      <button class="tool-tile" data-nav="checklist">
         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
           <path d="M9 11l3 3L22 4"/>
           <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
@@ -1690,6 +2091,66 @@ select {
     </div>
   </section>
 
+  <!-- ─── PRE-FLIGHT CHECKLIST VIEW ─── -->
+  <section class="view" id="view-checklist">
+    <div class="view-header">
+      <button class="back-btn" data-back>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+      </button>
+      <div class="view-title">
+        <div class="kicker">F·04 · SAFETY ROUTINE</div>
+        <div class="main-title">PRE-FLIGHT CHECKLIST</div>
+      </div>
+    </div>
+
+    <div class="flight-header">
+      <div class="flight-label">CURRENT FLIGHT</div>
+      <div class="flight-date" id="flight-date">—</div>
+      <button class="reset-btn" id="btn-reset-flight">NEW FLIGHT</button>
+    </div>
+
+    <div class="progress-stats">
+      <span><span class="count" id="checklist-completed">0</span> of <span class="count" id="checklist-total">0</span> items complete</span>
+      <span id="checklist-percent">0%</span>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progress-fill"></div>
+    </div>
+
+    <div class="celebration-banner" id="celebration">
+      <div class="title"><span class="ready-dot"></span> ALL CLEAR<span class="ready-dot"></span></div>
+      <div class="sub">All checklist items complete. You're cleared to fly safely. Have a good one.</div>
+    </div>
+
+    <div id="checklist-container"></div>
+
+    <div class="card" style="margin-top: var(--sp-5);">
+      <div class="field-label" style="margin-bottom: var(--sp-3);">MANAGE CHECKLIST</div>
+      <div style="color: var(--text-2); font-size: 13px; line-height: 1.5; margin-bottom: var(--sp-3);">
+        Tap any item to check it off. Use the edit/delete buttons to customize.
+        Add new items to any section. Your checklist is saved locally on your device.
+      </div>
+      <div class="section-actions">
+        <button class="mini-btn" id="btn-add-section">+ ADD SECTION</button>
+        <button class="mini-btn" id="btn-reset-all-checks">UNCHECK ALL</button>
+        <button class="mini-btn danger" id="btn-restore-defaults">RESTORE DEFAULTS</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="field-label" style="margin-bottom: var(--sp-3);">ABOUT THIS CHECKLIST</div>
+      <div style="color: var(--text-2); font-size: 13px; line-height: 1.6;">
+        This starts with a Canadian drone pilot's 5-phase pre-flight ritual:
+        <strong class="cyan">PLAN → SITE → CAMERA → AIRCRAFT → FLIGHT</strong>.
+        Customize it to your exact workflow.
+        <br><br>
+        <span class="dim">Auto-resets when you open the app on a new day. Tap "NEW FLIGHT" to reset manually mid-day (multi-flight shoots). Data stays on your device — never sent anywhere.</span>
+      </div>
+    </div>
+  </section>
+
 </main>
 
 <!-- ═══════════════════════════════════════════════════════════════ -->
@@ -1716,6 +2177,28 @@ select {
 </nav>
 
 <!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- MODAL OVERLAY (for editing checklist items)                       -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+
+<div class="modal-overlay" id="edit-modal">
+  <div class="modal">
+    <div class="modal-title" id="modal-title">EDIT ITEM</div>
+    <div class="field">
+      <label class="field-label">TEXT</label>
+      <input type="text" id="modal-text" placeholder="e.g. Check battery voltage">
+    </div>
+    <div class="field">
+      <label class="field-label">NOTE (OPTIONAL)</label>
+      <input type="text" id="modal-note" placeholder="e.g. Warn if under 3.7V per cell">
+    </div>
+    <div class="modal-actions">
+      <button class="btn" id="modal-cancel">CANCEL</button>
+      <button class="btn btn-primary" id="modal-save">SAVE</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
 <!-- LOGIC                                                             -->
 <!-- ═══════════════════════════════════════════════════════════════ -->
 
@@ -1725,10 +2208,11 @@ select {
    ──────────────────────────────────────────────── */
 
 const views = {
-  home:    document.getElementById('view-home'),
-  nd:      document.getElementById('view-nd'),
-  shutter: document.getElementById('view-shutter'),
-  sun:     document.getElementById('view-sun'),
+  home:      document.getElementById('view-home'),
+  nd:        document.getElementById('view-nd'),
+  shutter:   document.getElementById('view-shutter'),
+  sun:       document.getElementById('view-sun'),
+  checklist: document.getElementById('view-checklist'),
 };
 
 function navigate(viewId) {
@@ -1742,6 +2226,10 @@ function navigate(viewId) {
   // When sun view opens, refresh the dial immediately
   if (viewId === 'sun') {
     renderSun();
+  }
+  // When checklist view opens, refresh display (handles auto-reset on new day)
+  if (viewId === 'checklist') {
+    checklistOpened();
   }
 }
 
@@ -2481,12 +2969,471 @@ setInterval(() => {
 }, 60000);
 
 /* ────────────────────────────────────────────────
+   PRE-FLIGHT CHECKLIST
+   ────────────────────────────────────────────────
+   5-phase Canadian drone pilot checklist.
+   Users can add/edit/delete items and sections.
+   Saves to localStorage, auto-resets on new day.
+   ──────────────────────────────────────────────── */
+
+const DEFAULT_CHECKLIST = [
+  {
+    id: 's1',
+    name: 'PLAN',
+    items: [
+      { id: 'p1', text: 'Check weather forecast (wind, precip, visibility)', note: 'Wind under 30 km/h for smooth footage' },
+      { id: 'p2', text: 'Verify airspace via NAV CANADA or AirMap app', note: 'Check for CTRL zones, TFRs, and NOTAMs' },
+      { id: 'p3', text: 'Confirm insurance and Part 107 / RPAS documents', note: 'Digital or physical copy on hand' },
+      { id: 'p4', text: 'Review client brief / shot list', note: 'Know what you need before you launch' },
+    ]
+  },
+  {
+    id: 's2',
+    name: 'SITE',
+    items: [
+      { id: 'si1', text: 'Scout takeoff and landing area (flat, clear)', note: '3m+ clearance in all directions' },
+      { id: 'si2', text: 'Identify obstacles (wires, trees, buildings)', note: 'Note heading, distance, altitude' },
+      { id: 'si3', text: 'Check for people / vehicles / wildlife', note: '30m horizontal separation minimum' },
+      { id: 'si4', text: 'Confirm GPS signal strength', note: '10+ satellites locked before arming' },
+    ]
+  },
+  {
+    id: 's3',
+    name: 'CAMERA',
+    items: [
+      { id: 'c1', text: 'Set ISO, shutter, aperture for current light', note: '180° shutter rule = shutter 2× fps' },
+      { id: 'c2', text: 'Mount appropriate ND filter', note: 'See ND Filter Recommender tool' },
+      { id: 'c3', text: 'Verify color profile (D-Log M / Normal)', note: 'Match to your edit workflow' },
+      { id: 'c4', text: 'Confirm resolution + framerate on recorder', note: '4K60 D-Log M for pro work' },
+      { id: 'c5', text: 'Clean lens with microfiber cloth', note: 'Dust on lens = smudge in every frame' },
+    ]
+  },
+  {
+    id: 's4',
+    name: 'AIRCRAFT',
+    items: [
+      { id: 'a1', text: 'Inspect propellers for cracks or chips', note: 'Replace suspect props - they are $8' },
+      { id: 'a2', text: 'Check battery level (>50% for primary flight)', note: 'Land at 25%, not 15%' },
+      { id: 'a3', text: 'Confirm SD card has space + is seated', note: '1GB per 30 sec at 4K60 D-Log M' },
+      { id: 'a4', text: 'Calibrate compass if in new location', note: 'Only when aircraft asks for it' },
+      { id: 'a5', text: 'Set RTH altitude above all obstacles', note: 'Default 100m; higher for hills/trees' },
+      { id: 'a6', text: 'Verify remote ID broadcast is active', note: 'Canadian Remote ID required 2026+' },
+    ]
+  },
+  {
+    id: 's5',
+    name: 'FLIGHT',
+    items: [
+      { id: 'f1', text: 'Announce takeoff to anyone on-site', note: '"Drone taking off" - clear communication' },
+      { id: 'f2', text: 'Fly 2-3s of stable hover before moving', note: 'Gives you clean head frame for editing' },
+      { id: 'f3', text: 'Watch battery and signal during flight', note: 'Check every 30s or during pauses' },
+      { id: 'f4', text: 'Land softly before 25% battery remaining', note: 'Buffer for unexpected return flight' },
+      { id: 'f5', text: 'Eject SD card and store immediately', note: 'Do not leave card in drone overnight' },
+    ]
+  },
+];
+
+const CHECKLIST_KEY    = 'pfpp.checklist';
+const CHECKLIST_STATE  = 'pfpp.checklist.state';
+const CHECKLIST_DAY    = 'pfpp.checklist.day';
+
+let checklistData = loadChecklist();
+let checkedItems = loadCheckedState();
+let editingContext = null;   // { sectionId, itemId, mode } while modal open
+
+function loadChecklist() {
+  try {
+    const raw = localStorage.getItem(CHECKLIST_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
+  } catch (e) {}
+  return JSON.parse(JSON.stringify(DEFAULT_CHECKLIST));
+}
+
+function saveChecklist() {
+  try {
+    localStorage.setItem(CHECKLIST_KEY, JSON.stringify(checklistData));
+  } catch (e) {}
+}
+
+function loadCheckedState() {
+  try {
+    const raw = localStorage.getItem(CHECKLIST_STATE);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && typeof parsed === 'object') return parsed;
+    }
+  } catch (e) {}
+  return {};
+}
+
+function saveCheckedState() {
+  try {
+    localStorage.setItem(CHECKLIST_STATE, JSON.stringify(checkedItems));
+  } catch (e) {}
+}
+
+function todayKey() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function autoResetIfNewDay() {
+  const saved = localStorage.getItem(CHECKLIST_DAY);
+  const today = todayKey();
+  if (saved !== today) {
+    checkedItems = {};
+    saveCheckedState();
+    try { localStorage.setItem(CHECKLIST_DAY, today); } catch (e) {}
+    return true;
+  }
+  return false;
+}
+
+function resetFlight() {
+  checkedItems = {};
+  saveCheckedState();
+  try { localStorage.setItem(CHECKLIST_DAY, todayKey()); } catch (e) {}
+  renderChecklist();
+}
+
+function checklistOpened() {
+  const wasReset = autoResetIfNewDay();
+  renderChecklist();
+  if (wasReset && countCompletedItems() === 0) {
+    // quietly - no toast needed, empty boxes tell the story
+  }
+}
+
+function countTotalItems() {
+  return checklistData.reduce((sum, s) => sum + s.items.length, 0);
+}
+
+function countCompletedItems() {
+  let n = 0;
+  checklistData.forEach(s => {
+    s.items.forEach(it => {
+      if (checkedItems[`${s.id}:${it.id}`]) n++;
+    });
+  });
+  return n;
+}
+
+function updateFlightHeader() {
+  const d = new Date();
+  const opts = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+  document.getElementById('flight-date').textContent = d.toLocaleDateString(undefined, opts).toUpperCase();
+}
+
+function updateProgress() {
+  const total = countTotalItems();
+  const done = countCompletedItems();
+  const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+  document.getElementById('checklist-completed').textContent = done;
+  document.getElementById('checklist-total').textContent = total;
+  document.getElementById('checklist-percent').textContent = `${pct}%`;
+  document.getElementById('progress-fill').style.width = `${pct}%`;
+
+  const celebration = document.getElementById('celebration');
+  if (done > 0 && done === total) {
+    celebration.classList.add('show');
+  } else {
+    celebration.classList.remove('show');
+  }
+}
+
+function svgCheckmark() {
+  return `<svg viewBox="0 0 24 24"><polyline points="5 12 10 17 19 8"/></svg>`;
+}
+
+function svgPencil() {
+  return `<svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`;
+}
+
+function svgTrash() {
+  return `<svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>`;
+}
+
+function renderChecklist() {
+  updateFlightHeader();
+  const container = document.getElementById('checklist-container');
+  container.innerHTML = '';
+
+  if (checklistData.length === 0) {
+    container.innerHTML = '<div class="checklist-empty">No checklist sections. Tap "+ ADD SECTION" to create one.</div>';
+    updateProgress();
+    return;
+  }
+
+  checklistData.forEach(section => {
+    const sectionDone = section.items.filter(it => checkedItems[`${section.id}:${it.id}`]).length;
+    const sectionTotal = section.items.length;
+
+    const sec = document.createElement('div');
+    sec.className = 'checklist-section';
+    sec.innerHTML = `
+      <div class="checklist-section-header">
+        <span class="title">${escapeHtml(section.name)}</span>
+        <span class="section-count ${sectionDone === sectionTotal && sectionTotal > 0 ? 'done' : ''}">
+          ${sectionDone}/${sectionTotal}
+        </span>
+      </div>
+      <div class="section-items" data-section-id="${section.id}"></div>
+      <div class="add-item-row">
+        <input type="text" placeholder="Add item to ${escapeHtml(section.name)}..." data-section-input="${section.id}">
+        <button class="add-btn" data-section-add="${section.id}">ADD</button>
+      </div>
+      <div class="section-actions">
+        <button class="mini-btn" data-rename-section="${section.id}">RENAME</button>
+        <button class="mini-btn danger" data-delete-section="${section.id}">DELETE SECTION</button>
+      </div>
+    `;
+
+    const itemsEl = sec.querySelector('.section-items');
+    section.items.forEach(item => {
+      const stateKey = `${section.id}:${item.id}`;
+      const checked = !!checkedItems[stateKey];
+      const row = document.createElement('div');
+      row.className = 'check-item' + (checked ? ' checked' : '');
+      row.dataset.stateKey = stateKey;
+      row.innerHTML = `
+        <div class="check-box">${svgCheckmark()}</div>
+        <div class="check-content">
+          <div class="check-text">${escapeHtml(item.text)}</div>
+          ${item.note ? `<div class="check-note">${escapeHtml(item.note)}</div>` : ''}
+        </div>
+        <div class="check-item-actions">
+          <button class="check-edit-btn" data-edit="${section.id}:${item.id}" aria-label="Edit">${svgPencil()}</button>
+          <button class="check-delete-btn" data-delete="${section.id}:${item.id}" aria-label="Delete">${svgTrash()}</button>
+        </div>
+      `;
+      itemsEl.appendChild(row);
+    });
+
+    container.appendChild(sec);
+  });
+
+  updateProgress();
+  bindChecklistEvents();
+}
+
+function bindChecklistEvents() {
+  // Toggle item by tapping the row (but not if tapping edit/delete buttons)
+  document.querySelectorAll('.check-item').forEach(row => {
+    row.addEventListener('click', (e) => {
+      if (e.target.closest('.check-edit-btn') || e.target.closest('.check-delete-btn')) return;
+      const key = row.dataset.stateKey;
+      checkedItems[key] = !checkedItems[key];
+      if (!checkedItems[key]) delete checkedItems[key];
+      saveCheckedState();
+      row.classList.toggle('checked', !!checkedItems[key]);
+      updateProgress();
+      // Update section count without re-rendering everything
+      const [sid] = key.split(':');
+      const sec = checklistData.find(s => s.id === sid);
+      if (sec) {
+        const done = sec.items.filter(it => checkedItems[`${sid}:${it.id}`]).length;
+        const countEl = document.querySelector(`[data-section-id="${sid}"]`)
+          .closest('.checklist-section')
+          .querySelector('.section-count');
+        if (countEl) {
+          countEl.textContent = `${done}/${sec.items.length}`;
+          countEl.classList.toggle('done', done === sec.items.length);
+        }
+      }
+    });
+  });
+
+  // Edit item buttons
+  document.querySelectorAll('[data-edit]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const [sid, iid] = btn.dataset.edit.split(':');
+      openItemEditModal(sid, iid);
+    });
+  });
+
+  // Delete item buttons
+  document.querySelectorAll('[data-delete]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const [sid, iid] = btn.dataset.delete.split(':');
+      const section = checklistData.find(s => s.id === sid);
+      if (!section) return;
+      const item = section.items.find(it => it.id === iid);
+      if (!item) return;
+      if (!confirm(`Delete "${item.text}"?`)) return;
+      section.items = section.items.filter(it => it.id !== iid);
+      delete checkedItems[`${sid}:${iid}`];
+      saveChecklist();
+      saveCheckedState();
+      renderChecklist();
+    });
+  });
+
+  // Add item buttons
+  document.querySelectorAll('[data-section-add]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const sid = btn.dataset.sectionAdd;
+      const input = document.querySelector(`[data-section-input="${sid}"]`);
+      const text = (input.value || '').trim();
+      if (!text) return;
+      const section = checklistData.find(s => s.id === sid);
+      if (!section) return;
+      const newId = 'i' + Date.now().toString(36);
+      section.items.push({ id: newId, text, note: '' });
+      saveChecklist();
+      renderChecklist();
+    });
+  });
+
+  // Enter key in input adds item
+  document.querySelectorAll('[data-section-input]').forEach(input => {
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const sid = input.dataset.sectionInput;
+        document.querySelector(`[data-section-add="${sid}"]`).click();
+      }
+    });
+  });
+
+  // Rename section
+  document.querySelectorAll('[data-rename-section]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const sid = btn.dataset.renameSection;
+      const section = checklistData.find(s => s.id === sid);
+      if (!section) return;
+      const newName = prompt('New section name:', section.name);
+      if (newName && newName.trim()) {
+        section.name = newName.trim().toUpperCase();
+        saveChecklist();
+        renderChecklist();
+      }
+    });
+  });
+
+  // Delete section
+  document.querySelectorAll('[data-delete-section]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const sid = btn.dataset.deleteSection;
+      const section = checklistData.find(s => s.id === sid);
+      if (!section) return;
+      if (!confirm(`Delete the entire "${section.name}" section and all ${section.items.length} items?`)) return;
+      // Clean up checked state for this section
+      Object.keys(checkedItems).forEach(k => {
+        if (k.startsWith(sid + ':')) delete checkedItems[k];
+      });
+      checklistData = checklistData.filter(s => s.id !== sid);
+      saveChecklist();
+      saveCheckedState();
+      renderChecklist();
+    });
+  });
+}
+
+// Modal for editing items
+function openItemEditModal(sid, iid) {
+  const section = checklistData.find(s => s.id === sid);
+  if (!section) return;
+  const item = section.items.find(it => it.id === iid);
+  if (!item) return;
+  editingContext = { sectionId: sid, itemId: iid, mode: 'edit' };
+  document.getElementById('modal-title').textContent = 'EDIT ITEM';
+  document.getElementById('modal-text').value = item.text;
+  document.getElementById('modal-note').value = item.note || '';
+  document.getElementById('edit-modal').classList.add('show');
+  setTimeout(() => document.getElementById('modal-text').focus(), 50);
+}
+
+document.getElementById('modal-cancel').addEventListener('click', () => {
+  document.getElementById('edit-modal').classList.remove('show');
+  editingContext = null;
+});
+
+document.getElementById('modal-save').addEventListener('click', () => {
+  if (!editingContext) return;
+  const text = document.getElementById('modal-text').value.trim();
+  const note = document.getElementById('modal-note').value.trim();
+  if (!text) return;
+  const section = checklistData.find(s => s.id === editingContext.sectionId);
+  if (!section) return;
+  const item = section.items.find(it => it.id === editingContext.itemId);
+  if (!item) return;
+  item.text = text;
+  item.note = note;
+  saveChecklist();
+  document.getElementById('edit-modal').classList.remove('show');
+  editingContext = null;
+  renderChecklist();
+});
+
+// Close modal on overlay tap
+document.getElementById('edit-modal').addEventListener('click', (e) => {
+  if (e.target.id === 'edit-modal') {
+    document.getElementById('edit-modal').classList.remove('show');
+    editingContext = null;
+  }
+});
+
+// Checklist control buttons
+document.getElementById('btn-reset-flight').addEventListener('click', () => {
+  if (confirm('Start a new flight? This will uncheck all items.')) {
+    resetFlight();
+  }
+});
+
+document.getElementById('btn-reset-all-checks').addEventListener('click', () => {
+  if (confirm('Uncheck all items for this flight?')) {
+    checkedItems = {};
+    saveCheckedState();
+    renderChecklist();
+  }
+});
+
+document.getElementById('btn-restore-defaults').addEventListener('click', () => {
+  if (confirm('Restore the default checklist? This will ERASE all your custom items and sections.')) {
+    checklistData = JSON.parse(JSON.stringify(DEFAULT_CHECKLIST));
+    checkedItems = {};
+    saveChecklist();
+    saveCheckedState();
+    renderChecklist();
+  }
+});
+
+document.getElementById('btn-add-section').addEventListener('click', () => {
+  const name = prompt('New section name (e.g. DELIVERY, WINTER KIT):');
+  if (!name || !name.trim()) return;
+  checklistData.push({
+    id: 's' + Date.now().toString(36),
+    name: name.trim().toUpperCase(),
+    items: [],
+  });
+  saveChecklist();
+  renderChecklist();
+});
+
+// HTML escape helper
+function escapeHtml(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+/* ────────────────────────────────────────────────
    INIT
    ──────────────────────────────────────────────── */
 
 renderND();
 renderShutter();
 renderSun();
+autoResetIfNewDay();
+renderChecklist();
 
 // Register service worker for offline use
 if ('serviceWorker' in navigator) {
