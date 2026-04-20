@@ -1,23 +1,23 @@
 {
-  "name": "Pre-Flight Pilot Pal",
-  "short_name": "PFPP",
-  "description": "Canadian drone pilot pre-flight companion. ND filter recommender, 180° shutter calculator, and more.",
+  "name": "Vista Frame",
+  "short_name": "Vista Frame",
+  "description": "Aerial cinematography companion. ND filter recommender, 180° shutter rule, sun & moon tracker, pre-shoot checklist, white balance reference, drone registry.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#0A0E1A",
   "theme_color": "#0A0E1A",
-  "categories": ["utilities", "productivity", "photo"],
+  "categories": ["photo", "productivity", "utilities"],
   "icons": [
     {
-      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIj48cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgZmlsbD0iIzBBMEUxQSIvPjxyZWN0IHg9IjE2IiB5PSIxNiIgd2lkdGg9IjE2MCIgaGVpZ2h0PSIxNjAiIHJ4PSIxMiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDBENEZGIiBzdHJva2Utd2lkdGg9IjMiLz48dGV4dCB4PSI5NiIgeT0iMTIyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjkwIiBmb250LXdlaWdodD0iOTAwIiBmaWxsPSIjMDBENEZGIj5QPC90ZXh0Pjx0ZXh0IHg9Ijk2IiB5PSIxNTUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJtb25vc3BhY2UiIGZvbnQtc2l6ZT0iMTQiIGZvbnQtd2VpZ2h0PSI2MDAiIGZpbGw9IiM4RkEwQzciIGxldHRlci1zcGFjaW5nPSIyIj5GUFA8L3RleHQ+PC9zdmc+",
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIj48cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgZmlsbD0iIzBBMEUxQSIvPjxyZWN0IHg9IjE2IiB5PSIxNiIgd2lkdGg9IjE2MCIgaGVpZ2h0PSIxNjAiIHJ4PSIxMiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDBENEZGIiBzdHJva2Utd2lkdGg9IjMiLz48dGV4dCB4PSI5NiIgeT0iMTIyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjkwIiBmb250LXdlaWdodD0iOTAwIiBmaWxsPSIjMDBENEZGIj5WPC90ZXh0Pjx0ZXh0IHg9Ijk2IiB5PSIxNTUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJtb25vc3BhY2UiIGZvbnQtc2l6ZT0iMTQiIGZvbnQtd2VpZ2h0PSI2MDAiIGZpbGw9IiNCOEM1RTAiIGxldHRlci1zcGFjaW5nPSIyIj5GUkFNRTwvdGV4dD48L3N2Zz4=",
       "sizes": "192x192",
       "type": "image/svg+xml",
       "purpose": "any"
     },
     {
-      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgZmlsbD0iIzBBMEUxQSIvPjxyZWN0IHg9IjQwIiB5PSI0MCIgd2lkdGg9IjQzMiIgaGVpZ2h0PSI0MzIiIHJ4PSIzMiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDBENEZGIiBzdHJva2Utd2lkdGg9IjYiLz48dGV4dCB4PSIyNTYiIHk9IjMzMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9Im1vbm9zcGFjZSIgZm9udC1zaXplPSIyNDAiIGZvbnQtd2VpZ2h0PSI5MDAiIGZpbGw9IiMwMEQ0RkYiPlA8L3RleHQ+PHRleHQgeD0iMjU2IiB5PSI0MTUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJtb25vc3BhY2UiIGZvbnQtc2l6ZT0iMzgiIGZvbnQtd2VpZ2h0PSI2MDAiIGZpbGw9IiM4RkEwQzciIGxldHRlci1zcGFjaW5nPSI1Ij5GUFA8L3RleHQ+PC9zdmc+",
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgZmlsbD0iIzBBMEUxQSIvPjxyZWN0IHg9IjQwIiB5PSI0MCIgd2lkdGg9IjQzMiIgaGVpZ2h0PSI0MzIiIHJ4PSIzMiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDBENEZGIiBzdHJva2Utd2lkdGg9IjYiLz48dGV4dCB4PSIyNTYiIHk9IjMzMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9Im1vbm9zcGFjZSIgZm9udC1zaXplPSIyNDAiIGZvbnQtd2VpZ2h0PSI5MDAiIGZpbGw9IiMwMEQ0RkYiPlY8L3RleHQ+PHRleHQgeD0iMjU2IiB5PSI0MTUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJtb25vc3BhY2UiIGZvbnQtc2l6ZT0iMzgiIGZvbnQtd2VpZ2h0PSI2MDAiIGZpbGw9IiNCOEM1RTAiIGxldHRlci1zcGFjaW5nPSI1Ij5GUkFNRTwvdGV4dD48L3N2Zz4=",
       "sizes": "512x512",
       "type": "image/svg+xml",
       "purpose": "any maskable"
