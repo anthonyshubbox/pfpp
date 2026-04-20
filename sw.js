@@ -2,7 +2,7 @@
  * Caches the app for offline use after first visit.
  */
 
-const CACHE_VERSION = 'pfpp-v0.4.0';
+const CACHE_VERSION = 'pfpp-v0.5.0';
 const ASSETS = [
   './',
   './index.html',
