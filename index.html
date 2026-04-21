@@ -1871,6 +1871,446 @@ select {
 .action-btn-big:active { transform: scale(0.98); }
 
 /* ═══════════════════════════════════════════════════════════════
+   ACCESS GATE
+   ═══════════════════════════════════════════════════════════════ */
+
+.gate-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background:
+    radial-gradient(ellipse at top, #0a1b30 0%, transparent 50%),
+    radial-gradient(ellipse at bottom, #120822 0%, transparent 60%),
+    var(--bg-deep);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-5);
+  padding-top: calc(env(safe-area-inset-top) + var(--sp-5));
+  padding-bottom: calc(env(safe-area-inset-bottom) + var(--sp-5));
+  overflow-y: auto;
+}
+
+.gate-overlay.show { display: flex; }
+
+.gate-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.95' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.4;
+  mix-blend-mode: overlay;
+}
+
+.gate-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-hot);
+  border-radius: 6px;
+  padding: var(--sp-6);
+  width: 100%;
+  max-width: 380px;
+  position: relative;
+  box-shadow: 0 0 40px rgba(0,212,255,0.1), 0 20px 60px rgba(0,0,0,0.5);
+  animation: fadeIn 0.4s ease-out;
+}
+
+.gate-brand {
+  text-align: center;
+  margin-bottom: var(--sp-5);
+}
+
+.gate-brand-mark {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto var(--sp-3);
+  display: grid;
+  place-items: center;
+  background: var(--bg-elevated);
+  border: 2px solid var(--cyan);
+  border-radius: 6px;
+  position: relative;
+  box-shadow: 0 0 20px var(--cyan-glow), inset 0 0 12px var(--cyan-glow);
+}
+
+.gate-brand-mark::before {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border: 1px solid var(--cyan-glow);
+  border-radius: 4px;
+}
+
+.gate-brand-mark svg {
+  width: 28px;
+  height: 28px;
+  fill: var(--cyan);
+  filter: drop-shadow(0 0 6px var(--cyan));
+}
+
+.gate-brand .name {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  color: var(--text-1);
+  margin-bottom: 4px;
+}
+
+.gate-brand .tagline {
+  font-family: var(--font-technical);
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  color: var(--cyan);
+}
+
+.gate-heading {
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--text-2);
+  margin-bottom: var(--sp-3);
+}
+
+.gate-description {
+  font-size: 13px;
+  color: var(--text-2);
+  line-height: 1.5;
+  text-align: center;
+  margin-bottom: var(--sp-5);
+}
+
+.gate-input {
+  width: 100%;
+  background: var(--bg-deep);
+  border: 1px solid var(--border-hot);
+  border-radius: 4px;
+  padding: 14px;
+  color: var(--text-1);
+  font-family: var(--font-technical);
+  font-size: 16px;
+  letter-spacing: 0.3em;
+  text-align: center;
+  text-transform: uppercase;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.gate-input:focus {
+  outline: none;
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 3px var(--cyan-glow);
+}
+
+.gate-input.error {
+  border-color: var(--red);
+  animation: shake 0.4s ease-in-out;
+}
+
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}
+
+.gate-submit {
+  width: 100%;
+  margin-top: var(--sp-3);
+  padding: 14px;
+  background: var(--cyan);
+  color: var(--bg-deep);
+  border: 1px solid var(--cyan);
+  border-radius: 4px;
+  font-family: var(--font-technical);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  cursor: pointer;
+  box-shadow: 0 0 20px var(--cyan-glow);
+  transition: all 0.15s;
+}
+
+.gate-submit:active { transform: scale(0.98); }
+.gate-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.gate-error-msg {
+  color: var(--red);
+  font-family: var(--font-technical);
+  font-size: 11px;
+  text-align: center;
+  margin-top: var(--sp-3);
+  letter-spacing: 0.1em;
+  min-height: 16px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.gate-error-msg.show { opacity: 1; }
+
+.gate-footer {
+  text-align: center;
+  margin-top: var(--sp-5);
+  font-family: var(--font-technical);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--text-3);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FLIGHT SUITABILITY SCORE
+   ═══════════════════════════════════════════════════════════════ */
+
+.fs-score-wrap {
+  text-align: center;
+  padding: var(--sp-5) 0 var(--sp-4);
+}
+
+.fs-score-ring {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto var(--sp-4);
+}
+
+.fs-score-ring svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.fs-score-ring .ring-bg {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 8;
+}
+
+.fs-score-ring .ring-fill {
+  fill: none;
+  stroke-width: 10;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.6s ease-out, stroke 0.3s;
+}
+
+.fs-score-ring.go .ring-fill { stroke: var(--green); filter: drop-shadow(0 0 8px var(--green-glow)); }
+.fs-score-ring.caution .ring-fill { stroke: var(--amber); filter: drop-shadow(0 0 8px var(--amber-glow)); }
+.fs-score-ring.no-go .ring-fill { stroke: var(--red); filter: drop-shadow(0 0 8px var(--red-glow)); }
+
+.fs-score-ring .score-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.fs-score-big {
+  font-family: var(--font-display);
+  font-size: 56px;
+  font-weight: 900;
+  color: var(--text-1);
+  line-height: 1;
+  text-shadow: 0 0 20px var(--cyan-glow);
+}
+
+.fs-score-max {
+  font-family: var(--font-technical);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--text-3);
+  margin-top: 4px;
+}
+
+.fs-verdict {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  margin-bottom: var(--sp-2);
+}
+
+.fs-verdict.go      { color: var(--green); text-shadow: 0 0 12px var(--green-glow); }
+.fs-verdict.caution { color: var(--amber); text-shadow: 0 0 12px var(--amber-glow); }
+.fs-verdict.no-go   { color: var(--red); text-shadow: 0 0 12px var(--red-glow); }
+
+.fs-reason {
+  font-size: 13px;
+  color: var(--text-2);
+  line-height: 1.5;
+  padding: 0 var(--sp-3);
+  max-width: 340px;
+  margin: 0 auto;
+}
+
+.fs-factor-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.fs-factor {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: var(--sp-3);
+  align-items: center;
+  padding: var(--sp-3);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  border-left: 3px solid var(--text-3);
+}
+
+.fs-factor.ok     { border-left-color: var(--green); }
+.fs-factor.warn   { border-left-color: var(--amber); }
+.fs-factor.danger { border-left-color: var(--red); }
+
+.fs-factor-icon {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  color: var(--text-2);
+}
+
+.fs-factor.ok     .fs-factor-icon { color: var(--green); }
+.fs-factor.warn   .fs-factor-icon { color: var(--amber); }
+.fs-factor.danger .fs-factor-icon { color: var(--red); }
+
+.fs-factor-icon svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+}
+
+.fs-factor-body {
+  min-width: 0;
+}
+
+.fs-factor-label {
+  font-family: var(--font-technical);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--text-3);
+  margin-bottom: 2px;
+}
+
+.fs-factor-value {
+  font-family: var(--font-technical);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-1);
+}
+
+.fs-factor-unit {
+  color: var(--text-3);
+  font-size: 11px;
+  font-weight: 400;
+  margin-left: 3px;
+}
+
+.fs-factor-tag {
+  font-family: var(--font-technical);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 3px;
+  white-space: nowrap;
+  background: var(--bg-deep);
+  color: var(--text-3);
+  border: 1px solid var(--border);
+}
+
+.fs-factor.ok     .fs-factor-tag { color: var(--green);  border-color: var(--green); }
+.fs-factor.warn   .fs-factor-tag { color: var(--amber);  border-color: var(--amber); }
+.fs-factor.danger .fs-factor-tag { color: var(--red);    border-color: var(--red); }
+
+.fs-loader {
+  text-align: center;
+  padding: var(--sp-6) 0;
+  color: var(--text-2);
+}
+
+.fs-loader .spinner {
+  width: 32px;
+  height: 32px;
+  margin: 0 auto var(--sp-3);
+  border: 3px solid var(--border);
+  border-top-color: var(--cyan);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.fs-refresh-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--bg-deep);
+  border: 1px solid var(--border-hot);
+  border-radius: 3px;
+  color: var(--text-2);
+  font-family: var(--font-technical);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.fs-refresh-btn:active { border-color: var(--cyan); color: var(--cyan); }
+
+.fs-refresh-btn svg {
+  width: 12px;
+  height: 12px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+}
+
+.fs-hourly {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  padding: var(--sp-2) 0;
+  scrollbar-width: thin;
+}
+
+.fs-hour {
+  flex-shrink: 0;
+  width: 48px;
+  text-align: center;
+  padding: var(--sp-2) 4px;
+  background: var(--bg-elevated);
+  border-radius: 3px;
+  border: 1px solid var(--border);
+}
+
+.fs-hour.go     { border-color: var(--green); background: rgba(0,255,148,0.08); }
+.fs-hour.caution { border-color: var(--amber); background: rgba(255,178,0,0.08); }
+.fs-hour.no-go  { border-color: var(--red);   background: rgba(255,59,92,0.08); }
+
+.fs-hour-time {
+  font-family: var(--font-technical);
+  font-size: 9px;
+  color: var(--text-3);
+  margin-bottom: 2px;
+}
+
+.fs-hour-score {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-1);
+}
+
+/* ═══════════════════════════════════════════════════════════════
    UTILS
    ═══════════════════════════════════════════════════════════════ */
 
@@ -2086,6 +2526,35 @@ select {
 <body>
 
 <!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- ACCESS GATE OVERLAY                                               -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+
+<div class="gate-overlay" id="access-gate">
+  <div class="gate-card">
+    <div class="gate-brand">
+      <div class="gate-brand-mark">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 22h20L12 2zm0 6l6 12H6l6-12z"/></svg>
+      </div>
+      <div class="name">VISTA FRAME</div>
+      <div class="tagline">AERIAL CINEMATOGRAPHY</div>
+    </div>
+
+    <div class="gate-heading">▼ PRIVATE BETA ▼</div>
+    <div class="gate-description">
+      Vista Frame is currently in private beta for trusted pilots. Enter your access code to continue.
+    </div>
+
+    <form id="gate-form" autocomplete="off">
+      <input type="text" class="gate-input" id="gate-code" placeholder="ACCESS CODE" autocomplete="off" autocapitalize="characters" maxlength="20">
+      <button type="submit" class="gate-submit">UNLOCK</button>
+    </form>
+    <div class="gate-error-msg" id="gate-error">INVALID CODE · TRY AGAIN</div>
+
+    <div class="gate-footer">v0.6 · VISTA FRAME</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
 <!-- HEADER                                                            -->
 <!-- ═══════════════════════════════════════════════════════════════ -->
 
@@ -2197,7 +2666,7 @@ select {
     <div class="section-title">COMING SOON · PREMIUM</div>
 
     <div class="tool-grid">
-      <button class="tool-tile premium soon">
+      <button class="tool-tile premium" data-nav="flight">
         <span class="premium-badge">PRO</span>
         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
           <path d="M3 14l4-4 4 4 4-7 6 12"/>
@@ -2255,6 +2724,10 @@ select {
         <div class="kicker">F·01 · FIELD TOOL</div>
         <div class="main-title">ND FILTER RECOMMENDER</div>
       </div>
+    </div>
+
+    <div style="font-family: var(--font-technical); font-size: 11px; padding: 10px 14px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 4px; margin-bottom: var(--sp-4); color: var(--text-2); letter-spacing: 0.05em;" id="nd-drone-indicator">
+      <span class="dim">●</span> Loading drone profile...
     </div>
 
     <div class="card">
@@ -2323,6 +2796,10 @@ select {
         The 180° shutter rule says your shutter speed should be roughly 2× your frame rate for natural motion.
         At your chosen frame rate, the ideal shutter is too slow for bright daylight without an ND filter —
         the image would blow out. This filter brings the exposure back in line.
+        <br><br>
+        The math uses your primary drone's <strong class="cyan">aperture</strong> (wider aperture = more light
+        = stronger ND needed). Register your drone in the <strong class="cyan">Drone Registry</strong>
+        to get aperture-matched recommendations.
         <br><br>
         <span class="dim">If you notice your footage has a slight color cast with this filter, use a +/-5 temperature
         correction in your editor. Budget filters sometimes skew magenta or yellow.</span>
@@ -2699,6 +3176,29 @@ select {
     </div>
   </section>
 
+  <!-- ─── FLIGHT SUITABILITY VIEW ─── -->
+  <section class="view" id="view-flight">
+    <div class="view-header">
+      <button class="back-btn" data-back>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+      </button>
+      <div class="view-title">
+        <div class="kicker">F·07 · PRO · SHOULD I FLY?</div>
+        <div class="main-title">FLIGHT SUITABILITY</div>
+      </div>
+    </div>
+
+    <div class="location-bar" id="fs-location-bar">
+      <span class="loc-label">POS:</span>
+      <span class="loc-val" id="fs-loc-display">— not set —</span>
+      <button class="location-btn" id="fs-btn-location">GET LOCATION</button>
+    </div>
+
+    <div id="fs-content"></div>
+  </section>
+
 </main>
 
 <!-- ═══════════════════════════════════════════════════════════════ -->
@@ -2818,6 +3318,7 @@ const views = {
   checklist: document.getElementById('view-checklist'),
   wb:        document.getElementById('view-wb'),
   drones:    document.getElementById('view-drones'),
+  flight:    document.getElementById('view-flight'),
 };
 
 function navigate(viewId) {
@@ -2839,6 +3340,14 @@ function navigate(viewId) {
   // When drone registry opens, refresh the list
   if (viewId === 'drones') {
     renderDroneList();
+  }
+  // When ND tool opens, re-render in case primary drone changed
+  if (viewId === 'nd') {
+    renderND();
+  }
+  // When flight suitability opens, (re)fetch weather
+  if (viewId === 'flight') {
+    renderFlightSuitability();
   }
 }
 
@@ -2898,16 +3407,15 @@ const ND_KITS = {
   full:     ['ND8','ND16','ND32','ND64','ND128','ND256','ND512'],
 };
 
-// Base reference: at f/1.7 and ISO 100, target shutter = 1/(2×fps)
-// EV needed at target shutter = log2(f^2 / shutter) + log2(ISO/100)
-// At f/1.7: f^2 ≈ 2.89, so base EV for target shutter = log2(2.89 * 2 * fps)
+// Base reference: target shutter = 1/(2×fps) at ISO 100
+// EV = log2(N² / t)  where N = f-number, t = shutter time in seconds
 // Stops to remove = scene_EV - target_EV
-function computeND(lightKey, fps, kit) {
+function computeND(lightKey, fps, kit, aperture) {
+  const N = aperture || 1.7;            // default to f/1.7 (Mini-class) if no primary
+  const Nsquared = N * N;
   const sceneEV = LIGHT_EV[lightKey] ?? 14;
   const targetShutter = 1 / (2 * fps);   // e.g. 1/60 at 30fps
-  // EV = log2(N² / t)   where N=f-number, t=shutter time in seconds
-  // Mini 5 Pro f/1.7 → N²=2.89
-  const targetEV = Math.log2(2.89 / targetShutter);   // ISO 100 assumed
+  const targetEV = Math.log2(Nsquared / targetShutter);   // ISO 100 assumed
   const stopsToRemove = Math.max(0, sceneEV - targetEV);
 
   // Pick closest ND from kit (preferring undershoot — let user open up shutter slightly rather than underexpose)
@@ -2924,7 +3432,23 @@ function computeND(lightKey, fps, kit) {
     stopsToRemove: Math.round(stopsToRemove),
     targetShutter: `1/${Math.round(2*fps)}s`,
     availableKit: available,
+    apertureUsed: N,
   };
+}
+
+// Helper: get the primary drone's aperture, or null if none registered
+function getPrimaryAperture() {
+  try {
+    const raw = localStorage.getItem('vf.drones');
+    if (!raw) return null;
+    const drones = JSON.parse(raw);
+    if (!Array.isArray(drones)) return null;
+    const primary = drones.find(d => d.primary) || drones[0];
+    if (primary && typeof primary.aperture === 'number') {
+      return { aperture: primary.aperture, make: primary.make, model: primary.model };
+    }
+  } catch (e) {}
+  return null;
 }
 
 function renderND() {
@@ -2932,11 +3456,23 @@ function renderND() {
   const fps = parseFloat(document.querySelector('input[name=fps]:checked')?.value || 30);
   const kit = document.getElementById('nd-kit').value;
 
-  const result = computeND(light, fps, kit);
+  const primary = getPrimaryAperture();
+  const aperture = primary ? primary.aperture : 1.7;
+  const result = computeND(light, fps, kit, aperture);
 
   document.getElementById('nd-filter').textContent = result.chosen;
   document.getElementById('nd-stops').textContent = ND_STOPS[result.chosen];
   document.getElementById('nd-target-shutter').textContent = result.targetShutter;
+
+  // Drone-source indicator (shown in field hint area)
+  const droneIndicator = document.getElementById('nd-drone-indicator');
+  if (droneIndicator) {
+    if (primary) {
+      droneIndicator.innerHTML = `<span class="cyan">●</span> Using <strong>${escapeHtml(primary.make)} ${escapeHtml(primary.model)}</strong> · f/${primary.aperture}`;
+    } else {
+      droneIndicator.innerHTML = `<span class="dim">●</span> Using default f/1.7 (Mini-class). <a href="#" id="nd-add-drone-link" style="color:var(--cyan);text-decoration:underline;">Register your drone</a> for accurate math.`;
+    }
+  }
 
   // Build scale
   const scale = document.getElementById('nd-scale');
@@ -2961,6 +3497,15 @@ function renderND() {
     extreme: 'Beach / snow / noon overhead. Aggressive ND + consider a CPL to tame reflections.',
   };
   document.getElementById('nd-sub').textContent = hints[light];
+
+  // Wire the "Register your drone" link if present
+  const addLink = document.getElementById('nd-add-drone-link');
+  if (addLink) {
+    addLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      navigate('drones');
+    });
+  }
 }
 
 document.querySelectorAll('#view-nd input, #view-nd select').forEach(el => {
@@ -4557,8 +5102,515 @@ document.getElementById('drone-make').addEventListener('change', (e) => {
 });
 
 /* ────────────────────────────────────────────────
+   FLIGHT SUITABILITY SCORE
+   ────────────────────────────────────────────────
+   Uses Open-Meteo (free, no API key).
+   Computes a 0-100 score from:
+     - Wind speed at 10m (ground) + 120m (drone altitude)
+     - Wind gusts
+     - Precipitation probability
+     - Visibility
+   Returns a verdict: GO / CAUTION / NO-GO plus a primary reason.
+   ──────────────────────────────────────────────── */
+
+const FS_STATE_KEY = 'vf.flight.cache';
+const FS_CACHE_TTL_MS = 30 * 60 * 1000;   // 30 min
+
+// Thresholds (metric units — km/h, km)
+const FS_THRESHOLDS = {
+  wind_ground: { ok: 20, warn: 30, danger: 40 },     // km/h
+  wind_alt:    { ok: 25, warn: 40, danger: 55 },     // km/h at 120m
+  gusts:       { ok: 30, warn: 45, danger: 60 },     // km/h
+  precip_prob: { ok: 10, warn: 40, danger: 70 },     // %
+  visibility:  { ok: 10, warn: 5,  danger: 2 },      // km (inverted — lower is worse)
+};
+
+function scoreFactor(value, thresh, inverted = false) {
+  // Returns score contribution 0..100 for this factor, and a level label
+  if (inverted) {
+    // Lower value = worse (e.g. visibility)
+    if (value >= thresh.ok)     return { score: 100, level: 'ok'     };
+    if (value >= thresh.warn)   return { score: 65,  level: 'warn'   };
+    if (value >= thresh.danger) return { score: 30,  level: 'danger' };
+    return { score: 0, level: 'danger' };
+  } else {
+    // Higher value = worse (wind, precip)
+    if (value <= thresh.ok)     return { score: 100, level: 'ok'     };
+    if (value <= thresh.warn)   return { score: 65,  level: 'warn'   };
+    if (value <= thresh.danger) return { score: 30,  level: 'danger' };
+    return { score: 0, level: 'danger' };
+  }
+}
+
+function computeFlightScore(wx) {
+  // wx = { wind10, wind120, gusts, precipProb, visibility }
+  const factors = {
+    wind_ground: scoreFactor(wx.wind10,      FS_THRESHOLDS.wind_ground),
+    wind_alt:    scoreFactor(wx.wind120,     FS_THRESHOLDS.wind_alt),
+    gusts:       scoreFactor(wx.gusts,       FS_THRESHOLDS.gusts),
+    precip:      scoreFactor(wx.precipProb,  FS_THRESHOLDS.precip_prob),
+    visibility:  scoreFactor(wx.visibility,  FS_THRESHOLDS.visibility, true),
+  };
+
+  // Weighted score. Wind at altitude is most important for drone flight.
+  const weights = {
+    wind_ground: 0.15,
+    wind_alt:    0.30,
+    gusts:       0.25,
+    precip:      0.20,
+    visibility:  0.10,
+  };
+
+  let total = 0;
+  for (const k of Object.keys(factors)) {
+    total += factors[k].score * weights[k];
+  }
+  total = Math.round(total);
+
+  // Any single "danger" level drags the score down hard
+  const anyDanger = Object.values(factors).some(f => f.level === 'danger');
+  if (anyDanger) total = Math.min(total, 40);
+
+  // Verdict
+  let verdict, verdictClass;
+  if (total >= 75)      { verdict = 'GO';      verdictClass = 'go'; }
+  else if (total >= 50) { verdict = 'CAUTION'; verdictClass = 'caution'; }
+  else                  { verdict = 'NO-GO';   verdictClass = 'no-go'; }
+
+  // Primary reason (the factor with the lowest score)
+  let worstFactor = 'wind_alt';
+  let worstScore = 101;
+  for (const k of Object.keys(factors)) {
+    if (factors[k].score < worstScore) {
+      worstScore = factors[k].score;
+      worstFactor = k;
+    }
+  }
+
+  const reasonMap = {
+    wind_ground: (w) => w.wind10 > FS_THRESHOLDS.wind_ground.danger ? `Ground wind is ${Math.round(w.wind10)} km/h — too strong for stable takeoff.` : `Ground wind is ${Math.round(w.wind10)} km/h, getting marginal for clean shots.`,
+    wind_alt:    (w) => w.wind120 > FS_THRESHOLDS.wind_alt.danger ? `Wind at flight altitude is ${Math.round(w.wind120)} km/h — drone will struggle to hold position.` : `Wind at 120m is ${Math.round(w.wind120)} km/h, expect drift in hover shots.`,
+    gusts:       (w) => w.gusts > FS_THRESHOLDS.gusts.danger ? `Gusts reaching ${Math.round(w.gusts)} km/h — unsafe for small drones.` : `Gusts to ${Math.round(w.gusts)} km/h, footage will show jitter.`,
+    precip:      (w) => w.precipProb > FS_THRESHOLDS.precip_prob.danger ? `${w.precipProb}% chance of precipitation — water + electronics don't mix.` : `${w.precipProb}% chance of precipitation — have a bailout plan.`,
+    visibility:  (w) => w.visibility < FS_THRESHOLDS.visibility.danger ? `Visibility is ${w.visibility.toFixed(1)} km — below VLOS minimums.` : `Visibility is ${w.visibility.toFixed(1)} km, haze may affect long shots.`,
+  };
+
+  let reason;
+  if (total >= 75) {
+    reason = 'Conditions are clean for drone cinematography. Launch when ready.';
+  } else {
+    reason = reasonMap[worstFactor](wx);
+  }
+
+  return { score: total, verdict, verdictClass, factors, worstFactor, reason };
+}
+
+async function fetchWeather(lat, lng) {
+  // Open-Meteo: free, no key. Returns current + hourly for 24h.
+  // wind_speed_10m, wind_gusts_10m: at 10m ground level
+  // We approximate wind at 120m (drone altitude) by the wind_speed at the 850hPa pressure level
+  // which is roughly 1500m, too high — better is to use wind at 10m * vertical correction factor.
+  // Open-Meteo does expose hourly wind at multiple heights via "wind_speed_80m" and "wind_speed_120m".
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat.toFixed(4)}&longitude=${lng.toFixed(4)}`
+    + `&current=temperature_2m,wind_speed_10m,wind_gusts_10m,precipitation,weather_code,visibility`
+    + `&hourly=wind_speed_10m,wind_speed_120m,wind_gusts_10m,precipitation_probability,visibility`
+    + `&wind_speed_unit=kmh&timezone=auto&forecast_days=1`;
+  const resp = await fetch(url);
+  if (!resp.ok) throw new Error('weather fetch failed: ' + resp.status);
+  return await resp.json();
+}
+
+function extractCurrentWeather(meteoData) {
+  const c = meteoData.current || {};
+  const h = meteoData.hourly || {};
+  const times = h.time || [];
+
+  // Find the hourly index closest to "now"
+  const now = new Date();
+  let nowIdx = 0;
+  for (let i = 0; i < times.length; i++) {
+    const t = new Date(times[i]);
+    if (t <= now) nowIdx = i;
+    else break;
+  }
+
+  const w120 = (h.wind_speed_120m && h.wind_speed_120m[nowIdx]) ?? (c.wind_speed_10m || 0) * 1.6;
+  const visRaw = (h.visibility && h.visibility[nowIdx]) ?? (c.visibility ?? 10000);
+  return {
+    temp:       c.temperature_2m ?? 0,
+    wind10:     c.wind_speed_10m ?? 0,
+    wind120:    w120,
+    gusts:      c.wind_gusts_10m ?? 0,
+    precipProb: (h.precipitation_probability && h.precipitation_probability[nowIdx]) ?? 0,
+    visibility: visRaw / 1000,   // m → km
+    weatherCode: c.weather_code ?? 0,
+  };
+}
+
+function extractHourlyForecast(meteoData) {
+  const h = meteoData.hourly || {};
+  const times = h.time || [];
+  const now = new Date();
+  const hours = [];
+  for (let i = 0; i < times.length; i++) {
+    const t = new Date(times[i]);
+    if (t < now) continue;                        // skip past hours
+    if (t > new Date(now.getTime() + 12 * 3600000)) break;  // only next 12h
+    hours.push({
+      time: t,
+      wind10:      h.wind_speed_10m?.[i] ?? 0,
+      wind120:     h.wind_speed_120m?.[i] ?? 0,
+      gusts:       h.wind_gusts_10m?.[i] ?? 0,
+      precipProb:  h.precipitation_probability?.[i] ?? 0,
+      visibility: (h.visibility?.[i] ?? 10000) / 1000,
+    });
+  }
+  return hours;
+}
+
+function renderFlightSuitability(forceRefresh = false) {
+  const contentEl = document.getElementById('fs-content');
+  const locBar = document.getElementById('fs-location-bar');
+  const locDisplay = document.getElementById('fs-loc-display');
+  const btn = document.getElementById('fs-btn-location');
+
+  // Reuse location from sun module if available
+  const loc = (sunState.lat !== null && sunState.lng !== null)
+    ? { lat: sunState.lat, lng: sunState.lng }
+    : null;
+
+  if (!loc) {
+    locDisplay.textContent = '— location needed —';
+    locBar.classList.add('needs-location');
+    contentEl.innerHTML = `
+      <div class="card">
+        <div class="fs-loader">
+          <p style="color: var(--text-2); font-size: 13px; line-height: 1.5; max-width: 300px; margin: 0 auto;">
+            Tap <strong class="cyan">GET LOCATION</strong> above to calculate flight suitability from local weather data.
+          </p>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  locBar.classList.remove('needs-location');
+  locDisplay.textContent = formatLatLng(loc.lat, loc.lng);
+
+  // Try cache first
+  if (!forceRefresh) {
+    try {
+      const raw = localStorage.getItem(FS_STATE_KEY);
+      if (raw) {
+        const cached = JSON.parse(raw);
+        const age = Date.now() - (cached.fetchedAt || 0);
+        const distMoved = cached.lat !== undefined
+          ? Math.abs(cached.lat - loc.lat) + Math.abs(cached.lng - loc.lng)
+          : 999;
+        if (age < FS_CACHE_TTL_MS && distMoved < 0.1) {
+          renderFlightContent(cached.data, new Date(cached.fetchedAt));
+          return;
+        }
+      }
+    } catch (e) {}
+  }
+
+  // Show loader
+  contentEl.innerHTML = `
+    <div class="card">
+      <div class="fs-loader">
+        <div class="spinner"></div>
+        <div style="font-family: var(--font-technical); font-size: 11px; letter-spacing: 0.15em; color: var(--text-2);">
+          FETCHING WEATHER DATA...
+        </div>
+      </div>
+    </div>
+  `;
+
+  fetchWeather(loc.lat, loc.lng)
+    .then(data => {
+      const fetchedAt = Date.now();
+      try {
+        localStorage.setItem(FS_STATE_KEY, JSON.stringify({
+          data, fetchedAt, lat: loc.lat, lng: loc.lng,
+        }));
+      } catch (e) {}
+      renderFlightContent(data, new Date(fetchedAt));
+    })
+    .catch(err => {
+      contentEl.innerHTML = `
+        <div class="card">
+          <div style="color: var(--red); font-family: var(--font-technical); font-size: 12px; padding: var(--sp-4); text-align: center; letter-spacing: 0.05em;">
+            ⚠ COULD NOT FETCH WEATHER DATA
+          </div>
+          <div style="color: var(--text-2); font-size: 13px; line-height: 1.5; padding: 0 var(--sp-4) var(--sp-4); text-align: center;">
+            Check your internet connection. Weather data requires online access (unlike the other tools in the app).
+          </div>
+          <button class="action-btn-big" id="fs-retry">RETRY</button>
+        </div>
+      `;
+      document.getElementById('fs-retry').addEventListener('click', () => renderFlightSuitability(true));
+    });
+}
+
+function renderFlightContent(meteoData, fetchedAt) {
+  const contentEl = document.getElementById('fs-content');
+  const wx = extractCurrentWeather(meteoData);
+  const result = computeFlightScore(wx);
+  const hourly = extractHourlyForecast(meteoData);
+
+  // Ring: circle circumference = 2πr ≈ 534 for r=85
+  const circumference = 2 * Math.PI * 85;
+  const dashOffset = circumference * (1 - result.score / 100);
+
+  // Hourly scored
+  const hourlyScored = hourly.map(h => {
+    const hScore = computeFlightScore(h);
+    return { ...h, score: hScore.score, verdictClass: hScore.verdictClass };
+  });
+
+  const timeAgo = Math.round((Date.now() - fetchedAt.getTime()) / 60000);
+  const timeAgoStr = timeAgo < 1 ? 'just now' : `${timeAgo}m ago`;
+
+  contentEl.innerHTML = `
+    <div class="card">
+      <div class="card-corner tl"></div>
+      <div class="card-corner tr"></div>
+      <div class="card-corner bl"></div>
+      <div class="card-corner br"></div>
+
+      <div class="fs-score-wrap">
+        <div class="fs-score-ring ${result.verdictClass}">
+          <svg viewBox="0 0 200 200">
+            <circle class="ring-bg" cx="100" cy="100" r="85"></circle>
+            <circle class="ring-fill" cx="100" cy="100" r="85"
+                    stroke-dasharray="${circumference}"
+                    stroke-dashoffset="${dashOffset}"></circle>
+          </svg>
+          <div class="score-inner">
+            <div class="fs-score-big">${result.score}</div>
+            <div class="fs-score-max">OUT OF 100</div>
+          </div>
+        </div>
+
+        <div class="fs-verdict ${result.verdictClass}">${result.verdict}</div>
+        <div class="fs-reason">${escapeHtml(result.reason)}</div>
+
+        <div style="margin-top: var(--sp-4);">
+          <button class="fs-refresh-btn" id="fs-refresh-btn">
+            <svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+            UPDATED ${timeAgoStr.toUpperCase()} · REFRESH
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="field-label" style="margin-bottom: var(--sp-3);">CURRENT CONDITIONS</div>
+      <div class="fs-factor-list">
+        ${factorRow('wind-ground', 'WIND · GROUND', `${Math.round(wx.wind10)}`, 'km/h', result.factors.wind_ground.level)}
+        ${factorRow('wind-alt',    'WIND · 120m',   `${Math.round(wx.wind120)}`, 'km/h', result.factors.wind_alt.level)}
+        ${factorRow('gusts',       'GUSTS',          `${Math.round(wx.gusts)}`, 'km/h', result.factors.gusts.level)}
+        ${factorRow('precip',      'PRECIPITATION',  `${Math.round(wx.precipProb)}`, '%', result.factors.precip.level)}
+        ${factorRow('visibility',  'VISIBILITY',     `${wx.visibility.toFixed(1)}`, 'km', result.factors.visibility.level)}
+      </div>
+      <div style="margin-top: var(--sp-3); font-family: var(--font-technical); font-size: 10px; letter-spacing: 0.1em; color: var(--text-3); text-align: right;">
+        TEMP ${Math.round(wx.temp)}°C
+      </div>
+    </div>
+
+    ${hourlyScored.length > 1 ? `
+    <div class="card">
+      <div class="field-label" style="margin-bottom: var(--sp-3);">NEXT 12 HOURS</div>
+      <div class="fs-hourly">
+        ${hourlyScored.map(h => `
+          <div class="fs-hour ${h.verdictClass}">
+            <div class="fs-hour-time">${fmtHourShort(h.time)}</div>
+            <div class="fs-hour-score">${h.score}</div>
+          </div>
+        `).join('')}
+      </div>
+      <div style="margin-top: var(--sp-2); font-size: 11px; color: var(--text-3); line-height: 1.4;">
+        Green = clear conditions · Amber = proceed with caution · Red = not recommended
+      </div>
+    </div>
+    ` : ''}
+
+    <div class="card">
+      <div class="field-label" style="margin-bottom: var(--sp-3);">HOW THIS WORKS</div>
+      <div style="color: var(--text-2); font-size: 13px; line-height: 1.6;">
+        Score is computed from live weather at your location:
+        <strong class="cyan">wind at flight altitude (30%)</strong>, gusts (25%),
+        ground wind (15%), precipitation chance (20%), visibility (10%).
+        <br><br>
+        <strong class="green">75-100 · GO</strong> — clean conditions for cinematography<br>
+        <strong class="amber">50-74 · CAUTION</strong> — flyable but watch conditions<br>
+        <strong class="red">0-49 · NO-GO</strong> — wait for better weather
+        <br><br>
+        <span class="dim">Weather from Open-Meteo (free, no tracking). Cached 30 min.
+        This is an advisory tool — always apply your own judgement before flight.</span>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('fs-refresh-btn').addEventListener('click', () => renderFlightSuitability(true));
+}
+
+function factorRow(iconKey, label, value, unit, level) {
+  const tagMap = { ok: 'CLEAR', warn: 'MARGINAL', danger: 'HAZARD' };
+  const iconMap = {
+    'wind-ground': '<svg viewBox="0 0 24 24"><path d="M17.7 7.7a2.5 2.5 0 111.8 4.3H2"/><path d="M9.6 4.6A2 2 0 1111 8H2"/><path d="M12.6 19.4A2 2 0 1014 16H2"/></svg>',
+    'wind-alt':    '<svg viewBox="0 0 24 24"><path d="M17.7 7.7a2.5 2.5 0 111.8 4.3H2"/><path d="M9.6 4.6A2 2 0 1111 8H2"/><path d="M12.6 19.4A2 2 0 1014 16H2"/></svg>',
+    'gusts':       '<svg viewBox="0 0 24 24"><path d="M3 8h13a3 3 0 103-3"/><path d="M3 12h17a3 3 0 113 3"/><path d="M3 16h11"/></svg>',
+    'precip':      '<svg viewBox="0 0 24 24"><path d="M8 19v1M8 14v1M16 19v1M16 14v1M12 21v1M12 16v1"/><path d="M20 16.58A5 5 0 0018 7h-1.26a8 8 0 10-11.62 9"/></svg>',
+    'visibility':  '<svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>',
+  };
+  return `
+    <div class="fs-factor ${level}">
+      <div class="fs-factor-icon">${iconMap[iconKey] || ''}</div>
+      <div class="fs-factor-body">
+        <div class="fs-factor-label">${label}</div>
+        <div class="fs-factor-value">${value}<span class="fs-factor-unit">${unit}</span></div>
+      </div>
+      <div class="fs-factor-tag">${tagMap[level]}</div>
+    </div>
+  `;
+}
+
+function fmtHourShort(d) {
+  const h = d.getHours();
+  const ap = h < 12 ? 'A' : 'P';
+  const h12 = ((h + 11) % 12) + 1;
+  return `${h12}${ap}`;
+}
+
+// Location button on flight view reuses the sun view's location stash
+document.getElementById('fs-btn-location').addEventListener('click', () => {
+  if (!navigator.geolocation) {
+    alert('This device does not support geolocation.');
+    return;
+  }
+  const btn = document.getElementById('fs-btn-location');
+  btn.textContent = 'LOCATING...';
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      sunState.lat = pos.coords.latitude;
+      sunState.lng = pos.coords.longitude;
+      sunState.lastLocationTime = Date.now();
+      try {
+        localStorage.setItem('pfpp.location', JSON.stringify({
+          lat: sunState.lat, lng: sunState.lng, time: sunState.lastLocationTime,
+        }));
+      } catch (e) {}
+      btn.textContent = 'UPDATE';
+      renderFlightSuitability(true);
+    },
+    (err) => {
+      btn.textContent = 'GET LOCATION';
+      let msg = 'Could not get location.';
+      if (err.code === 1) msg = 'Permission denied. Enable location access for this site in your browser settings.';
+      else if (err.code === 2) msg = 'Location unavailable. Try again in a moment.';
+      else if (err.code === 3) msg = 'Timed out. Try again.';
+      alert(msg);
+    },
+    { enableHighAccuracy: false, timeout: 15000, maximumAge: 300000 }
+  );
+});
+
+/* ────────────────────────────────────────────────
+   ACCESS GATE
+   ────────────────────────────────────────────────
+   Simple code gate to prevent random URL-finders
+   from using the app during private beta.
+
+   To add/change codes: edit VALID_CODES below and
+   push an update. All existing authenticated users
+   stay authenticated (localStorage flag persists).
+
+   To force everyone to re-auth (e.g. someone leaked
+   a code), bump GATE_EPOCH — this invalidates all
+   existing localStorage tokens.
+   ──────────────────────────────────────────────── */
+
+const VALID_CODES = [
+  'VISTA2026',       // general beta code - share with trusted pilots
+  'TONY',            // your personal code, always works
+];
+
+const GATE_EPOCH = 1;   // bump to force re-auth for everyone
+const GATE_KEY = 'vf.gate';
+
+function isGateUnlocked() {
+  try {
+    const raw = localStorage.getItem(GATE_KEY);
+    if (!raw) return false;
+    const obj = JSON.parse(raw);
+    if (!obj || obj.epoch !== GATE_EPOCH) return false;
+    return true;
+  } catch (e) { return false; }
+}
+
+function unlockGate(code) {
+  try {
+    localStorage.setItem(GATE_KEY, JSON.stringify({
+      code: code,
+      epoch: GATE_EPOCH,
+      unlockedAt: Date.now(),
+    }));
+  } catch (e) {}
+}
+
+function showGate() {
+  document.getElementById('access-gate').classList.add('show');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => document.getElementById('gate-code').focus(), 300);
+}
+
+function hideGate() {
+  document.getElementById('access-gate').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+function handleGateSubmit(e) {
+  if (e) e.preventDefault();
+  const input = document.getElementById('gate-code');
+  const errorEl = document.getElementById('gate-error');
+  const entered = (input.value || '').trim().toUpperCase();
+
+  if (VALID_CODES.includes(entered)) {
+    unlockGate(entered);
+    errorEl.classList.remove('show');
+    input.classList.remove('error');
+    hideGate();
+    return;
+  }
+
+  // Wrong code
+  input.classList.add('error');
+  errorEl.classList.add('show');
+  // Clear animation after it plays
+  setTimeout(() => input.classList.remove('error'), 500);
+  input.value = '';
+  input.focus();
+}
+
+document.getElementById('gate-form').addEventListener('submit', handleGateSubmit);
+
+// Uppercase-as-you-type in the code field (cosmetic — codes are normalized on submit anyway)
+document.getElementById('gate-code').addEventListener('input', (e) => {
+  const pos = e.target.selectionStart;
+  e.target.value = e.target.value.toUpperCase();
+  e.target.setSelectionRange(pos, pos);
+});
+
+/* ────────────────────────────────────────────────
    INIT
    ──────────────────────────────────────────────── */
+
+// Check gate BEFORE rendering anything else
+if (!isGateUnlocked()) {
+  showGate();
+}
 
 renderND();
 renderShutter();
