@@ -2471,6 +2471,318 @@ select {
 }
 
 /* ═══════════════════════════════════════════════════════════════
+   SCENE → SETTINGS
+   ═══════════════════════════════════════════════════════════════ */
+
+.scene-intro {
+  color: var(--text-2);
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: var(--sp-4);
+}
+
+.scene-category-title {
+  font-family: var(--font-technical);
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  color: var(--text-3);
+  margin: var(--sp-4) 0 var(--sp-3);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.scene-category-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--border) 0%, transparent 100%);
+}
+
+.scene-category-title:first-child { margin-top: 0; }
+
+.scene-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-3);
+}
+
+.scene-tile {
+  position: relative;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: var(--sp-4);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: left;
+  font-family: inherit;
+  color: var(--text-1);
+  min-height: 118px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+}
+
+.scene-tile:active {
+  border-color: var(--cyan);
+  background: var(--bg-elevated);
+  transform: translateY(-1px);
+  box-shadow: 0 0 20px var(--cyan-glow);
+}
+
+.scene-tile-bg {
+  position: absolute;
+  inset: 0;
+  opacity: 0.25;
+  transition: opacity 0.15s;
+  pointer-events: none;
+}
+
+.scene-tile:active .scene-tile-bg {
+  opacity: 0.5;
+}
+
+.scene-tile-content {
+  position: relative;
+  z-index: 1;
+}
+
+.scene-tile-label {
+  font-family: var(--font-technical);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--cyan);
+  margin-bottom: 4px;
+}
+
+.scene-tile-title {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--text-1);
+  line-height: 1.2;
+  margin-bottom: 3px;
+}
+
+.scene-tile-sub {
+  font-size: 11px;
+  color: var(--text-2);
+  line-height: 1.3;
+}
+
+/* Scene detail panel */
+.scene-detail-header {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-4);
+}
+
+.scene-detail-icon {
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  border-radius: 6px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--cyan);
+  box-shadow: 0 0 16px var(--cyan-glow);
+  overflow: hidden;
+  position: relative;
+}
+
+.scene-detail-icon::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.4;
+}
+
+.scene-detail-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.scene-detail-name {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  color: var(--text-1);
+  line-height: 1.1;
+  margin-bottom: 2px;
+}
+
+.scene-detail-cat {
+  font-family: var(--font-technical);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--cyan);
+}
+
+.scene-settings-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-4);
+}
+
+.scene-setting {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: var(--sp-3);
+  border-left: 3px solid var(--cyan);
+}
+
+.scene-setting .label {
+  font-family: var(--font-technical);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--text-3);
+  margin-bottom: 4px;
+}
+
+.scene-setting .value {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-1);
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+
+.scene-setting .value-unit {
+  font-family: var(--font-technical);
+  font-size: 11px;
+  color: var(--text-3);
+  font-weight: 500;
+  margin-left: 4px;
+}
+
+.scene-setting.full-width {
+  grid-column: span 2;
+}
+
+.scene-section {
+  margin-top: var(--sp-4);
+}
+
+.scene-tips {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.scene-tip {
+  display: flex;
+  gap: var(--sp-3);
+  align-items: flex-start;
+  padding: var(--sp-3);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  border-left: 3px solid var(--amber);
+}
+
+.scene-tip-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--amber);
+  margin-top: 2px;
+}
+
+.scene-tip-icon svg {
+  width: 100%;
+  height: 100%;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+}
+
+.scene-tip-text {
+  color: var(--text-1);
+  font-size: 13px;
+  line-height: 1.5;
+  flex: 1;
+}
+
+.scene-back-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-family: var(--font-technical);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: var(--cyan);
+  padding: 10px 14px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--cyan);
+  border-radius: 4px;
+  margin-bottom: var(--sp-4);
+  cursor: pointer;
+  width: fit-content;
+  transition: all 0.15s;
+}
+
+.scene-back-bar:active {
+  background: var(--cyan);
+  color: var(--bg-deep);
+}
+
+.scene-back-bar svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+}
+
+.scene-related-tools {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 8px;
+  margin-top: var(--sp-3);
+}
+
+.scene-related-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: var(--bg-deep);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-2);
+  font-family: var(--font-technical);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: left;
+  font-family: inherit;
+}
+
+.scene-related-link:active {
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
+
+.scene-related-link svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+  color: var(--cyan);
+}
+
+/* ═══════════════════════════════════════════════════════════════
    UTILS
    ═══════════════════════════════════════════════════════════════ */
 
@@ -2848,11 +3160,11 @@ select {
         <div class="title">FLIGHT<br>SUITABILITY</div>
       </button>
 
-      <button class="tool-tile premium soon">
+      <button class="tool-tile premium" data-nav="scene">
         <span class="premium-badge">PRO</span>
         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <path d="M17.6 6.4A9 9 0 1021 12"/>
-          <polyline points="21 3 21 9 15 9"/>
+          <path d="M23 7l-7 5 7 5V7z"/>
+          <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
         </svg>
         <div class="label">P·02</div>
         <div class="title">SCENE → SETTINGS</div>
@@ -3399,6 +3711,33 @@ select {
     </div>
   </section>
 
+  <!-- ─── SCENE → SETTINGS VIEW ─── -->
+  <section class="view" id="view-scene">
+    <div class="view-header">
+      <button class="back-btn" data-back>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+      </button>
+      <div class="view-title">
+        <div class="kicker">P·02 · PRO · SMART SETUP</div>
+        <div class="main-title">SCENE → SETTINGS</div>
+      </div>
+    </div>
+
+    <!-- PICKER VIEW (default) -->
+    <div id="scene-picker">
+      <div class="scene-intro">
+        Pick the type of shoot you're on and get recommended camera settings, composition approach,
+        ND filter choice, and shot-specific tips. Tap any scene below to load the brief.
+      </div>
+      <div id="scene-list"></div>
+    </div>
+
+    <!-- DETAIL VIEW (shown after tile tap) -->
+    <div id="scene-detail" style="display:none;"></div>
+  </section>
+
 </main>
 
 <!-- ═══════════════════════════════════════════════════════════════ -->
@@ -3520,6 +3859,7 @@ const views = {
   drones:       document.getElementById('view-drones'),
   flight:       document.getElementById('view-flight'),
   composition:  document.getElementById('view-composition'),
+  scene:        document.getElementById('view-scene'),
 };
 
 function navigate(viewId) {
@@ -3553,6 +3893,10 @@ function navigate(viewId) {
   // When composition opens, render the currently-selected guide
   if (viewId === 'composition') {
     renderComposition();
+  }
+  // When scene opens, reset to picker view
+  if (viewId === 'scene') {
+    showScenePicker();
   }
 }
 
@@ -5638,6 +5982,489 @@ function renderComposition() {
       <div class="tip-text">${escapeHtml(t.text)}</div>
     </div>
   `).join('');
+}
+
+/* ────────────────────────────────────────────────
+   SCENE → SETTINGS
+   ────────────────────────────────────────────────
+   Curated database of common drone shoot types.
+   Each scene specifies: recommended fps, shutter,
+   ISO, ND filter, color profile, composition style,
+   and specific tips.
+   ──────────────────────────────────────────────── */
+
+const SCENE_DATA = [
+  // ── REAL ESTATE ──────────────────────────────
+  {
+    id: 'realestate-exterior',
+    category: 'REAL ESTATE',
+    name: 'EXTERIOR HOUSE',
+    sub: 'Front elevation + driveway',
+    bgColor: 'linear-gradient(135deg,#5d7a9d 0%,#8ab0d4 100%)',
+    settings: {
+      fps: '30 fps', fpsNote: 'Smooth real-estate standard',
+      shutter: '1/60s', shutterNote: '180° rule at 30fps',
+      iso: '100', isoNote: 'Base ISO, ND handles exposure',
+      nd: 'ND64', ndNote: 'Sunny day · ND32 for cloudy',
+      wb: '5500 K', wbNote: 'Daylight · manual for consistency',
+      profile: 'Normal', profileNote: 'Less grading, faster turnaround',
+    },
+    composition: 'RULE OF THIRDS',
+    compNote: 'Place house on lower third, sky on upper two thirds. Offset to one side for driveway lead-in.',
+    tips: [
+      'Fly 20-30m altitude, gimbal at -15° for the classic "realtor" front elevation.',
+      'Do a full orbit around the property at constant altitude for the listing video hero shot.',
+      'Blue hour (just after sunset) makes houses with interior lights look high-end. Schedule for it.',
+      'Keep the horizon dead level — crooked horizons scream amateur on listing sites.',
+    ],
+    relatedTools: ['nd', 'sun'],
+  },
+  {
+    id: 'realestate-aerial',
+    category: 'REAL ESTATE',
+    name: 'PROPERTY AERIAL',
+    sub: 'Lot / acreage / boundary',
+    bgColor: 'linear-gradient(135deg,#4a6d3e 0%,#8ab56a 100%)',
+    settings: {
+      fps: '30 fps', fpsNote: 'Standard for real estate',
+      shutter: '1/60s', shutterNote: '180° rule',
+      iso: '100', isoNote: 'Base ISO',
+      nd: 'ND64', ndNote: 'Midday sun typical',
+      wb: '5500 K', wbNote: 'Daylight',
+      profile: 'Normal', profileNote: 'Direct-to-deliverable',
+    },
+    composition: 'TOP-DOWN SYMMETRY',
+    compNote: 'Gimbal -90°, centered over property. Shows lot size, boundaries, and context instantly.',
+    tips: [
+      '80-120m altitude for residential, higher for acreage. Include neighboring context.',
+      'Shoot mid-morning or mid-afternoon — harsh noon light flattens textures.',
+      'Include at least one recognizable landmark (road, school) so buyers can orient themselves.',
+      'Do a "drop-down" shot: start high looking straight down, descend while tilting to 45° as you approach the house.',
+    ],
+    relatedTools: ['nd', 'sun'],
+  },
+  {
+    id: 'realestate-interior-light',
+    category: 'REAL ESTATE',
+    name: 'INTERIOR W/ WINDOWS',
+    sub: 'Through doors, natural light',
+    bgColor: 'linear-gradient(135deg,#b09670 0%,#e0c898 100%)',
+    settings: {
+      fps: '30 fps', fpsNote: 'Smooth, matches exterior',
+      shutter: '1/60s', shutterNote: '180° rule',
+      iso: '200-400', isoNote: 'Interiors need more ISO',
+      nd: 'None', ndNote: 'Interior light is already dim',
+      wb: '5000 K', wbNote: 'Mix of daylight + warm bulbs',
+      profile: 'Normal or HLG', profileNote: 'HLG handles window highlights',
+    },
+    composition: 'FRAME WITHIN A FRAME',
+    compNote: 'Frame through doorways, past kitchen islands, between railings. Creates depth and scale.',
+    tips: [
+      'Fly SLOWER indoors — 25-35% throttle. Any drift is very obvious in tight spaces.',
+      'Make sure all lights are ON — cold interiors photograph lifelessly.',
+      'Bracket exposure manually (or use HLG profile) to save window highlights while keeping shadow detail.',
+      'Plan your path before arming. Indoor flying with no GPS = your reflexes only.',
+    ],
+    relatedTools: ['wb', 'composition'],
+  },
+
+  // ── WEDDING ──────────────────────────────────
+  {
+    id: 'wedding-ceremony',
+    category: 'WEDDING',
+    name: 'CEREMONY AERIAL',
+    sub: 'Guests gathered, outdoor',
+    bgColor: 'linear-gradient(135deg,#8a5d80 0%,#c89cba 100%)',
+    settings: {
+      fps: '30 fps', fpsNote: 'Some slow-mo optional at 60',
+      shutter: '1/60s', shutterNote: '180° rule',
+      iso: '100', isoNote: 'Daylight base',
+      nd: 'ND32', ndNote: 'Cloudy common for weddings',
+      wb: '5500 K', wbNote: 'Daylight · lock manually',
+      profile: 'D-Log M', profileNote: 'Grading headroom for edit consistency',
+    },
+    composition: 'TOP-DOWN SYMMETRY',
+    compNote: 'Gimbal -90° during the vows. Shows the processional as a living aisle of people.',
+    tips: [
+      'Fly HIGH — 60-80m minimum. Nobody wants drone noise during "I do."',
+      'Coordinate with the officiant in advance — some couples want absolute silence.',
+      'Do establishing shots BEFORE the ceremony, not during. Saves stress and respect.',
+      'Land before the recessional — the kiss, the walk-out, and cheers should be clean audio on the ground cam.',
+    ],
+    relatedTools: ['nd', 'composition'],
+  },
+  {
+    id: 'wedding-venue',
+    category: 'WEDDING',
+    name: 'VENUE ESTABLISHING',
+    sub: 'Location hero shots',
+    bgColor: 'linear-gradient(135deg,#9a7030 0%,#d8b870 100%)',
+    settings: {
+      fps: '24 fps', fpsNote: 'Cinematic feel for edit',
+      shutter: '1/50s', shutterNote: '180° rule at 24fps',
+      iso: '100', isoNote: 'Base ISO',
+      nd: 'ND32-64', ndNote: 'Depends on light',
+      wb: '5500 K', wbNote: 'Daylight · manual',
+      profile: 'D-Log M', profileNote: 'Color graded to match edit',
+    },
+    composition: 'LEADING LINES',
+    compNote: 'Reveal the venue — fly from a distance toward it, or pass over a path leading to it.',
+    tips: [
+      'Golden hour venue shots are the wedding video MONEY SHOT. Schedule the drone for that window.',
+      'Slow, deliberate movement. Fast-flying establishing shots feel amateur.',
+      'Reverse-reveal: fly backwards away from the venue to show it getting smaller and the landscape getting bigger.',
+      'Plan 3 different altitudes: 30m, 60m, 100m. Editor needs variety.',
+    ],
+    relatedTools: ['sun', 'composition'],
+  },
+
+  // ── LANDSCAPE / NATURE ───────────────────────
+  {
+    id: 'landscape-sunset',
+    category: 'LANDSCAPE',
+    name: 'SUNSET / GOLDEN HOUR',
+    sub: 'Warm cinematic light',
+    bgColor: 'linear-gradient(135deg,#c85a3d 0%,#f8c890 100%)',
+    settings: {
+      fps: '24 fps', fpsNote: 'Cinematic standard',
+      shutter: '1/50s', shutterNote: '180° rule at 24fps',
+      iso: '100', isoNote: 'Base ISO at golden hour',
+      nd: 'ND16', ndNote: 'Low light — lighter ND',
+      wb: '4500-5200 K', wbNote: 'Preserve warm tones — don\'t neutralize',
+      profile: 'D-Log M or HLG', profileNote: 'Save the color data',
+    },
+    composition: 'RULE OF THIRDS',
+    compNote: 'Horizon on LOWER third with sky dominating. Sun on an intersection, not centered.',
+    tips: [
+      'Use the SUN / MOON tracker to time it exactly — golden hour is 30-60 min, not "evening."',
+      'The best light is OPPOSITE the sun (side-lit), not shooting INTO the sun. Spin around and look away.',
+      'Clouds make golden hour. Perfectly clear skies are less cinematic.',
+      'Fly higher than usual — low sun + high altitude = dramatic shadows on the landscape below.',
+    ],
+    relatedTools: ['sun', 'wb'],
+  },
+  {
+    id: 'landscape-water',
+    category: 'LANDSCAPE',
+    name: 'COASTLINE / WATER',
+    sub: 'Ocean, lakes, rivers',
+    bgColor: 'linear-gradient(135deg,#2a5d7a 0%,#6db0d0 100%)',
+    settings: {
+      fps: '24 fps', fpsNote: 'Cinematic · 60 for fast waves',
+      shutter: '1/50s', shutterNote: '180° rule',
+      iso: '100', isoNote: 'Reflective water = plenty of light',
+      nd: 'ND128 + CPL', ndNote: 'CPL cuts glare off water',
+      wb: '6000 K', wbNote: 'Slight cool bias for water',
+      profile: 'D-Log M', profileNote: 'Preserve highlight detail in whitecaps',
+    },
+    composition: 'SYMMETRY',
+    compNote: 'Still water = perfect reflection. Split the frame exactly between sky and water.',
+    tips: [
+      'CPL is mandatory over water. Rotate it until water darkens and reflections reduce.',
+      'Top-down over waves: fly 30-40m, gimbal -90°, look for the texture patterns as waves break.',
+      'Do slow parallel-to-coast flybys at 50m. It\'s the drone-cinema equivalent of a tracking shot.',
+      'Watch battery — wind off the water is always stronger than the forecast says.',
+    ],
+    relatedTools: ['nd', 'composition'],
+  },
+  {
+    id: 'landscape-forest',
+    category: 'LANDSCAPE',
+    name: 'FOREST / TERRAIN',
+    sub: 'Canopy, autumn colors',
+    bgColor: 'linear-gradient(135deg,#3d5528 0%,#7a9050 100%)',
+    settings: {
+      fps: '24 fps', fpsNote: 'Cinematic',
+      shutter: '1/50s', shutterNote: '180° rule',
+      iso: '100', isoNote: 'Base ISO',
+      nd: 'ND32-64', ndNote: 'Depends on canopy coverage',
+      wb: '5500 K', wbNote: 'Daylight · preserve fall colors',
+      profile: 'D-Log M', profileNote: 'Maximum grading flexibility',
+    },
+    composition: 'FILL THE FRAME',
+    compNote: 'Top-down on canopy creates beautiful texture. Fall foliage especially — no sky needed.',
+    tips: [
+      'Peak autumn color lasts 7-10 days in any given area. Plan around the forecast.',
+      'Cloudy days beat sunny days for forests — diffused light, no harsh shadows that hide detail.',
+      'Fly 40-60m over canopy, gimbal -90° — look for single standout trees (red oak in green pines, etc.).',
+      'Dawn mist in a valley is magic. Get there 30 min before sunrise, be airborne at first light.',
+    ],
+    relatedTools: ['nd', 'composition'],
+  },
+
+  // ── CONSTRUCTION / COMMERCIAL ────────────────
+  {
+    id: 'construction-progress',
+    category: 'COMMERCIAL',
+    name: 'CONSTRUCTION PROGRESS',
+    sub: 'Jobsite documentation',
+    bgColor: 'linear-gradient(135deg,#8a6d40 0%,#c0a070 100%)',
+    settings: {
+      fps: '30 fps', fpsNote: 'Standard for docs',
+      shutter: '1/60s', shutterNote: '180° rule',
+      iso: '100', isoNote: 'Base ISO',
+      nd: 'ND64', ndNote: 'Midday sun common',
+      wb: '5500 K', wbNote: 'Daylight',
+      profile: 'Normal', profileNote: 'Direct to client, minimal grading',
+    },
+    composition: 'TOP-DOWN',
+    compNote: 'Overhead plan-view for BIM/survey work. Include scale reference (vehicle, trailer).',
+    tips: [
+      'Fly the SAME altitude, SAME flight path each visit. Week-over-week comparisons need consistency.',
+      'Document timestamp + weather in your notes — critical for client reporting and legal disputes.',
+      'Mid-morning (10-11 AM) is best — sun high enough to show texture, not so high it washes color.',
+      'Capture 4-corner obliques (45° from each corner) + one pure top-down. Gives PM everything they need.',
+    ],
+    relatedTools: ['checklist', 'sun'],
+  },
+  {
+    id: 'commercial-building',
+    category: 'COMMERCIAL',
+    name: 'COMMERCIAL BUILDING',
+    sub: 'Exterior, signage, facade',
+    bgColor: 'linear-gradient(135deg,#5a5a6d 0%,#9ca8c0 100%)',
+    settings: {
+      fps: '30 fps', fpsNote: 'Smooth pro standard',
+      shutter: '1/60s', shutterNote: '180° rule',
+      iso: '100', isoNote: 'Base ISO',
+      nd: 'ND32-64', ndNote: 'Match to sky brightness',
+      wb: '5500 K', wbNote: 'Daylight, manual',
+      profile: 'D-Log M', profileNote: 'Grading flexibility for branding match',
+    },
+    composition: 'LEADING LINES',
+    compNote: 'Architectural lines (parking lot stripes, glass mullions) draw eye to building signage.',
+    tips: [
+      'Shoot head-on AND at 30° from the corner — client will want both for brochures.',
+      'Avoid capturing neighboring businesses\' signage unless cleared — legal headache.',
+      'Vertical pans from base to roof look great on LinkedIn / commercial websites.',
+      'Blue hour (10 min after sunset) with lit interiors = classic corporate shot.',
+    ],
+    relatedTools: ['composition', 'sun'],
+  },
+
+  // ── ACTION / SPORTS ──────────────────────────
+  {
+    id: 'action-sports',
+    category: 'ACTION',
+    name: 'SPORTS / ACTION',
+    sub: 'Fast motion, tracking',
+    bgColor: 'linear-gradient(135deg,#9d3d5a 0%,#d47090 100%)',
+    settings: {
+      fps: '60 fps', fpsNote: '60fps for slow-motion',
+      shutter: '1/120s', shutterNote: '180° rule at 60fps',
+      iso: '100-200', isoNote: 'Faster shutter = need slightly more',
+      nd: 'ND32', ndNote: 'Faster shutter = less ND needed',
+      wb: '5500 K', wbNote: 'Daylight · lock it',
+      profile: 'D-Log M', profileNote: 'For slow-mo grading',
+    },
+    composition: 'LEADING LINES + DIAGONALS',
+    compNote: 'Follow the motion — diagonal paths across the frame feel fastest.',
+    tips: [
+      '60fps gives you a 2.5× slow-motion option (playing at 24fps). Don\'t waste this — shoot key moments at 60.',
+      'Use ActiveTrack / Follow Me for predictable subjects. Manual for anything unpredictable.',
+      'Keep distance — fast subjects are easier to compose tight with zoom than by flying close.',
+      'Higher shutter = less motion blur = frames OK to pause for thumbnails. But video will look choppy — stick with 180° for playback.',
+    ],
+    relatedTools: ['shutter', 'nd'],
+  },
+
+  // ── CREATIVE / SOCIAL ────────────────────────
+  {
+    id: 'social-reels',
+    category: 'CREATIVE',
+    name: 'SOCIAL / REELS',
+    sub: 'Instagram, TikTok, Reels',
+    bgColor: 'linear-gradient(135deg,#d03a8a 0%,#f090c0 100%)',
+    settings: {
+      fps: '60 fps', fpsNote: 'Lets you speed-ramp in edit',
+      shutter: '1/120s', shutterNote: '180° rule at 60fps',
+      iso: '100', isoNote: 'Base ISO',
+      nd: 'ND32-64', ndNote: 'Daylight dependent',
+      wb: '5500 K', wbNote: 'Daylight, punchy not warm',
+      profile: 'Normal or D-Log M', profileNote: 'Normal for fast turnaround',
+    },
+    composition: 'FILL THE FRAME',
+    compNote: 'Vertical format requires tight framing. One strong subject, centered, fills the screen.',
+    tips: [
+      'Shoot 9:16 vertical when your drone supports it natively (Mini 4 Pro, Mini 5 Pro do). Avoid cropping from 16:9.',
+      'Hook in first 2 seconds. Start with the most dramatic shot, not the establishing shot.',
+      'Dolly-zoom (move forward while zooming out) looks INCREDIBLE on social. 10s clips go viral.',
+      'Vertical orbits on a still subject, or tracking shots at subject height, perform best.',
+    ],
+    relatedTools: ['composition', 'shutter'],
+  },
+  {
+    id: 'night-lowlight',
+    category: 'CREATIVE',
+    name: 'NIGHT / LOW LIGHT',
+    sub: 'City lights, stars, blue hour',
+    bgColor: 'linear-gradient(135deg,#1a2050 0%,#4050a0 100%)',
+    settings: {
+      fps: '24 fps', fpsNote: 'Cinematic + extra light gathering',
+      shutter: '1/50s', shutterNote: '180° rule at 24fps',
+      iso: '800-1600', isoNote: 'Low light requires more ISO',
+      nd: 'None', ndNote: 'Never use ND at night',
+      wb: '3500 K', wbNote: 'Cool to capture blue hour',
+      profile: 'D-Log M', profileNote: 'Most grading headroom for noise reduction',
+    },
+    composition: 'LEADING LINES',
+    compNote: 'City lights naturally create lines — roads, bridges, illuminated buildings. Follow them.',
+    tips: [
+      'Blue hour (10-30 min after sunset) is BETTER than full dark. Ambient light + lit windows = magic.',
+      'Fly LOW and SLOW. ISO 800+ means any wind wobble becomes visible noise.',
+      'Avoid flight near obstacles — depth perception at night is poor even with obstacle avoidance.',
+      'If your drone has nightscape/obstacle-sensing-in-dark, USE it. Otherwise keep it simple and safe.',
+    ],
+    relatedTools: ['sun', 'wb'],
+  },
+];
+
+function groupScenesByCategory() {
+  const grouped = {};
+  SCENE_DATA.forEach(s => {
+    if (!grouped[s.category]) grouped[s.category] = [];
+    grouped[s.category].push(s);
+  });
+  return grouped;
+}
+
+function showScenePicker() {
+  document.getElementById('scene-picker').style.display = 'block';
+  document.getElementById('scene-detail').style.display = 'none';
+
+  const listEl = document.getElementById('scene-list');
+  if (listEl.dataset.built === '1') return;   // already rendered
+
+  const grouped = groupScenesByCategory();
+  let html = '';
+  Object.keys(grouped).forEach(cat => {
+    html += `<div class="scene-category-title">${escapeHtml(cat)}</div>`;
+    html += `<div class="scene-grid">`;
+    grouped[cat].forEach(s => {
+      html += `
+        <button class="scene-tile" data-scene-id="${s.id}">
+          <div class="scene-tile-bg" style="background:${s.bgColor};"></div>
+          <div class="scene-tile-content">
+            <div class="scene-tile-label">${escapeHtml(s.category)}</div>
+            <div class="scene-tile-title">${escapeHtml(s.name)}</div>
+            <div class="scene-tile-sub">${escapeHtml(s.sub)}</div>
+          </div>
+        </button>
+      `;
+    });
+    html += `</div>`;
+  });
+  listEl.innerHTML = html;
+  listEl.dataset.built = '1';
+
+  listEl.querySelectorAll('[data-scene-id]').forEach(btn => {
+    btn.addEventListener('click', () => showSceneDetail(btn.dataset.sceneId));
+  });
+}
+
+function showSceneDetail(sceneId) {
+  const scene = SCENE_DATA.find(s => s.id === sceneId);
+  if (!scene) return;
+
+  document.getElementById('scene-picker').style.display = 'none';
+  const detailEl = document.getElementById('scene-detail');
+  detailEl.style.display = 'block';
+
+  const toolLabels = {
+    nd:          { label: 'ND RECOMMENDER',    icon: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg>' },
+    shutter:     { label: '180° SHUTTER',       icon: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3l3 6M21 12l-6 3M12 21l-3-6M3 12l6-3"/></svg>' },
+    sun:         { label: 'SUN / MOON',         icon: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2"/></svg>' },
+    wb:          { label: 'WHITE BALANCE',      icon: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><path d="M12 7v5l3 3"/></svg>' },
+    composition: { label: 'COMPOSITION',        icon: '<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg>' },
+    checklist:   { label: 'PRE-SHOOT',          icon: '<svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>' },
+  };
+
+  const related = (scene.relatedTools || []).map(k => toolLabels[k]).filter(Boolean);
+
+  detailEl.innerHTML = `
+    <button class="scene-back-bar" id="scene-back">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      ALL SCENES
+    </button>
+
+    <div class="card">
+      <div class="card-corner tl"></div>
+      <div class="card-corner tr"></div>
+      <div class="card-corner bl"></div>
+      <div class="card-corner br"></div>
+
+      <div class="scene-detail-header">
+        <div class="scene-detail-icon" style="background:${scene.bgColor};"></div>
+        <div class="scene-detail-info">
+          <div class="scene-detail-name">${escapeHtml(scene.name)}</div>
+          <div class="scene-detail-cat">${escapeHtml(scene.category)} · ${escapeHtml(scene.sub)}</div>
+        </div>
+      </div>
+
+      <div class="field-label" style="margin-bottom: var(--sp-3);">CAMERA SETTINGS</div>
+      <div class="scene-settings-grid">
+        ${sceneSettingBlock('FRAME RATE', scene.settings.fps, scene.settings.fpsNote)}
+        ${sceneSettingBlock('SHUTTER',    scene.settings.shutter, scene.settings.shutterNote)}
+        ${sceneSettingBlock('ISO',        scene.settings.iso, scene.settings.isoNote)}
+        ${sceneSettingBlock('ND FILTER',  scene.settings.nd, scene.settings.ndNote)}
+        ${sceneSettingBlock('WHITE BAL',  scene.settings.wb, scene.settings.wbNote)}
+        ${sceneSettingBlock('PROFILE',    scene.settings.profile, scene.settings.profileNote)}
+      </div>
+
+      <div class="field-label" style="margin: var(--sp-4) 0 var(--sp-3);">COMPOSITION</div>
+      <div class="scene-setting full-width" style="border-left-color: var(--amber);">
+        <div class="label">RECOMMENDED APPROACH</div>
+        <div class="value" style="color: var(--amber);">${escapeHtml(scene.composition)}</div>
+        <div style="font-size: 12px; color: var(--text-2); margin-top: 6px; line-height: 1.4;">${escapeHtml(scene.compNote)}</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="field-label" style="margin-bottom: var(--sp-3);">PRO TIPS</div>
+      <div class="scene-tips">
+        ${scene.tips.map(t => `
+          <div class="scene-tip">
+            <div class="scene-tip-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6.3 4.6 2.4 7.4-6.1-4.6-6.1 4.6 2.4-7.4L2 9.4h7.6z"/></svg>
+            </div>
+            <div class="scene-tip-text">${escapeHtml(t)}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    ${related.length > 0 ? `
+      <div class="card">
+        <div class="field-label" style="margin-bottom: var(--sp-3);">JUMP TO RELATED TOOLS</div>
+        <div class="scene-related-tools">
+          ${scene.relatedTools.map(k => {
+            const t = toolLabels[k];
+            return t ? `<button class="scene-related-link" data-jump="${k}">${t.icon}${t.label}</button>` : '';
+          }).join('')}
+        </div>
+      </div>
+    ` : ''}
+  `;
+
+  detailEl.querySelector('#scene-back').addEventListener('click', showScenePicker);
+  detailEl.querySelectorAll('[data-jump]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.jump;
+      navigate(target);
+    });
+  });
+
+  window.scrollTo({ top: 0, behavior: 'instant' });
+}
+
+function sceneSettingBlock(label, value, note) {
+  return `
+    <div class="scene-setting">
+      <div class="label">${escapeHtml(label)}</div>
+      <div class="value">${escapeHtml(value)}</div>
+      <div style="font-size: 11px; color: var(--text-3); margin-top: 4px; line-height: 1.3;">${escapeHtml(note)}</div>
+    </div>
+  `;
 }
 
 /* ────────────────────────────────────────────────
