@@ -5214,7 +5214,7 @@ async function fetchWeather(lat, lng) {
   const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat.toFixed(4)}&longitude=${lng.toFixed(4)}`
     + `&current=temperature_2m,wind_speed_10m,wind_gusts_10m,precipitation,weather_code,visibility`
     + `&hourly=wind_speed_10m,wind_speed_120m,wind_gusts_10m,precipitation_probability,visibility`
-    + `&wind_speed_unit=kmh&timezone=auto&forecast_days=1`;
+    + `&wind_speed_unit=kmh&timezone=auto&forecast_days=2`;
   const resp = await fetch(url);
   if (!resp.ok) throw new Error('weather fetch failed: ' + resp.status);
   return await resp.json();
