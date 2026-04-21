@@ -1,8 +1,9 @@
-/* Pre-Flight Pilot Pal - Service Worker
+/* Vista Frame - Service Worker
  * Caches the app for offline use after first visit.
+ * Third-party API calls (Open-Meteo) pass through uncached.
  */
 
-const CACHE_VERSION = 'pfpp-v0.5.0';
+const CACHE_VERSION = 'pfpp-v0.6.0';
 const ASSETS = [
   './',
   './index.html',
