@@ -3,7 +3,7 @@
  * Third-party API calls (Open-Meteo) pass through uncached.
  */
 
-const CACHE_VERSION = 'pfpp-v0.7.0';
+const CACHE_VERSION = 'pfpp-v0.8.0';
 const ASSETS = [
   './',
   './index.html',
