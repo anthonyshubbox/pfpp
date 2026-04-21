@@ -2311,6 +2311,166 @@ select {
 }
 
 /* ═══════════════════════════════════════════════════════════════
+   COMPOSITION GUIDES
+   ═══════════════════════════════════════════════════════════════ */
+
+.comp-selector {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  padding: var(--sp-2) 0 var(--sp-4);
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+
+.comp-tab {
+  flex-shrink: 0;
+  padding: 8px 14px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-2);
+  font-family: var(--font-technical);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.comp-tab.active {
+  background: var(--cyan);
+  color: var(--bg-deep);
+  border-color: var(--cyan);
+  box-shadow: 0 0 12px var(--cyan-glow);
+  font-weight: 700;
+}
+
+.comp-visual {
+  background: var(--bg-deep);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  position: relative;
+  margin-bottom: var(--sp-4);
+}
+
+.comp-visual svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.comp-name {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  color: var(--cyan);
+  text-shadow: 0 0 12px var(--cyan-glow);
+  margin-bottom: var(--sp-2);
+}
+
+.comp-tagline {
+  font-size: 14px;
+  color: var(--text-2);
+  line-height: 1.5;
+  margin-bottom: var(--sp-4);
+  font-style: italic;
+}
+
+.comp-section-title {
+  font-family: var(--font-technical);
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  color: var(--text-3);
+  margin: var(--sp-4) 0 var(--sp-3);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.comp-section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--border) 0%, transparent 100%);
+}
+
+.comp-points {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.comp-point {
+  display: flex;
+  gap: var(--sp-3);
+  align-items: flex-start;
+  padding: var(--sp-3);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+.comp-point-num {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  background: var(--cyan);
+  color: var(--bg-deep);
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 900;
+  border-radius: 3px;
+  margin-top: 1px;
+}
+
+.comp-point-text {
+  color: var(--text-1);
+  font-size: 13px;
+  line-height: 1.5;
+  flex: 1;
+  min-width: 0;
+}
+
+.comp-tip-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  padding: var(--sp-3);
+  background: rgba(255, 178, 0, 0.06);
+  border: 1px solid var(--amber);
+  border-radius: 4px;
+  margin-bottom: var(--sp-2);
+}
+
+.comp-tip-row .pro-tag {
+  font-family: var(--font-technical);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--amber);
+  font-weight: 700;
+  padding: 2px 6px;
+  border: 1px solid var(--amber);
+  border-radius: 3px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.comp-tip-row .tip-text {
+  color: var(--text-1);
+  font-size: 13px;
+  line-height: 1.5;
+  flex: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════════
    UTILS
    ═══════════════════════════════════════════════════════════════ */
 
@@ -2661,6 +2821,18 @@ select {
         <div class="label">F·06</div>
         <div class="title">DRONE<br>REGISTRY</div>
       </button>
+
+      <button class="tool-tile" data-nav="composition">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="3" y="3" width="18" height="18" rx="1"/>
+          <line x1="9" y1="3" x2="9" y2="21"/>
+          <line x1="15" y1="3" x2="15" y2="21"/>
+          <line x1="3" y1="9" x2="21" y2="9"/>
+          <line x1="3" y1="15" x2="21" y2="15"/>
+        </svg>
+        <div class="label">F·07</div>
+        <div class="title">COMPOSITION<br>GUIDES</div>
+      </button>
     </div>
 
     <div class="section-title">COMING SOON · PREMIUM</div>
@@ -2672,21 +2844,8 @@ select {
           <path d="M3 14l4-4 4 4 4-7 6 12"/>
           <path d="M3 3v18h18"/>
         </svg>
-        <div class="label">F·07</div>
+        <div class="label">P·01</div>
         <div class="title">FLIGHT<br>SUITABILITY</div>
-      </button>
-
-      <button class="tool-tile premium soon">
-        <span class="premium-badge">PRO</span>
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <rect x="3" y="3" width="18" height="18" rx="1"/>
-          <line x1="9" y1="3" x2="9" y2="21"/>
-          <line x1="15" y1="3" x2="15" y2="21"/>
-          <line x1="3" y1="9" x2="21" y2="9"/>
-          <line x1="3" y1="15" x2="21" y2="15"/>
-        </svg>
-        <div class="label">F·08</div>
-        <div class="title">COMPOSITION<br>GUIDES</div>
       </button>
 
       <button class="tool-tile premium soon">
@@ -2695,7 +2854,7 @@ select {
           <path d="M17.6 6.4A9 9 0 1021 12"/>
           <polyline points="21 3 21 9 15 9"/>
         </svg>
-        <div class="label">F·09</div>
+        <div class="label">P·02</div>
         <div class="title">SCENE → SETTINGS</div>
       </button>
 
@@ -2705,7 +2864,7 @@ select {
           <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
           <polyline points="14 2 14 8 20 8"/>
         </svg>
-        <div class="label">F·10</div>
+        <div class="label">P·03</div>
         <div class="title">FLIGHT REPORT<br>PDF</div>
       </button>
     </div>
@@ -3199,6 +3358,47 @@ select {
     <div id="fs-content"></div>
   </section>
 
+  <!-- ─── COMPOSITION GUIDES VIEW ─── -->
+  <section class="view" id="view-composition">
+    <div class="view-header">
+      <button class="back-btn" data-back>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+      </button>
+      <div class="view-title">
+        <div class="kicker">F·07 · FRAMING REFERENCE</div>
+        <div class="main-title">COMPOSITION GUIDES</div>
+      </div>
+    </div>
+
+    <div class="comp-selector" id="comp-selector"></div>
+
+    <div class="card">
+      <div id="comp-visual-wrap" class="comp-visual"></div>
+      <div class="comp-name" id="comp-name">—</div>
+      <div class="comp-tagline" id="comp-tagline">—</div>
+
+      <div class="comp-section-title">HOW TO APPLY</div>
+      <div class="comp-points" id="comp-points"></div>
+
+      <div class="comp-section-title">DRONE-SPECIFIC TIPS</div>
+      <div id="comp-tips"></div>
+    </div>
+
+    <div class="card">
+      <div class="field-label" style="margin-bottom: var(--sp-3);">WHY COMPOSITION MATTERS</div>
+      <div style="color: var(--text-2); font-size: 13px; line-height: 1.6;">
+        The technical settings get you exposed correctly. <strong class="cyan">Composition</strong>
+        is what makes the shot worth exposing. In aerial work, your aperture, shutter, and ISO are
+        often locked by the 180° rule and the light — but the frame is always yours to choose.
+        <br><br>
+        <span class="dim">These are starting points, not rules. The strongest compositions often break
+        one pattern to highlight another. Learn the rules first — then earn the right to break them.</span>
+      </div>
+    </div>
+  </section>
+
 </main>
 
 <!-- ═══════════════════════════════════════════════════════════════ -->
@@ -3311,14 +3511,15 @@ select {
    ──────────────────────────────────────────────── */
 
 const views = {
-  home:      document.getElementById('view-home'),
-  nd:        document.getElementById('view-nd'),
-  shutter:   document.getElementById('view-shutter'),
-  sun:       document.getElementById('view-sun'),
-  checklist: document.getElementById('view-checklist'),
-  wb:        document.getElementById('view-wb'),
-  drones:    document.getElementById('view-drones'),
-  flight:    document.getElementById('view-flight'),
+  home:         document.getElementById('view-home'),
+  nd:           document.getElementById('view-nd'),
+  shutter:      document.getElementById('view-shutter'),
+  sun:          document.getElementById('view-sun'),
+  checklist:    document.getElementById('view-checklist'),
+  wb:           document.getElementById('view-wb'),
+  drones:       document.getElementById('view-drones'),
+  flight:       document.getElementById('view-flight'),
+  composition:  document.getElementById('view-composition'),
 };
 
 function navigate(viewId) {
@@ -3348,6 +3549,10 @@ function navigate(viewId) {
   // When flight suitability opens, (re)fetch weather
   if (viewId === 'flight') {
     renderFlightSuitability();
+  }
+  // When composition opens, render the currently-selected guide
+  if (viewId === 'composition') {
+    renderComposition();
   }
 }
 
@@ -5102,6 +5307,340 @@ document.getElementById('drone-make').addEventListener('change', (e) => {
 });
 
 /* ────────────────────────────────────────────────
+   COMPOSITION GUIDES
+   ────────────────────────────────────────────────
+   Static reference. Each guide has an SVG diagram
+   showing the composition principle, plus drone-specific
+   application tips.
+   ──────────────────────────────────────────────── */
+
+const COMP_GUIDES = {
+  thirds: {
+    label: 'RULE OF THIRDS',
+    tagline: 'The oldest trick in the book. Divide the frame into a 3×3 grid and place your subject on a line or intersection.',
+    diagram: (W, H) => {
+      const t1x = W / 3, t2x = 2 * W / 3;
+      const t1y = H / 3, t2y = 2 * H / 3;
+      return `
+        <defs>
+          <linearGradient id="sky1" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#3d5480"/>
+            <stop offset="100%" stop-color="#8aa8d4"/>
+          </linearGradient>
+          <linearGradient id="ground1" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#4a5d3c"/>
+            <stop offset="100%" stop-color="#2a3528"/>
+          </linearGradient>
+        </defs>
+        <rect width="${W}" height="${t2y}" fill="url(#sky1)"/>
+        <rect y="${t2y}" width="${W}" height="${H - t2y}" fill="url(#ground1)"/>
+        <!-- Sun on upper-right intersection -->
+        <circle cx="${t2x}" cy="${t1y}" r="22" fill="#ffc870" opacity="0.9"/>
+        <circle cx="${t2x}" cy="${t1y}" r="35" fill="#ffc870" opacity="0.2"/>
+        <!-- Grid overlay -->
+        <line x1="${t1x}" y1="0" x2="${t1x}" y2="${H}" stroke="#00D4FF" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.85"/>
+        <line x1="${t2x}" y1="0" x2="${t2x}" y2="${H}" stroke="#00D4FF" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.85"/>
+        <line x1="0" y1="${t1y}" x2="${W}" y2="${t1y}" stroke="#00D4FF" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.85"/>
+        <line x1="0" y1="${t2y}" x2="${W}" y2="${t2y}" stroke="#00D4FF" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.85"/>
+        <!-- Intersection points -->
+        <circle cx="${t1x}" cy="${t1y}" r="5" fill="#FFB200" stroke="#0A0E1A" stroke-width="2"/>
+        <circle cx="${t2x}" cy="${t1y}" r="5" fill="#FFB200" stroke="#0A0E1A" stroke-width="2"/>
+        <circle cx="${t1x}" cy="${t2y}" r="5" fill="#FFB200" stroke="#0A0E1A" stroke-width="2"/>
+        <circle cx="${t2x}" cy="${t2y}" r="5" fill="#FFB200" stroke="#0A0E1A" stroke-width="2"/>
+      `;
+    },
+    points: [
+      'Turn on the grid overlay in your drone controller — DJI has "3×3" under camera settings.',
+      'Place the horizon on the upper or lower third, never dead center.',
+      'Put your subject on an intersection for maximum visual weight.',
+      'For moving subjects, give them space to move INTO the frame — lead them, don\'t trail them.',
+    ],
+    tips: [
+      { tag: 'AERIAL', text: 'Top-down shots: offset the subject to an intersection point, don\'t center. Central subjects look like evidence photos.' },
+      { tag: 'REAL ESTATE', text: 'Place the house on the lower-third line so the sky gives the shot scale.' },
+      { tag: 'LANDSCAPE', text: 'Interesting sky? Horizon on lower third. Interesting foreground? Horizon on upper third.' },
+    ],
+  },
+
+  leading: {
+    label: 'LEADING LINES',
+    tagline: 'Roads, rivers, fences, shorelines. Any line that pulls the eye through the frame toward your subject.',
+    diagram: (W, H) => {
+      return `
+        <defs>
+          <linearGradient id="sky2" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#2d3d5c"/>
+            <stop offset="100%" stop-color="#6a88b0"/>
+          </linearGradient>
+          <linearGradient id="field2" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#5d5030"/>
+            <stop offset="100%" stop-color="#3a2e1a"/>
+          </linearGradient>
+        </defs>
+        <rect width="${W}" height="${H * 0.55}" fill="url(#sky2)"/>
+        <rect y="${H * 0.55}" width="${W}" height="${H * 0.45}" fill="url(#field2)"/>
+        <!-- Road converging to vanishing point on upper third -->
+        <polygon points="${W * 0.35},${H} ${W * 0.65},${H} ${W * 0.54},${H * 0.55} ${W * 0.46},${H * 0.55}" fill="#555" opacity="0.85"/>
+        <!-- Center road line -->
+        <line x1="${W * 0.5}" y1="${H}" x2="${W * 0.5}" y2="${H * 0.55}" stroke="#FFD870" stroke-width="3" stroke-dasharray="12 10" opacity="0.9"/>
+        <!-- Subject (small figure/building) at vanishing point -->
+        <rect x="${W * 0.48}" y="${H * 0.48}" width="12" height="20" fill="#1a1a1a"/>
+        <!-- Cyan arrows showing the lead -->
+        <path d="M ${W * 0.2} ${H * 0.95} Q ${W * 0.35} ${H * 0.75} ${W * 0.48} ${H * 0.55}" stroke="#00D4FF" stroke-width="2.5" fill="none" stroke-dasharray="8 6" opacity="0.8"/>
+        <path d="M ${W * 0.8} ${H * 0.95} Q ${W * 0.65} ${H * 0.75} ${W * 0.52} ${H * 0.55}" stroke="#00D4FF" stroke-width="2.5" fill="none" stroke-dasharray="8 6" opacity="0.8"/>
+      `;
+    },
+    points: [
+      'Position your drone so lines enter from the corners and converge toward the subject.',
+      'S-curves work even better than straight lines — they hold the eye longer.',
+      'Multiple lines pointing to the same subject = strong emphasis. But only if they agree.',
+      'Lines that exit the frame pull the viewer OUT of the shot. Avoid.',
+    ],
+    tips: [
+      { tag: 'AERIAL', text: 'Rivers, roads, coastlines, fence rows — aerial view lets you see leading lines that are invisible from the ground.' },
+      { tag: 'REVEAL', text: 'Start a shot with a leading line toward a hidden subject, then fly forward to "reveal" it at the vanishing point.' },
+      { tag: 'URBAN', text: 'Street grids and building edges work beautifully from 50-120m altitude.' },
+    ],
+  },
+
+  symmetry: {
+    label: 'SYMMETRY',
+    tagline: 'Mirror-image compositions. Natural in aerial work — water reflections, architectural patterns, top-down symmetry.',
+    diagram: (W, H) => {
+      return `
+        <defs>
+          <linearGradient id="sky3" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#3d2d5c"/>
+            <stop offset="100%" stop-color="#c8826d"/>
+          </linearGradient>
+        </defs>
+        <rect width="${W}" height="${H/2}" fill="url(#sky3)"/>
+        <rect y="${H/2}" width="${W}" height="${H/2}" fill="#1a2b3a"/>
+        <!-- Reflected mountains -->
+        <polygon points="0,${H*0.38} ${W*0.3},${H*0.22} ${W*0.55},${H*0.32} ${W*0.8},${H*0.2} ${W},${H*0.35} ${W},${H/2} 0,${H/2}" fill="#2d3d5c"/>
+        <polygon points="0,${H*0.62} ${W*0.3},${H*0.78} ${W*0.55},${H*0.68} ${W*0.8},${H*0.8} ${W},${H*0.65} ${W},${H/2} 0,${H/2}" fill="#2d3d5c" opacity="0.8"/>
+        <!-- Sun and reflection -->
+        <circle cx="${W*0.7}" cy="${H*0.28}" r="18" fill="#FFD870"/>
+        <circle cx="${W*0.7}" cy="${H*0.72}" r="16" fill="#FFD870" opacity="0.6"/>
+        <!-- Center line -->
+        <line x1="0" y1="${H/2}" x2="${W}" y2="${H/2}" stroke="#00D4FF" stroke-width="2" stroke-dasharray="8 4" opacity="0.9"/>
+      `;
+    },
+    points: [
+      'Dead-center your subject when going for symmetry — it\'s one of the few times centering works.',
+      'Water reflections: fly lower so the waterline splits your frame exactly in half.',
+      'Top-down: look for circles, squares, radial patterns (intersections, plazas, pools).',
+      'Imperfect symmetry is often more interesting than perfect symmetry. One element out of place creates tension.',
+    ],
+    tips: [
+      { tag: 'REFLECTION', text: 'Still water after sunrise is the golden hour for symmetry. Wind after 10 AM kills it.' },
+      { tag: 'TOP-DOWN', text: 'Gimbal to -90° directly over a circular feature (fountain, roundabout, radial park) for a stunning symmetric frame.' },
+      { tag: 'ARCHITECTURE', text: 'Bridges, stadiums, and modern buildings are symmetric — frame them head-on, not at angles.' },
+    ],
+  },
+
+  frame: {
+    label: 'FRAME WITHIN A FRAME',
+    tagline: 'Use foreground elements (arches, branches, doorways, rock formations) to frame your subject and add depth.',
+    diagram: (W, H) => {
+      return `
+        <defs>
+          <linearGradient id="sky4" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#4a5d80"/>
+            <stop offset="100%" stop-color="#c5a870"/>
+          </linearGradient>
+        </defs>
+        <rect width="${W}" height="${H}" fill="#1a1a1a"/>
+        <!-- "Frame" — archway/foreground dark shape -->
+        <path d="M 0 0 L 0 ${H} L ${W} ${H} L ${W} 0 Z M ${W*0.2} ${H*0.25} L ${W*0.2} ${H*0.85} Q ${W*0.2} ${H*0.15} ${W*0.5} ${H*0.15} Q ${W*0.8} ${H*0.15} ${W*0.8} ${H*0.85} L ${W*0.8} ${H*0.25} Z" fill="#0a0a0a" fill-rule="evenodd"/>
+        <!-- Inner scene visible through the frame -->
+        <rect x="${W*0.2}" y="${H*0.25}" width="${W*0.6}" height="${H*0.6}" fill="url(#sky4)"/>
+        <!-- Mountain silhouette in the "opening" -->
+        <polygon points="${W*0.2},${H*0.75} ${W*0.35},${H*0.55} ${W*0.5},${H*0.65} ${W*0.65},${H*0.5} ${W*0.8},${H*0.68} ${W*0.8},${H*0.85} ${W*0.2},${H*0.85}" fill="#3d4d6c"/>
+        <!-- Sun -->
+        <circle cx="${W*0.55}" cy="${H*0.4}" r="14" fill="#FFD870"/>
+        <!-- Cyan outline showing the "frame" -->
+        <path d="M ${W*0.2} ${H*0.85} L ${W*0.2} ${H*0.25} Q ${W*0.2} ${H*0.15} ${W*0.5} ${H*0.15} Q ${W*0.8} ${H*0.15} ${W*0.8} ${H*0.25} L ${W*0.8} ${H*0.85}" fill="none" stroke="#00D4FF" stroke-width="2" stroke-dasharray="6 4" opacity="0.9"/>
+      `;
+    },
+    points: [
+      'Find a foreground element with an opening — trees, archways, rock formations, bridges.',
+      'Position the drone so the opening frames your subject.',
+      'The "frame" can be out of focus or in focus — both work.',
+      'Foreground frames add depth to otherwise flat-looking aerial shots.',
+    ],
+    tips: [
+      { tag: 'AERIAL', text: 'Fly BEHIND a tree or through an arch toward your subject. The foreground blur creates the frame.' },
+      { tag: 'REVEAL', text: 'Start the shot tight on the "frame" element, then dolly forward — the subject is revealed as you pass through.' },
+      { tag: 'LAYERS', text: 'Stack multiple frames for depth: a tree in the foreground, a building mid-ground, a mountain background.' },
+    ],
+  },
+
+  negative: {
+    label: 'NEGATIVE SPACE',
+    tagline: 'Leave most of the frame empty. The empty area makes the subject feel small, isolated, or epic. Great for minimalism.',
+    diagram: (W, H) => {
+      return `
+        <defs>
+          <linearGradient id="sky5" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#a8b8c8"/>
+            <stop offset="100%" stop-color="#d8e0e8"/>
+          </linearGradient>
+        </defs>
+        <rect width="${W}" height="${H}" fill="url(#sky5)"/>
+        <!-- Tiny isolated subject on left third -->
+        <circle cx="${W*0.22}" cy="${H*0.68}" r="10" fill="#2d1d14"/>
+        <!-- Small shadow beneath -->
+        <ellipse cx="${W*0.22}" cy="${H*0.78}" rx="16" ry="3" fill="#000" opacity="0.25"/>
+        <!-- Annotation: cyan box around subject area -->
+        <rect x="${W*0.12}" y="${H*0.58}" width="${W*0.2}" height="${H*0.25}" fill="none" stroke="#00D4FF" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.7"/>
+        <text x="${W*0.22}" y="${H*0.94}" text-anchor="middle" font-family="monospace" font-size="14" fill="#00D4FF" opacity="0.95">SUBJECT</text>
+        <!-- Annotation: NEGATIVE SPACE in empty area -->
+        <text x="${W*0.6}" y="${H*0.5}" text-anchor="middle" font-family="monospace" font-size="16" fill="#FFB200" opacity="0.6" letter-spacing="2">NEGATIVE SPACE</text>
+      `;
+    },
+    points: [
+      'Place your subject on the edge of the frame, not in the middle.',
+      'The empty space IS the statement — it shows scale, loneliness, vastness, or peace.',
+      'Works best with simple backgrounds (sky, water, snow, sand).',
+      'Let the subject feel small. Resist the urge to zoom in or get closer.',
+    ],
+    tips: [
+      { tag: 'AERIAL', text: 'Fly high, small subject. A lone boat on calm water, a hiker on a dune, a cabin in a valley. Altitude IS negative space.' },
+      { tag: 'MINIMALISM', text: 'Overcast skies are pure negative space — no clouds to compete with the subject.' },
+      { tag: 'SCALE', text: 'Use negative space to make a subject feel monumental (tight framing) or microscopic (loose framing).' },
+    ],
+  },
+
+  diagonals: {
+    label: 'DIAGONALS',
+    tagline: 'Diagonal lines add energy and movement. Horizontal = calm. Vertical = stable. Diagonal = dynamic.',
+    diagram: (W, H) => {
+      return `
+        <defs>
+          <linearGradient id="sky6" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#5d4a3a"/>
+            <stop offset="100%" stop-color="#c88a55"/>
+          </linearGradient>
+        </defs>
+        <rect width="${W}" height="${H}" fill="url(#sky6)"/>
+        <!-- Diagonal coastline -->
+        <polygon points="0,${H} ${W},${H*0.2} ${W},${H} 0,${H}" fill="#1a3548"/>
+        <polygon points="0,${H} ${W},${H*0.2} ${W*0.85},${H*0.25} ${W*0.5},${H*0.6} ${W*0.2},${H*0.85} 0,${H*0.95} 0,${H}" fill="#e8d8b0" opacity="0.7"/>
+        <!-- Diagonal arrow overlay -->
+        <line x1="${W*0.1}" y1="${H*0.9}" x2="${W*0.9}" y2="${H*0.25}" stroke="#00D4FF" stroke-width="2.5" stroke-dasharray="10 6" opacity="0.9"/>
+        <polygon points="${W*0.9},${H*0.25} ${W*0.83},${H*0.3} ${W*0.88},${H*0.32}" fill="#00D4FF"/>
+      `;
+    },
+    points: [
+      'Tilt the drone slightly, or shoot subjects naturally diagonal to the horizon.',
+      'Diagonals from lower-left to upper-right feel optimistic / rising.',
+      'Diagonals from upper-left to lower-right feel descending / melancholy.',
+      'Multiple diagonals = tension. Single strong diagonal = direction.',
+    ],
+    tips: [
+      { tag: 'AERIAL', text: 'Coastlines, mountain ridges, river bends — shoot them at 30-45° to the frame edge, not parallel to it.' },
+      { tag: 'MOTION', text: 'Panning side-to-side along a diagonal line feels more dynamic than along a horizontal.' },
+      { tag: 'AVOID', text: 'Don\'t tilt for no reason. A crooked horizon with no purpose just looks like a mistake.' },
+    ],
+  },
+
+  fill: {
+    label: 'FILL THE FRAME',
+    tagline: 'Get close. Fill the entire frame with texture, pattern, or a single subject. No background, no context.',
+    diagram: (W, H) => {
+      const cell = W / 8;
+      let out = `<rect width="${W}" height="${H}" fill="#1a2a15"/>`;
+      // Hexagonal / agricultural pattern fill
+      for (let r = 0; r < Math.ceil(H / cell) + 1; r++) {
+        for (let c = 0; c < 9; c++) {
+          const x = c * cell - cell/2;
+          const y = r * cell - cell/2;
+          const shade = ['#2d4a20', '#3d5d28', '#4e6d30', '#2a3d1a'][(r + c) % 4];
+          out += `<rect x="${x}" y="${y}" width="${cell - 2}" height="${cell - 2}" fill="${shade}" opacity="0.95"/>`;
+        }
+      }
+      // One cyan highlight cell showing "focus"
+      out += `<rect x="${4 * cell - cell/2}" y="${2 * cell - cell/2}" width="${cell - 2}" height="${cell - 2}" fill="none" stroke="#00D4FF" stroke-width="2.5" stroke-dasharray="4 3" opacity="0.9"/>`;
+      return out;
+    },
+    points: [
+      'Move in close. Crop out the context entirely.',
+      'Let texture, repetition, or pattern BE the subject.',
+      'No background = no distraction. The eye has nowhere to wander.',
+      'Works great with top-down aerial shots of fields, water, rooftops, forests.',
+    ],
+    tips: [
+      { tag: 'TOP-DOWN', text: 'Gimbal to -90°, fly 30-60m altitude over textured surfaces: crops, waves, forest canopy, parking lots.' },
+      { tag: 'PATTERN', text: 'Repetition breaks when something\'s different — the odd-one-out becomes the subject automatically.' },
+      { tag: 'ABSTRACT', text: 'Without context, viewers guess scale. A 20cm puddle can look like a lake. Play with ambiguity.' },
+    ],
+  },
+};
+
+let currentCompId = 'thirds';
+
+function renderComposition() {
+  const selectorEl = document.getElementById('comp-selector');
+  if (!selectorEl) return;
+
+  // Build selector tabs (only first time)
+  if (!selectorEl.dataset.built) {
+    selectorEl.innerHTML = '';
+    Object.keys(COMP_GUIDES).forEach(id => {
+      const tab = document.createElement('button');
+      tab.className = 'comp-tab';
+      tab.textContent = COMP_GUIDES[id].label;
+      tab.dataset.compId = id;
+      tab.addEventListener('click', () => {
+        currentCompId = id;
+        renderComposition();
+      });
+      selectorEl.appendChild(tab);
+    });
+    selectorEl.dataset.built = '1';
+  }
+
+  // Active tab
+  selectorEl.querySelectorAll('.comp-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.compId === currentCompId);
+  });
+
+  const g = COMP_GUIDES[currentCompId];
+  if (!g) return;
+
+  // Render SVG diagram
+  const W = 640, H = 360;
+  const visualEl = document.getElementById('comp-visual-wrap');
+  visualEl.innerHTML = `
+    <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice">
+      ${g.diagram(W, H)}
+    </svg>
+  `;
+
+  document.getElementById('comp-name').textContent = g.label;
+  document.getElementById('comp-tagline').textContent = g.tagline;
+
+  // Points
+  const pointsEl = document.getElementById('comp-points');
+  pointsEl.innerHTML = g.points.map((p, i) => `
+    <div class="comp-point">
+      <div class="comp-point-num">${i + 1}</div>
+      <div class="comp-point-text">${escapeHtml(p)}</div>
+    </div>
+  `).join('');
+
+  // Tips
+  const tipsEl = document.getElementById('comp-tips');
+  tipsEl.innerHTML = g.tips.map(t => `
+    <div class="comp-tip-row">
+      <div class="pro-tag">${escapeHtml(t.tag)}</div>
+      <div class="tip-text">${escapeHtml(t.text)}</div>
+    </div>
+  `).join('');
+}
+
+/* ────────────────────────────────────────────────
    FLIGHT SUITABILITY SCORE
    ────────────────────────────────────────────────
    Uses Open-Meteo (free, no API key).
@@ -5619,6 +6158,7 @@ autoResetIfNewDay();
 renderChecklist();
 renderWB();
 renderDroneList();
+renderComposition();
 
 // Register service worker for offline use
 if ('serviceWorker' in navigator) {
